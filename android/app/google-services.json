@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "687817970459",
+    "firebase_url": "https://runningza-4278d.firebaseio.com",
+    "project_id": "runningza-4278d",
+    "storage_bucket": "runningza-4278d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687817970459:android:5a9e705b4815af347db9be",
+        "android_client_info": {
+          "package_name": "com.runza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687817970459-5saemipmo0pa6t8a8gh8i6g92ul47i56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq1b1mttwLA38Y71XkFDUVp5AcgNywFos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687817970459-5saemipmo0pa6t8a8gh8i6g92ul47i56.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
