@@ -6,8 +6,14 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import firestore from '@react-native-firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import firestore, {firebase} from '@react-native-firebase/firestore';
+import {
+  LoginManager,
+  AccessToken,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+import auth from '@react-native-firebase/auth';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,47 +22,101 @@ import {
   TextInput,
   Button,
   StatusBar,
+  Text,
+  Image,
 } from 'react-native';
 
-const getUser = async () => {
-  const userDocument = await firestore()
-    .collection('users')
-    .doc('zYH4qienodYSAXP43ohs')
-    .get();
-  console.log(userDocument);
-};
+// const getUser = async () => {
+//   const userDocument = await firestore()
+//     .collection('users')
+//     .doc('zYH4qienodYSAXP43ohs')
+//     .get();
+//   console.log(userDocument);
+// };
+const LoginButton = () => {
+  const [login, setLogin] = useState(false);
+  const [profile, setProfile] = useState(null);
+  if (login) {
+    return (
+      <View>
+        <InforUser profile={profile} />
+        <Button
+          title="Logout facebook"
+          onPress={() => {
+            LoginManager.logOut;
+            setLogin(false);
+            console.log('application is log out');
+          }}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <Button
+        title="Login facebook"
+        onPress={() => {
+          LoginManager.logInWithPermissions(['public_profile'])
+            .then((result) => {
+              if (result.isCancelled) {
+                return Promise.reject(
+                  new Error('The user cancelled the request'),
+                );
+              } else {
+                console.log(
+                  `log sucess with permission :${result.grantedPermissions.toString()}`,
+                );
+                //get access token
+                setLogin(true);
 
+                return AccessToken.getCurrentAccessToken();
+              }
+            })
+            .then((data) => {
+              const credential = firebase.auth.FacebookAuthProvider.credential(
+                data.accessToken,
+              );
+              return firebase.auth().signInWithCredential(credential);
+            })
+            .then((curentUser) => {
+              const profile = curentUser.additionalUserInfo.profile;
+              setProfile(profile);
+            })
+            .catch((error) => {
+              console.log('facebook login fail with error: ', error);
+            });
+        }}
+      />
+    );
+  }
+};
+const InforUser = ({profile}) => {
+  const myName = profile.name;
+  const image = profile.picture.data.url;
+  return (
+    <>
+      <Image source={require(image.toString())} />
+      <Text>{myName}</Text>
+    </>
+  );
+};
 const App = () => {
-  const [userName, setUserName] = React.useState('');
-  const [passWord, setPassWord] = React.useState('');
+  // const [userName, setUserName] = React.useState('');
+  // const [passWord, setPassWord] = React.useState('');
   // const usersCollection = firestore().collection('users');
-  const changvalue = () => {
-    firestore()
-      .collection('users')
-      .doc('zYH4qienodYSAXP43ohs')
-      .set({userName: userName, passWord: passWord})
-      .then((data) => console.log('is sucess and data is :', data))
-      .catch((err) => console.log('erro isss', err));
-    setUserName('');
-    setPassWord('');
-  };
+  // const changvalue = () => {
+  //   firestore()
+  //     .collection('users')
+  //     .doc('zYH4qienodYSAXP43ohs')
+  //     .set({userName: userName, passWord: passWord})
+  //     .then((data) => console.log('is sucess and data is :', data))
+  //     .catch((err) => console.log('erro isss', err));
+  //   setUserName('');
+  //   setPassWord('');
+  // };
   return (
     <>
       <View style={styles.container}>
-        <TextInput
-          style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => setUserName(text)}
-          placeholder="user name"
-          value={userName}
-        />
-        <TextInput
-          style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => setPassWord(text)}
-          placeholder="pass word"
-          value={passWord}
-        />
-        <Button title="Press me" onPress={() => changvalue()} />
-        <Button title="logdata" onPress={() => getUser()} />
+        <LoginButton />
       </View>
     </>
   );
