@@ -25,6 +25,7 @@ import {
   Text,
   Image,
 } from 'react-native';
+import Navigation from './src/navigators/index';
 
 // const getUser = async () => {
 //   const userDocument = await firestore()
@@ -116,7 +117,7 @@ const App = () => {
   return (
     <>
       <View style={styles.container}>
-        <LoginButton />
+        <Navigation />
       </View>
     </>
   );
