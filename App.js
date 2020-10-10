@@ -25,7 +25,8 @@ import {
   Text,
   Image,
 } from 'react-native';
-import Navigation from './src/navigators/index';
+import NavigatorDraw from './src/navigators/navigatorDraw';
+// import {NavigationContainer} from '@react-navigation/native';
 
 // const getUser = async () => {
 //   const userDocument = await firestore()
@@ -34,72 +35,70 @@ import Navigation from './src/navigators/index';
 //     .get();
 //   console.log(userDocument);
 // };
-const LoginButton = () => {
-  const [login, setLogin] = useState(false);
-  const [profile, setProfile] = useState(null);
-  if (login) {
-    return (
-      <View>
-        <InforUser profile={profile} />
-        <Button
-          title="Logout facebook"
-          onPress={() => {
-            LoginManager.logOut;
-            setLogin(false);
-            console.log('application is log out');
-          }}
-        />
-      </View>
-    );
-  } else {
-    return (
-      <Button
-        title="Login facebook"
-        onPress={() => {
-          LoginManager.logInWithPermissions(['public_profile'])
-            .then((result) => {
-              if (result.isCancelled) {
-                return Promise.reject(
-                  new Error('The user cancelled the request'),
-                );
-              } else {
-                console.log(
-                  `log sucess with permission :${result.grantedPermissions.toString()}`,
-                );
-                //get access token
-                setLogin(true);
+// const LoginButton = () => {
+//   const [login, setLogin] = useState(false);
+//   const [profile, setProfile] = useState(null);
+//   if (login) {
+//     return (
+//       <View>
+//         <InforUser profile={profile} />
+//         <Button
+//           title="Logout facebook"
+//           onPress={() => {
+//             LoginManager.logOut;
+//             setLogin(false);
+//             console.log('application is log out');
+//           }}
+//         />
+//       </View>
+//     );
+//   } else {
+//     return (
+//       <Button
+//         title="Login facebook"
+//         onPress={() => {
+//           LoginManager.logInWithPermissions(['public_profile'])
+//             .then((result) => {
+//               if (result.isCancelled) {
+//                 return Promise.reject(
+//                   new Error('The user cancelled the request'),
+//                 );
+//               } else {
+//                 console.log(
+//                   `log sucess with permission :${result.grantedPermissions.toString()}`,
+//                 );
+//                 //get access token
+//                 setLogin(true);
 
-                return AccessToken.getCurrentAccessToken();
-              }
-            })
-            .then((data) => {
-              const credential = firebase.auth.FacebookAuthProvider.credential(
-                data.accessToken,
-              );
-              return firebase.auth().signInWithCredential(credential);
-            })
-            .then((curentUser) => {
-              const profile = curentUser.additionalUserInfo.profile;
-              setProfile(profile);
-            })
-            .catch((error) => {
-              console.log('facebook login fail with error: ', error);
-            });
-        }}
-      />
-    );
-  }
-};
-const InforUser = ({profile}) => {
-  const myName = profile.name;
-  const image = profile.picture.data.url;
-  return (
-    <>
-      <Image source={require(image.toString())} />
-      <Text>{myName}</Text>
-    </>
-  );
-};
+//                 return AccessToken.getCurrentAccessToken();
+//               }
+//             })
+//             .then((data) => {
+//               const credential = firebase.auth.FacebookAuthProvider.credential(
+//                 data.accessToken,
+//               );
+//               return firebase.auth().signInWithCredential(credential);
+//             })
+//             .then((curentUser) => {
+//               const profile = curentUser.additionalUserInfo.profile;
+//               setProfile(profile);
+//             })
+//             .catch((error) => {
+//               console.log('facebook login fail with error: ', error);
+//             });
+//         }}
+//       />
+//     );
+//   }
+// };
+// const InforUser = ({profile}) => {
+//   const myName = profile.name;
+//   return (
+//     <>
+//       <Text>{myName}</Text>
+//     </>
+//   );
+// };
 const App = () => {
   // const [userName, setUserName] = React.useState('');
   // const [passWord, setPassWord] = React.useState('');
@@ -116,9 +115,7 @@ const App = () => {
   // };
   return (
     <>
-      <View style={styles.container}>
-        <Navigation />
-      </View>
+      <NavigatorDraw />
     </>
   );
 };
