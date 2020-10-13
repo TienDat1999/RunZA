@@ -13,7 +13,7 @@ function HomeScreen() {
 
 const Stack = createStackNavigator();
 
-function navigation() {
+function ContainerNavi() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -23,4 +23,4 @@ function navigation() {
   );
 }
 
-export default navigation;
+export default ContainerNavi;
