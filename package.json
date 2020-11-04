@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^8.4.3",
     "@react-native-firebase/auth": "^9.2.3",
@@ -17,15 +18,21 @@
     "@react-navigation/drawer": "^5.10.0",
     "@react-navigation/native": "^5.7.5",
     "@react-navigation/stack": "^5.9.2",
+    "lodash.debounce": "^4.0.8",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-background-timer": "^2.4.1",
     "react-native-circular-progress": "^1.3.6",
     "react-native-debugger": "^1.1.0",
     "react-native-fbsdk": "^2.0.0",
     "react-native-gesture-handler": "^1.8.0",
+<<<<<<< HEAD
     "react-native-icons": "^0.7.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-paper": "^4.2.0",
+=======
+    "react-native-pedometer-huangxt": "^1.0.3",
+>>>>>>> origin
     "react-native-reanimated": "^1.13.1",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
