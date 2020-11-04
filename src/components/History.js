@@ -1,11 +1,11 @@
 import React from 'react';
-import {Button, View} from 'react-native';
+import {Button, View, Text} from 'react-native';
 
-const History = () => {
+export default History = ({navigation}) => {
   return (
     <View>
-      <Text>this is profile</Text>
+      <Text>this is History</Text>
     </View>
   );
 };
-export default History;
+

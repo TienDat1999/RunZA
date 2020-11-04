@@ -14,6 +14,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
+import Entypo from 'react-native-vector-icons/Entypo'
 import {
   SafeAreaView,
   StyleSheet,
