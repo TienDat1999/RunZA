@@ -1,115 +1,107 @@
 import React, {useEffect, useState} from 'react';
-import {Switch, View, Text} from 'react-native';
+import {Button, View, Text, StyleSheet} from 'react-native';
 import CircularProgres from './Component/CircularProgres';
-import Pedometer from 'react-native-pedometer-huangxt';
-import AsyncStorage from '@react-native-community/async-storage';
-import debounce from 'lodash.debounce';
-import BackgroundTimer from 'react-native-background-timer';
-import {set} from 'react-native-reanimated';
 
-//const NUMBER_STEP_KEY = 'numberOfSteps';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomeScreen = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [award, setAward] = useState({
-    distance: 0,
-    numberOfSteps: 0,
-    startDate: '',
-  });
-
-  //  const [award, setAward] = useState({numberOfSteps: 0});
-  const [curentAward, SetCurentAward] = useState({
-    distance: null,
-    numberOfSteps: null,
-  });
-
-  const setStoreAward = async () => {
-    try {
-      const check = AsyncStorage.getItem('award');
-      const now = new Date();
-      const dayNow = now.getDate();
-      console.log('ngay hien tai', dayNow);
-
-      if (check == null) {
-        return await AsyncStorage.setItem('award', JSON.stringify(award));
-      } else {
-        return await AsyncStorage.mergeItem('award', JSON.stringify(award));
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // //get du lieu tu local
-  const recieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('award');
-      if (value !== null) {
-        // We have data!!
-        const data = JSON.parse(value);
-        SetCurentAward({
-          distance: data.distance,
-          numberOfSteps: data.numberOfSteps,
-        });
-      }
-    } catch (error) {
-      // Error retrieving data
-      console.log(error);
-    }
-  };
-  const pedomestorCount = () => {
-    // if (isEnabled) {
-    const now = new Date();
-    Pedometer.startPedometerUpdatesFromDate(now.getTime(), (pedometerData) => {
-      //console.log(pedometerData);
-      if (curentAward.numberOfSteps != null) {
-        setAward({
-          distance: curentAward.distance + pedometerData.distance,
-          numberOfSteps:
-            curentAward.numberOfSteps + pedometerData.numberOfSteps,
-          startDate: pedometerData.startDate,
-        });
-      } else {
-        setAward({
-          distance: pedometerData.distance,
-          numberOfSteps: pedometerData.numberOfSteps,
-          startDate: pedometerData.startDate,
-        });
-      }
-    });
-    // } else {
-    //   Pedometer.stopPedometerUpdates();
-    // }
-  };
-  useEffect(() => {
-    recieveData();
-  }, []);
-  useEffect(() => {
-    d = new Date().toLocaleDateString();
-    pedomestorCount();
-  });
-  useEffect(() => {
-    setStoreAward();
-  }, [award.numberOfSteps]);
-
+  const [Progress, setProgress] = useState({fill: 50});
   return (
-    <View>
-      <Text>{award.distance}</Text>
-      <CircularProgres
-        size={200}
-        width={10}
-        fill={Number(award.numberOfSteps)}
-        tintColor="#00e0ff"
-        backgroundColor="#3d5875"
-        steps={Number(award.numberOfSteps)}
+    
+    <View style={styles.container}>
+      <View style={styles.header}>
+      <View ><Entypo name="menu" size={40} color="#FFFFFF"/></View>
+      <View style={styles.share}><Entypo name="share" size={40} color="#FFFFFF"/></View>
+      </View>
+      
+      <View style={styles.containertwo}>
+      <View style={styles.fire}><FontAwesome5 name="running" size={100} color="#FFFFFF"/></View>
+      <CircularProgres 
+        size={300}
+        width={15}
+        fill={50}
+        tintColor="#56CCF2"
+        backgroundColor="#fff"
+        steps={450}>
+         
+
+      </CircularProgres>
+      </View>
+
+      
+      <View style={styles.containercalo}>
+      <View style={styles.fire}><FontAwesome5 name="fire" size={30} color="#F3705A"/></View>
+      <CircularProgres 
+        size={60}
+        width={2}
+        fill={100}
+        tintColor="#fff"
+        
       />
-      {/* <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        /> */}
+      
+      
+      </View>
+
+      <View style={styles.containerdistance}>
+      <View style={styles.fire}><MaterialCommunityIcons name="map-marker-distance" size={30} color="#C7EBFF"/></View>
+      <CircularProgres 
+        size={60}
+        width={2}
+        fill={100}
+        tintColor="#fff"
+        
+      />
+      </View>
+
+      <View style={styles.containertime}>
+      <View style={styles.fire}><Entypo name="stopwatch" size={30} color="#45B8FB"/></View>
+      <CircularProgres 
+        size={60}
+        width={2}
+        fill={100}
+        tintColor="#fff"
+        
+      />
+      </View>
     </View>
+    
   );
 };
+
+
+const styles = StyleSheet.create({
+  container : {
+      flex : 1,
+      display : 'flex',
+      backgroundColor :'#000029'
+  },
+  
+  share:{
+    marginLeft:360,
+    marginTop:-30
+  },
+
+  containertwo:{
+    
+    marginTop:50,
+    marginLeft:60
+  },
+  containercalo:{
+    marginLeft:50,
+    marginTop:50
+  },
+
+ 
+  containerdistance:{
+    marginLeft:180,
+    marginTop:-90
+  },
+  containertime:{
+    marginLeft:310,
+    marginTop:-90
+  
+  }
+});
 export default HomeScreen;
