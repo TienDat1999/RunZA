@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Switch, View, Text} from 'react-native';
-import CircularProgres from './Component/CircularProgres';
+import {Button, View, Text} from 'react-native';
+import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
 import debounce from 'lodash.debounce';
@@ -9,30 +9,25 @@ import {set} from 'react-native-reanimated';
 
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
-const HomeScreen = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
+const HomeScreen = ({navigate}) => {
+  // const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
-    startDate: '',
+    startDate: null,
   });
 
   //  const [award, setAward] = useState({numberOfSteps: 0});
   const [curentAward, SetCurentAward] = useState({
     distance: null,
     numberOfSteps: null,
+    startDate: null,
   });
 
   const setStoreAward = async () => {
     try {
-      const check = AsyncStorage.getItem('award');
-      const dayLocal = check.startDate;
-      console.log('date local,', dayLocal);
-      const now = new Date();
-      const dayNow = now.getDate();
-      console.log('ngay hien tai', dayNow);
-
-      if (check == null) {
+      const value = await AsyncStorage.getItem('award');
+      if (value == null) {
         return await AsyncStorage.setItem('award', JSON.stringify(award));
       } else {
         return await AsyncStorage.mergeItem('award', JSON.stringify(award));
@@ -46,13 +41,35 @@ const HomeScreen = () => {
   const recieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('award');
-      if (value !== null) {
+      if (value != null) {
         // We have data!!
-        const data = JSON.parse(value);
-        SetCurentAward({
-          distance: data.distance,
-          numberOfSteps: data.numberOfSteps,
-        });
+        const data = await JSON.parse(value);
+        console.log('data recieve: ', data);
+        if (data.startDate !== null) {
+          const now = new Date().getMinutes();
+          const lastDay = new Date(Number(data.startDate)).getMinutes();
+          if (now == lastDay) {
+            console.log('VAN LA NGAY CU ');
+            SetCurentAward({
+              distance: data.distance,
+              numberOfSteps: data.numberOfSteps,
+              startDate: data.startDate,
+            });
+            setAward({
+              distance: data.distance,
+              numberOfSteps: data.numberOfSteps,
+            });
+          } else {
+            console.log('DA QUA NGAY MOI ROI ');
+            SetCurentAward({
+              distance: null,
+              numberOfSteps: null,
+              startDate: null,
+            });
+          }
+        }
+      } else {
+        console.log('loi phan recieve');
       }
     } catch (error) {
       // Error retrieving data
@@ -64,18 +81,24 @@ const HomeScreen = () => {
     const now = new Date();
     Pedometer.startPedometerUpdatesFromDate(now.getTime(), (pedometerData) => {
       //console.log(pedometerData);
-      if (curentAward.numberOfSteps != null) {
+      if (award.numberOfSteps == null) {
+        console.log('number of steps nulll');
+        setAward({
+          distance: pedometerData.distance,
+          numberOfSteps: pedometerData.numberOfSteps,
+          startDate: pedometerData.startDate
+            ? pedometerData.startDate
+            : curentAward.startDate,
+        });
+      } else {
+        console.log('number of steps khac nulll');
         setAward({
           distance: curentAward.distance + pedometerData.distance,
           numberOfSteps:
             curentAward.numberOfSteps + pedometerData.numberOfSteps,
-          startDate: pedometerData.startDate,
-        });
-      } else {
-        setAward({
-          distance: pedometerData.distance,
-          numberOfSteps: pedometerData.numberOfSteps,
-          startDate: pedometerData.startDate,
+          startDate: pedometerData.startDate
+            ? pedometerData.startDate
+            : curentAward.startDate,
         });
       }
     });
@@ -83,16 +106,17 @@ const HomeScreen = () => {
     //   Pedometer.stopPedometerUpdates();
     // }
   };
+
   useEffect(() => {
     recieveData();
   }, []);
   useEffect(() => {
-    d = new Date().toLocaleDateString();
-    pedomestorCount();
-  });
-  useEffect(() => {
     setStoreAward();
   }, [award.numberOfSteps]);
+
+  useEffect(() => {
+    pedomestorCount();
+  });
 
   return (
     <View>
@@ -105,12 +129,6 @@ const HomeScreen = () => {
         backgroundColor="#3d5875"
         steps={Number(award.numberOfSteps)}
       />
-      {/* <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        /> */}
     </View>
   );
 };
