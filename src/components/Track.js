@@ -1,11 +1,13 @@
 import React from 'react';
-import {Button, View, Text} from 'react-native';
+import {Button, View, Text, StyleSheet} from 'react-native';
 
-const Track = () => {
+
+export default Track = ({navigation}) => {
   return (
-    <View>
-      <Text>this is Track</Text>
-    </View>
+    <View></View>
   );
 };
-export default Track;
+const style=StyleSheet.create({
+ 
+})
+

@@ -1,28 +1,35 @@
 import React, {useEffect, useState} from 'react';
-import {Switch, View, Text} from 'react-native';
+import {Switch, View, Text, StyleSheet} from 'react-native';
 import CircularProgres from './Component/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
 import debounce from 'lodash.debounce';
 import BackgroundTimer from 'react-native-background-timer';
-import {set} from 'react-native-reanimated';
+import {color, set} from 'react-native-reanimated';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { BarChart } from 'react-native-svg-charts'
+
 
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [isSwitchEnabled, setSwitch] = React.useState(false)
+ 
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
     startDate: '',
   });
-
   //  const [award, setAward] = useState({numberOfSteps: 0});
   const [curentAward, SetCurentAward] = useState({
     distance: null,
     numberOfSteps: null,
   });
-
+  
+   
+  
   const setStoreAward = async () => {
     try {
       const check = AsyncStorage.getItem('award');
@@ -91,25 +98,101 @@ const HomeScreen = () => {
   useEffect(() => {
     setStoreAward();
   }, [award.numberOfSteps]);
+  const fill = 'rgb(86, 204, 242)'
+  const data = [50, 10, 40, 95, 4, 24, null, 85, undefined, 0, 35, 53, 53, 24, 50, 20, 10]
 
   return (
-    <View>
-      <Text>{award.distance}</Text>
-      <CircularProgres
-        size={200}
-        width={10}
-        fill={Number(award.numberOfSteps)}
-        tintColor="#00e0ff"
-        backgroundColor="#3d5875"
-        steps={Number(award.numberOfSteps)}
-      />
-      {/* <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        /> */}
-    </View>
+    <View style={styles.container}>
+        <LinearGradient colors={[ '#000029','#000029' ]} style={{flex:1}}>         
+        <View style={styles.header}>
+          <View>
+            <Text>{award.distance}</Text>
+            <CircularProgres
+              size={300}
+              width={10}
+              fill={100}
+              tintColor="#ffff"
+              backgroundColor="#ffff"
+              steps={1000}
+            /> 
+            {/* <Switch
+                trackColor={{false: '#767577', true: '#81b0ff'}}
+                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              /> */}
+          </View>
+          <View style={{marginTop:10}}>   
+            <Switch 
+              value={isSwitchEnabled}
+              onValueChange={(value) => setSwitch(value)}
+            />
+          </View>   
+        </View>
+        <View style={styles.body}>
+          <View style={styles.icon}>
+                <View style={styles.itemicon}>
+                  <Icon name="fire"  size={40} color='#ffff'/>             
+                </View> 
+               <View><Text style={styles.text} >O KCAL</Text></View> 
+          </View> 
+          <View style={styles.icon}>
+                <View style={styles.itemicon}>
+                  <Icon name="map-marker-radius-outline"  size={40} color='#ffff'/>             
+                </View> 
+               <View><Text style={styles.text} >O KCAL</Text></View> 
+          </View> 
+          <View style={styles.icon}>
+                <View style={styles.itemicon}>
+                  <Icon name="clock-time-two-outline"  size={40} color='#ffff'/>             
+                </View> 
+               <View><Text style={styles.text} >O KCAL</Text></View> 
+          </View>                    
+        </View>
+        <View style={styles.footer}>
+        <BarChart style={{ height: 200 }} data={data} svg={{ fill }} contentInset={{ top:30  }}>  
+            </BarChart>
+        </View>
+        </LinearGradient>  
+  </View>
   );
-};
+}; 
+const styles = StyleSheet.create({
+container:{
+ flex:1
+},
+header:{
+  alignItems:'center',
+  marginTop: 60
+},
+body:{
+  flexDirection:'row',
+  marginTop:10
+},
+icon:{
+  flexDirection:'column'
+},
+itemicon:{
+  alignItems:'center',
+  justifyContent:'center',
+  borderRadius:50,
+  borderWidth:2,
+  borderColor:'white',
+  marginLeft:50,
+  width:60,
+  height:60,
+  marginTop:10
+},
+text:{
+  color:'white',
+  marginTop:10,
+  textAlign:'center',
+  marginLeft: 50,
+},
+footer:{
+  marginTop:10,
+  marginLeft:20,
+  marginRight:20
+},
+})
 export default HomeScreen;
