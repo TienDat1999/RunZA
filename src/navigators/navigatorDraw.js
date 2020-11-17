@@ -28,7 +28,7 @@ const ProfileElm = ({navigation}) => {
 const Drawer = createDrawerNavigator();
 
 const NavigatorDraw = () => {
-  const [login, setLogin] = useState(null);
+  const [login, setLogin] = useState(true);
   const authContextvaluses = React.useMemo(() => {
     return {
       Sigin: () => {
