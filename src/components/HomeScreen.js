@@ -16,7 +16,93 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 const HomeScreen = () => {
   const fill = 'rgb(86, 204, 242)';
   const data = [50, 20, 60, 20, 30, 20, 30, 100, 50];
+  const [award, setAward] = useState({
+    distance: null,
+    numberOfSteps: null,
+    startDate: null,
+  });
 
+  const [curentAward, SetCurentAward] = useState({
+    distance: null,
+    numberOfSteps: null,
+    startDate: null,
+  });
+  const setStoreAward = async () => {
+    try {
+      await AsyncStorage.setItem('award', JSON.stringify(award));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const recieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('award');
+      if (value != null) {
+        let data = JSON.parse(value);
+        console.log('data nhan dc la', value);
+        const now = new Date().getMinutes();
+        const lastDay = new Date(Number(data.startDate)).getMinutes();
+        if (now == lastDay) {
+          console.log('VAN LA NGAY CU');
+          setAward(data);
+          SetCurentAward(data);
+        } else {
+          // setHistoryAward([...historyAward, data]);
+          // setHistoryLocal(historyAward);
+          setTimeout(() => {
+            SetCurentAward({
+              distance: 0,
+              numberOfSteps: 0,
+              startDate: null,
+            });
+          }, 250);
+        }
+      } else {
+        console.log('data award null');
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log(error);
+    }
+  };
+  const setHistoryLocal = (data) => {
+    setTimeout(async () => {
+      await AsyncStorage.setItem('historyAwardLocal', JSON.stringify(data));
+    }, 100);
+  };
+  const getHistoryLocal = async () => {
+    const value = await AsyncStorage.getItem('historyAwardLocal');
+    let data = JSON.parse(value);
+    console.log('data value', data);
+    // setHistoryAward(data);
+    // console.log('data history', historyAward);
+  };
+  const pedomestorCount = () => {
+    // if (isEnabled) {
+    const now = new Date();
+    Pedometer.startPedometerUpdatesFromDate(now.getTime(), (pedometerData) => {
+      setAward({
+        distance: Number(curentAward.distance) + pedometerData.distance,
+        numberOfSteps:
+          Number(curentAward.numberOfSteps) + pedometerData.numberOfSteps,
+        startDate: pedometerData.startDate,
+      });
+    });
+  };
+
+  useEffect(() => {
+    recieveData();
+    // getHistoryLocal();
+  }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setStoreAward();
+    }, 300);
+  }, [award.numberOfSteps]);
+
+  useEffect(() => {
+    pedomestorCount();
+  });
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#000029', '#000029']} style={{flex: 1}}>
@@ -26,12 +112,12 @@ const HomeScreen = () => {
               size={300}
               width={15}
               backgroundWidth={10}
-              fill={40}
-              tintColor="#2EFE2E"
+              fill={Number(award.numberOfSteps)}
+              steps={Number(award.numberOfSteps)}
+              tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
-              steps={<Text style={styles.texCircle}>500</Text>}
             />
           </View>
         </View>
@@ -73,10 +159,6 @@ const HomeScreen = () => {
   );
 };
 const styles = StyleSheet.create({
-  texCircle: {
-    color: 'white',
-    fontSize: 50,
-  },
   container: {
     flex: 1,
   },

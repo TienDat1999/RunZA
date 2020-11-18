@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, View, Text} from 'react-native';
+import {Button, View, Text, StyleSheet} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 const CircularProgress = ({
@@ -24,9 +24,16 @@ const CircularProgress = ({
         backgroundColor={backgroundColor}
         rotation={rotation}
         lineCap={lineCap}>
-        {() => <Text>{steps}</Text>}
+        {() => <Text style={styles.texCircle}>{steps}</Text>}
       </AnimatedCircularProgress>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  texCircle: {
+    color: 'white',
+    fontSize: 50,
+  },
+});
+
 export default CircularProgress;
