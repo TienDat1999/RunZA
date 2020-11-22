@@ -10,7 +10,7 @@ export default class Profile extends Component {
         <View style={styles.header} >
           <View>
             <Image source={require('../components/image/avatar.jpg')} style={{borderRadius:50,alignItems:'center'}} />
-            <View style={{marginTop:20, marginBottom:10}} >
+            <View style={{ marginTop:10}} >
               <Text style={{fontSize:20, color:'white'}}>TONY STARK </Text>
             </View>
           </View>
@@ -63,7 +63,8 @@ container:{
   },
 header:{
  alignItems:"center",
- marginTop:40
+ marginTop:40,
+ flexDirection:'column'
 },
 body:{
   backgroundColor:'white', 

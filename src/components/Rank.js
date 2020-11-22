@@ -64,18 +64,16 @@ export default Rank = ({navigation}) => {
                 <View>
                   <Text style={{fontSize:16,color:'#ffff', marginRight:30}}>2nd</Text>
                 </View>
-                <View style={{marginTop:40}}>
-                  <Image source={require('../components/image/avatar.jpg')} style={{borderRadius:50,alignItems:'center',justifyContent:'center'}} />
+                <View style={{flexDirection:'column'}}>
+                    <Image source={require('../components/image/avatar.jpg')} style={{borderRadius:50,alignItems:'center',justifyContent:'center'}} />
+                    <View style={{marginTop:10}}>
+                    <Text style={{fontSize:16,color:'#ffff'}}>TONY STARK</Text>
+                  </View>
                 </View>
                 <View>
                   <Text style={{fontSize:16,color:'#ffff', marginLeft:30}}>10.000m</Text>
                 </View>
-              </View>  
-              <View style={styles.headerBot}>
-                <View>
-                  <Text style={{fontSize:16,color:'#ffff'}}>TONY STARK</Text>
-                </View>
-              </View>
+              </View>       
             </View>
             <View style={styles.body}>
               <View style={styles.listTab}>
@@ -109,6 +107,8 @@ container:{
 header:{
  flex:1,
  alignItems:'center',
+ justifyContent:'space-around',
+ flexDirection:'column'
 },
 headerTop:{
   flexDirection:'row',

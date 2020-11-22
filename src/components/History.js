@@ -4,11 +4,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import {LocaleConfig} from 'react-native-calendars';
 import {Calendar} from 'react-native-calendars';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { BarChart } from 'react-native-svg-charts'
+import { BarChart } from 'react-native-svg-charts';
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+import { Dimensions } from 'react-native';
+import { color } from 'react-native-reanimated';
 
 export default History = ({navigation}) => {
-  const fill = 'rgb(86, 204, 242)'
-  const data = [50, 10, 40, 95, 4, 24, null, 85, undefined, 0, 35, 53, 53, 24, 50, 20, 10]
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
   return (
   <LinearGradient colors={[ '#000029','#000029' ]} style={{flex:1}}>
     <View  style={styles.container} >
@@ -36,17 +39,40 @@ export default History = ({navigation}) => {
                     <View style={styles.itemicon}>
                       <Icon name="map-marker-radius-outline"  size={40} color='#ffff'/>             
                     </View> 
-                  <View><Text style={styles.text} >O KCAL</Text></View> 
+                  <View><Text style={styles.text} >O M</Text></View> 
               </View> 
               <View style={styles.icon}>
                     <View style={styles.itemicon}>
                       <Icon name="clock-time-two-outline"  size={40} color='#ffff'/>             
                     </View> 
-                  <View><Text style={styles.text} >O KCAL</Text></View> 
+                  <View><Text style={styles.text} >O MM</Text></View> 
               </View> 
         </View>  
-            <BarChart style={{ height: 200, marginTop:20,marginBottom:20 }} data={data} svg={{ fill }} contentInset={{ top:30  }}>  
-            </BarChart>
+        <VerticalBarGraph
+            data={[20, 45, 28, 80, 99, 43, 50]}
+            labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+            width={Dimensions.get('window').width }
+            height={200}
+            barRadius={5}
+            barWidthPercentage={0.65}
+            barColor='#56CCF2'
+            baseConfig={{
+              hasXAxisBackgroundLines: false,
+              xAxisLabelStyle: {
+                position: 'right',
+                suffix: 'km',
+                color:'white'
+              },      
+              yAxisLabelStyle: {
+                color:'white'
+              },      
+            }}
+            style={{
+              marginBottom: 30,
+              paddingTop: 20,
+              width: Dimensions.get('window').width ,
+            }}
+          />
         </View>    
       </View>
   </LinearGradient>
@@ -66,26 +92,22 @@ footer:{
   marginTop:20,
 },
 top:{
-  flexDirection:'row'
+  flexDirection: 'row',
+  justifyContent:'space-around'
 },
-icon:{
-  flexDirection:'column'
-},
+
 itemicon:{
   alignItems:'center',
   justifyContent:'center',
   borderRadius:50,
   borderWidth:2,
   borderColor:'white',
-  marginLeft:50,
   width:60,
   height:60,
-  marginTop:10
 },
 text:{
   color:'white',
   marginTop:10,
   textAlign:'center',
-  marginLeft: 50,
 },
 })

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Switch, View, Text, StyleSheet} from 'react-native';
+import {Switch, View, Text, StyleSheet, TouchableOpacity, Button,Dimensions} from 'react-native';
 import CircularProgres from './Component/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -7,12 +7,13 @@ import debounce from 'lodash.debounce';
 import BackgroundTimer from 'react-native-background-timer';
 import {color, set} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {BarChart} from 'react-native-svg-charts';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 //const NUMBER_STEP_KEY = 'numberOfSteps';
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const HomeScreen = () => {
   const fill = 'rgb(86, 204, 242)';
   const data = [50, 20, 60, 20, 30, 20, 30, 100, 50];
@@ -89,7 +90,6 @@ const HomeScreen = () => {
       });
     });
   };
-
   useEffect(() => {
     recieveData();
     // getHistoryLocal();
@@ -103,6 +103,7 @@ const HomeScreen = () => {
   useEffect(() => {
     pedomestorCount();
   });
+
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#000029', '#000029']} style={{flex: 1}}>
@@ -112,19 +113,19 @@ const HomeScreen = () => {
               size={300}
               width={15}
               backgroundWidth={10}
-              fill={Number(award.numberOfSteps)}
-              steps={Number(award.numberOfSteps)}
+              fill={56}
+              steps={56}
               tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
             />
-          </View>
+          </View> 
         </View>
         <View style={styles.body}>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              <Icon name="fire" size={40} color="#ffff" />
+              <Icons name="fire" size={40} color="#ffff" />
             </View>
             <View>
               <Text style={styles.text}>O KCAL</Text>
@@ -132,27 +133,47 @@ const HomeScreen = () => {
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              <Icon name="map-marker-radius-outline" size={40} color="#ffff" />
+              <Icons name="map-marker-radius-outline" size={40} color="#ffff" />
             </View>
             <View>
-              <Text style={styles.text}>O KCAL</Text>
+              <Text style={styles.text}>O M</Text>
             </View>
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              <Icon name="clock-time-two-outline" size={40} color="#ffff" />
+              <Icons name="clock-time-two-outline" size={40} color="#ffff" />
             </View>
             <View>
-              <Text style={styles.text}>O KCAL</Text>
+              <Text style={styles.text}>O MM</Text>
             </View>
           </View>
         </View>
         <View style={styles.footer}>
-          <BarChart
-            style={{height: 200}}
-            data={data}
-            svg={{fill}}
-            contentInset={{top: 30}}></BarChart>
+        <VerticalBarGraph
+            data={[20, 45, 28, 80, 99, 43, 50]}
+            labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+            width={Dimensions.get('window').width }
+            height={200}
+            barRadius={5}
+            barWidthPercentage={0.65}
+            barColor='#56CCF2'
+            baseConfig={{
+              hasXAxisBackgroundLines: false,
+              xAxisLabelStyle: {
+                position: 'right',
+                suffix: 'km',
+                color:'white'
+              },      
+              yAxisLabelStyle: {
+                color:'white'
+              },      
+            }}
+            style={{
+              marginBottom: 30,
+              paddingTop: 20,
+              width: Dimensions.get('window').width ,
+            }}
+          />
         </View>
       </LinearGradient>
     </View>
@@ -164,11 +185,12 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginTop: 60,
+    marginTop: 30,
   },
   body: {
     flexDirection: 'row',
     marginTop: 10,
+    justifyContent:'space-around'
   },
   icon: {
     flexDirection: 'column',
@@ -179,7 +201,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     borderColor: 'white',
-    marginLeft: 50,
     width: 60,
     height: 60,
     marginTop: 10,
@@ -188,12 +209,10 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 10,
     textAlign: 'center',
-    marginLeft: 50,
   },
   footer: {
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
+    marginTop:20,
+    justifyContent:'flex-end'
   },
 });
 export default HomeScreen;

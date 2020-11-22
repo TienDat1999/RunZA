@@ -10,6 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@chartiful/react-native-chart-builder": "^0.1.8",
+    "@chartiful/react-native-line-graph": "^0.1.2",
+    "@chartiful/react-native-vertical-bar-graph": "^0.1.2",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^8.4.3",
@@ -20,6 +23,7 @@
     "@react-navigation/stack": "^5.9.2",
     "css-tree": "1.0.0-alpha.39",
     "lodash.debounce": "^4.0.8",
+    "native-base": "^2.13.14",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-background-timer": "^2.4.1",
@@ -35,6 +39,7 @@
     "react-native-linear-gradient": "^2.5.6",
     "react-native-paper": "^4.3.0",
     "react-native-pedometer-huangxt": "^1.0.3",
+    "react-native-pure-chart": "0.0.24",
     "react-native-reanimated": "^1.13.1",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",

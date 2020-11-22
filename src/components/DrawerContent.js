@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import{
     Avatar,
     Title,
@@ -14,14 +14,14 @@ import{
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {Header, Left, Right, Icon} from 'native-base';
 export function DrawerContent(props){
     return(
       <LinearGradient colors={[ '#000029','#000029' ]} style={{flex:1}}>
-         <View style={styles.container}>
-           <View style={styles.header}>
+         <View style={styles.container}>         
+           <View style={styles.header}>        
             <View style={styles.avatar}>
               <View>
                   <Image source={require('../components/image/avatar.jpg')} style={{  borderWidth: 30,borderRadius:50,marginTop:40, marginLeft:20}} />              
@@ -32,9 +32,9 @@ export function DrawerContent(props){
               </View>
             <View style={styles.icon}>
               <View style={styles.itemicon}>
-                <View style={{marginTop:20}}><Icon name="face" size={18} color="white"> 18 </Icon></View>
-                <View style={{marginTop:20}}><Icon name="human-male-height-variant" size={18} color="white"> 180cm </Icon></View>
-                <View style={{marginTop:20}}><Icon name="weight-kilogram" size={18} color="white"> 70kg </Icon></View>
+                <View style={{marginTop:20}}><Icons name="face" size={18} color="white"> 18 </Icons></View>
+                <View style={{marginTop:20}}><Icons name="human-male-height-variant" size={18} color="white"> 180cm </Icons></View>
+                <View style={{marginTop:20}}><Icons name="weight-kilogram" size={18} color="white"> 70kg </Icons></View>
               </View>
             </View>  
           </View>  
@@ -44,7 +44,7 @@ export function DrawerContent(props){
               <Drawer.Section>
                 <DrawerItem 
                     icon={({color, size}) => (
-                    <Icon 
+                    <Icons
                         name="home-outline" 
                         color= "white"
                         size={size}
@@ -56,7 +56,7 @@ export function DrawerContent(props){
                         />
                    <DrawerItem 
                       icon={({color, size}) => (
-                          <Icon 
+                          <Icons 
                           name="smart-card-outline" 
                           color= "white"
                           size={size}
@@ -68,7 +68,7 @@ export function DrawerContent(props){
                         />               
                    <DrawerItem 
                       icon={({color, size}) => (
-                          <Icon 
+                          <Icons 
                           name="signal" 
                           color= "white"
                           size={size}
@@ -80,7 +80,7 @@ export function DrawerContent(props){
                         /> 
                         <DrawerItem 
                       icon={({color, size}) => (
-                          <Icon 
+                          <Icons 
                           name="notebook-outline" 
                           color= "white"
                           size={size}
@@ -92,7 +92,7 @@ export function DrawerContent(props){
                         /> 
                 <DrawerItem 
                       icon={({color, size}) => (
-                          <Icon 
+                          <Icons 
                           name="transit-connection-variant" 
                           color= "white"
                           size={size}
@@ -104,7 +104,7 @@ export function DrawerContent(props){
                         />  
                   <DrawerItem 
                       icon={({color, size}) => (
-                          <Icon 
+                          <Icons 
                           name="bell-outline" 
                           color= "white"
                           size={size}
@@ -120,7 +120,7 @@ export function DrawerContent(props){
               <Drawer.Section>
                 <DrawerItem 
                           icon={({color, size,marginTop}) => (
-                              <Icon 
+                              <Icons 
                               name="logout" 
                               color= "white"
                               size={size}
