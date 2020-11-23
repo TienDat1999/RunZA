@@ -15,10 +15,12 @@ const HomeScreen = () => {
     startDate: null,
     calories: null,
     time: null,
+    endDate: null,
   });
   const [duration, setDuaration] = useState({
     numberOfSteps: null,
-    endDate: null,
+    startDate: null,
+    timeDuaration: null,
   });
   //  const [award, setAward] = useState({numberOfSteps: 0});
   const [curentAward, SetCurentAward] = useState({
@@ -27,6 +29,7 @@ const HomeScreen = () => {
     startDate: null,
     calories: null,
     time: null,
+    endDate: null,
   });
   //history award data
   const [historyAward, setHistoryAward] = useState([]);
@@ -74,18 +77,18 @@ const HomeScreen = () => {
       console.log(error);
     }
   };
-  const setHistoryLocal = (data) => {
-    setTimeout(async () => {
-      await AsyncStorage.setItem('historyAwardLocal', JSON.stringify(data));
-    }, 100);
-  };
-  const getHistoryLocal = async () => {
-    const value = await AsyncStorage.getItem('historyAwardLocal');
-    let data = JSON.parse(value);
-    console.log('data value', data);
-    // setHistoryAward(data);
-    // console.log('data history', historyAward);
-  };
+  // const setHistoryLocal = (data) => {
+  //   setTimeout(async () => {
+  //     await AsyncStorage.setItem('historyAwardLocal', JSON.stringify(data));
+  //   }, 100);
+  // };
+  // const getHistoryLocal = async () => {
+  //   const value = await AsyncStorage.getItem('historyAwardLocal');
+  //   let data = JSON.parse(value);
+  //   console.log('data value', data);
+  //   // setHistoryAward(data);
+  //   // console.log('data history', historyAward);
+  // };
   const pedomestorCount = () => {
     const now = new Date();
     Pedometer.startPedometerUpdatesFromDate(now.getTime(), (pedometerData) => {
@@ -95,14 +98,19 @@ const HomeScreen = () => {
         numberOfSteps:
           Number(curentAward.numberOfSteps) + pedometerData.numberOfSteps,
         startDate: pedometerData.startDate,
+        endDate: pedometerData.endDate,
       });
-      setDuaration({...duration, pedometerData});
+      // setDuaration({
+      //   ...duration,
+      //   numberOfSteps: pedometerData.numberOfSteps,
+      //   endDate: pedometerData.endDate,
+      // });
     });
   };
 
   useEffect(() => {
     recieveData();
-    getHistoryLocal();
+    //getHistoryLocal();
     pedomestorCount();
 
     // let number = BWR('nu', 20, 70, 170);
@@ -114,11 +122,12 @@ const HomeScreen = () => {
     setTimeout(() => {
       setStoreAward();
     }, 300);
-    // luu lai time luc bat dau hoat dong
-    if (duration.numberOfSteps == 2) {
-      AsyncStorage.setItem('starTime', duration.endDate);
-      console.log('time start', duration.endDate);
-    }
+    //luu lai time luc bat dau hoat dong
+    // if (duration.numberOfSteps == 1) {
+    //   AsyncStorage.setItem('starTime', duration.endDate);
+    //   console.log('time start', duration.endDate);
+    // }
+    // console.log('duaration', duration);
   }, [award.numberOfSteps]);
 
   return (
