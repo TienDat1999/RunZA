@@ -48,9 +48,9 @@ const NavigatorDraw = () => {
   };
   const checkState = async () => {
     const value = await AsyncStorage.getItem('localSate');
-    if (value === 'true') {
+    if (value == 'true') {
       setLogin(true);
-    } else if (value === 'false') {
+    } else if (value == 'false') {
       setLogin(false);
     } else {
       console.log('loi trang thai');
@@ -59,21 +59,21 @@ const NavigatorDraw = () => {
   return (
     <>
       <authContext.Provider value={authContextvaluses}>
-        {login == null ? (
+        {/* {login == null ? (
           <WaitLoading />
         ) : login == false ? (
           <Login login={login} />
-        ) : (
-          <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home">
-              <Drawer.Screen name="Home" component={HomeScreenEml} />
-              <Drawer.Screen
-                name="Notifications"
-                component={NotificationsScreen}
-              />
-              <Drawer.Screen name="Profile" component={ProfileElm} />
-            </Drawer.Navigator>
-            <Button
+        ) : ( */}
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={HomeScreenEml} />
+            <Drawer.Screen
+              name="Notifications"
+              component={NotificationsScreen}
+            />
+            <Drawer.Screen name="Profile" component={ProfileElm} />
+          </Drawer.Navigator>
+          {/* <Button
               title="Logout facebook"
               onPress={() => {
                 setTimeout(() => {
@@ -82,9 +82,9 @@ const NavigatorDraw = () => {
                 // phai stop pedometer tai day
                 Pedometer.stopPedometerUpdates();
               }}
-            />
-          </NavigationContainer>
-        )}
+            /> */}
+        </NavigationContainer>
+        {/* )} */}
       </authContext.Provider>
     </>
   );

@@ -30,9 +30,9 @@ import NavigatorDraw from '../navigators/navigatorDraw';
 import AsyncStorage from '@react-native-community/async-storage';
 import {authContext} from '../components/common/authContext';
 import react from 'react';
-
 const Login = () => {
   const {Sigin} = react.useContext(authContext);
+
   const setStateLogin = async (status) => {
     await AsyncStorage.setItem('localSate', status);
   };
