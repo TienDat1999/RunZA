@@ -5,6 +5,7 @@ import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BWR} from './common/calculateCalories';
 import {CaloriesBurn} from './common/calculateCalories';
+import BackgroundJob from 'react-native-background-actions';
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
 const HomeScreen = () => {
@@ -66,6 +67,9 @@ const HomeScreen = () => {
               distance: 0,
               numberOfSteps: 0,
               startDate: null,
+              calories: null,
+              time: null,
+              endDate: null,
             });
           }, 250);
         }
@@ -107,16 +111,68 @@ const HomeScreen = () => {
       // });
     });
   };
-
+  const sleep = (time) =>
+    new Promise((resolve) => setTimeout(() => resolve(), time));
+  const taskRandom = async (taskData) => {
+    if (Platform.OS === 'ios') {
+      console.warn(
+        'This task will not keep your app alive in the background by itself, use other library like react-native-track-player that use audio,',
+        'geolocalization, etc. to keep your app alive in the background while you excute the JS from this library.',
+      );
+    }
+    await new Promise(async (resolve) => {
+      // For loop with a delay
+      const {delay} = taskData;
+      for (let i = 0; BackgroundJob.isRunning(); i++) {
+        console.log('Runned -> ', i);
+        await BackgroundJob.updateNotification({
+          taskDesc: 'app is running ',
+          progressBar: {
+            max: 50,
+            value: 27,
+            //indeterminate: true,
+          },
+        });
+        await sleep(delay);
+      }
+    });
+  };
+  const options = {
+    taskName: 'RuningZone',
+    taskTitle: 'Tap is Running',
+    taskDesc: 'ExampleTask desc',
+    taskIcon: {
+      name: 'ic_launcher',
+      type: 'mipmap',
+    },
+    color: '#ff00ff',
+    linkingURI: 'exampleScheme://chat/jane',
+    parameters: {
+      delay: 10000,
+    },
+  };
+  const backgroundTask = async () => {
+    try {
+      console.log('Trying to start background service');
+      await BackgroundJob.start(taskRandom, options);
+      console.log('Successful start!');
+    } catch (e) {
+      console.log('Error', e);
+    }
+  };
   useEffect(() => {
     recieveData();
     //getHistoryLocal();
     pedomestorCount();
+    backgroundTask();
 
     // let number = BWR('nu', 20, 70, 170);
     // console.log('BWR is', number);
     // let caloburn = CaloriesBurn(number, 3.5, 120);
     // console.log('calories Burn', Math.ceil(caloburn));
+    return () => {
+      BackgroundJob.stop();
+    };
   }, []);
   useEffect(() => {
     setTimeout(() => {
