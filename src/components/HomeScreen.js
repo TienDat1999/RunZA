@@ -103,16 +103,22 @@ const HomeScreen = () => {
   useEffect(() => {
     pedomestorCount();
   });
-
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#000029', '#000029']} style={{flex: 1}}>
+      {/* <LinearGradient colors={['#0000']} style={{flex: 1}}> */}
         <View style={styles.header}>
-          <View>
+        <TouchableOpacity>
+            <View style={styles.buttonmenu}>
+              <Icons name="menu" size={40} color="#ffff" />
+            </View>
+            </TouchableOpacity>
+          <View style={{borderWidth:1, borderColor:'white',width:windowWidth-100,height:windowHeight*0.45,marginTop:20}}>
             <CircularProgres
-              size={300}
-              width={15}
-              backgroundWidth={10}
+              size={windowHeight*0.45}
+              width={10}
+              backgroundWidth={6}
               fill={56}
               steps={56}
               tintColor="#00ffff"
@@ -121,6 +127,11 @@ const HomeScreen = () => {
               rotation={0}
             />
           </View> 
+          <TouchableOpacity>
+            <View style={styles.buttonshare}>
+            < Icons name="share-variant" size={40} color="#ffff" />
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
           <View style={styles.icon}>
@@ -152,8 +163,8 @@ const HomeScreen = () => {
         <VerticalBarGraph
             data={[20, 45, 28, 80, 99, 43, 50]}
             labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
-            width={Dimensions.get('window').width }
-            height={200}
+            width={windowWidth*0.95 }
+            height={windowHeight*0.26}
             barRadius={5}
             barWidthPercentage={0.65}
             barColor='#56CCF2'
@@ -169,23 +180,23 @@ const HomeScreen = () => {
               },      
             }}
             style={{
-              marginBottom: 30,
-              paddingTop: 20,
-              width: Dimensions.get('window').width ,
+              marginBottom: 20,
             }}
           />
         </View>
-      </LinearGradient>
+      {/* </LinearGradient> */}
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'black'
   },
   header: {
     alignItems: 'center',
-    marginTop: 30,
+    flexDirection:'row',
+    justifyContent:'space-between'
   },
   body: {
     flexDirection: 'row',
@@ -212,7 +223,19 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop:20,
-    justifyContent:'flex-end'
+    justifyContent:'flex-end',
+    borderColor:'white',
+    marginLeft:5,
+    marginRight:5,
+    borderWidth:1
   },
+  buttonmenu:{
+    justifyContent:'flex-start',
+    flex:1,
+  },
+  buttonshare:{
+    justifyContent:'flex-start',
+    flex:1
+  }
 });
 export default HomeScreen;

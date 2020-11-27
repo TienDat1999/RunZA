@@ -17,17 +17,14 @@ export default History = ({navigation}) => {
     <View  style={styles.container} >
       <View style={styles.header}>
         <View><Text style={{fontSize:20, textAlign:"center", color:'#ffff'}}> SEP, 2020 </Text></View>
-         <View style={{marginTop:10}}><Text style={{fontSize:25, textAlign:"center", color:'#ffff'}}> 1.200 </Text></View>
+         <View style={{marginTop:5}}><Text style={{fontSize:25, textAlign:"center", color:'#ffff'}}> 1.200 </Text></View>
       </View>
       <View style={styles.body}>
-          <View style={styles.calender}>
           <Calendar
-          style={{borderWidth:1, height:300}}
-          theme={{calendarBackground:'#000029'}}
-              />
-          </View>
-      </View>
-      <View style={styles.footer}>
+          style={{marginLeft:5,marginRight:5}}
+          theme={{calendarBackground:'#000029',
+         }}
+       />
         <View style={styles.top}>
           <View style={styles.icon}>
                     <View style={styles.itemicon}>
@@ -47,12 +44,16 @@ export default History = ({navigation}) => {
                     </View> 
                   <View><Text style={styles.text} >O MM</Text></View> 
               </View> 
-        </View>  
+        </View> 
+
+      </View>
+      <View style={styles.footer}>
+        <View style={styles.chart}>
         <VerticalBarGraph
             data={[20, 45, 28, 80, 99, 43, 50]}
             labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
-            width={Dimensions.get('window').width }
-            height={200}
+            width={windowWidth*0.95 }
+            height={windowHeight*0.26}
             barRadius={5}
             barWidthPercentage={0.65}
             barColor='#56CCF2'
@@ -68,12 +69,11 @@ export default History = ({navigation}) => {
               },      
             }}
             style={{
-              marginBottom: 30,
-              paddingTop: 20,
-              width: Dimensions.get('window').width ,
+              paddingTop: 10,
             }}
           />
-        </View>    
+        </View>  
+        </View>   
       </View>
   </LinearGradient>
   );
@@ -82,20 +82,19 @@ const styles=StyleSheet.create({
 container:{
  flex:1
 },
-header:{
- marginTop:20
-},
-calender:{
- marginTop:10
-},
+
 footer:{
-  marginTop:20,
+  marginTop:10,
 },
 top:{
   flexDirection: 'row',
-  justifyContent:'space-around'
+  justifyContent:'space-around',
+  marginTop:5,
+  marginBottom:5
 },
-
+body:{
+  flex:1,
+},
 itemicon:{
   alignItems:'center',
   justifyContent:'center',
@@ -107,7 +106,15 @@ itemicon:{
 },
 text:{
   color:'white',
-  marginTop:10,
+  marginTop:5,
   textAlign:'center',
+},
+chart: {
+  marginTop:20,
+  justifyContent:'flex-end',
+  borderColor:'white',
+  marginLeft:5,
+  marginRight:5,
+  borderWidth:1
 },
 })
