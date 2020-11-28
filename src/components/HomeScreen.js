@@ -22,21 +22,25 @@ const HomeScreen = () => {
     startDate: null,
     timeDuaration: null,
   });
-  //  const [award, setAward] = useState({numberOfSteps: 0});
+  //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
     if (value != null) {
       let data = JSON.parse(value);
+      console.log('data', data);
       return data;
-    } else return null;
+    } else {
+      console.log('lay du lieu tu local null');
+      return null;
+    }
   };
   //history award data
   const [historyAward, setHistoryAward] = useState([]);
 
   const setStoreAward = async () => {
     const value = JSON.stringify(award);
-
     try {
+      console.log('set award', value);
       await AsyncStorage.setItem('award', value);
     } catch (e) {
       console.log(e);
@@ -55,9 +59,9 @@ const HomeScreen = () => {
         if (now == lastDay) {
           console.log('VAN LA NGAY CU');
           setAward(data);
+        } else {
+          console.log('qua ngay moi');
         }
-      } else {
-        console.log('data award null');
       }
     } catch (error) {
       // Error retrieving data
@@ -79,28 +83,20 @@ const HomeScreen = () => {
   const pedomestorCount = () => {
     curentAward().then((value) => {
       const now = new Date();
-      const curentDay = new Date().getMinutes();
-      const lastDay = new Date(Number(value.startDate)).getMinutes();
 
       Pedometer.startPedometerUpdatesFromDate(
         now.getTime(),
         (pedometerData) => {
-          if (curentDay == lastDay) {
-            setAward({
-              distance: Number(value.distance) + pedometerData.distance,
-              numberOfSteps:
-                Number(value.numberOfSteps) + pedometerData.numberOfSteps,
-              startDate: pedometerData.startDate,
-              endDate: pedometerData.endDate,
-            });
-          } else {
-            setAward({
-              distance: pedometerData.distance,
-              numberOfSteps: pedometerData.numberOfSteps,
-              startDate: pedometerData.startDate,
-              endDate: pedometerData.endDate,
-            });
-          }
+          const curentDay = new Date().getMinutes();
+          const lastDay = new Date(Number(value.startDate)).getMinutes();
+          console.log(curentDay + ' and ' + lastDay);
+          setAward({
+            distance: Number(value.distance) + pedometerData.distance,
+            numberOfSteps:
+              Number(value.numberOfSteps) + pedometerData.numberOfSteps,
+            startDate: pedometerData.startDate,
+            endDate: pedometerData.endDate,
+          });
         },
       );
     });
@@ -161,7 +157,7 @@ const HomeScreen = () => {
     //getHistoryLocal();
     setTimeout(() => {
       pedomestorCount();
-    }, 3500);
+    }, 400);
 
     //backgroundTask();
 
@@ -174,9 +170,8 @@ const HomeScreen = () => {
     };
   }, []);
   useEffect(() => {
-    setTimeout(() => {
-      setStoreAward();
-    }, 300);
+    setStoreAward();
+
     //luu lai time luc bat dau hoat dong
     // if (duration.numberOfSteps == 1) {
     //   AsyncStorage.setItem('starTime', duration.endDate);
