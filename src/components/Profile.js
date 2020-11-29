@@ -26,7 +26,7 @@ export default Profile = ({navigation}) => {
   };
   useEffect(() => {
     setInforUser();
-  }, [profile]);
+  }, [{profile}]);
   useEffect(() => {
     getInforUser();
   });

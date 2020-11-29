@@ -3,10 +3,11 @@ import {Button, View, Text, Linking} from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
-import {BWR} from './common/calculateCalories';
-import {CaloriesBurn} from './common/calculateCalories';
-import BackgroundJob from 'react-native-background-actions';
-import {set} from 'react-native-reanimated';
+import {BWR, CaloriesBurn} from './common/calculateCalories';
+import {fn_DateCompare} from '../components/common/equalDate';
+import {getData, setData, removeData} from '../components/common/AsyncStorage';
+import {get} from 'react-native/Libraries/Utilities/PixelRatio';
+import moment from 'moment';
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
 const HomeScreen = () => {
@@ -16,18 +17,15 @@ const HomeScreen = () => {
     numberOfSteps: null,
     startDate: null,
     endDate: null,
+    miniutes: null,
+    Calories: null,
   });
-  const [duration, setDuaration] = useState({
-    numberOfSteps: null,
-    startDate: null,
-    timeDuaration: null,
-  });
+
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
     if (value != null) {
       let data = JSON.parse(value);
-      console.log('data', data);
       return data;
     } else {
       console.log('lay du lieu tu local null');
@@ -36,11 +34,16 @@ const HomeScreen = () => {
   };
   //history award data
   const [historyAward, setHistoryAward] = useState([]);
+  const getMinute = (fist, second) => {
+    const miniutesNow = new Date(Number(fist)).getMinutes();
+    const miniutesLast = new Date(Number(second)).getMinutes();
+
+    return miniutesNow - miniutesLast;
+  };
 
   const setStoreAward = async () => {
     const value = JSON.stringify(award);
     try {
-      console.log('set award', value);
       await AsyncStorage.setItem('award', value);
     } catch (e) {
       console.log(e);
@@ -52,15 +55,27 @@ const HomeScreen = () => {
     try {
       const value = await AsyncStorage.getItem('award');
       if (value != null) {
-        let data = JSON.parse(value);
-        console.log('data nhan dc la', data);
-        const now = new Date().getMinutes();
-        const lastDay = new Date(Number(data.startDate)).getMinutes();
-        if (now == lastDay) {
+        const data = JSON.parse(value);
+        const now = new Date().getTime();
+        const lastDay = new Date(Number(data.startDate)).getTime();
+        // const miniutesNow = new Date(Number(now)).getMinutes();
+        // const miniutesLast = new Date(Number(lastDay)).getMinutes();
+        //console.log('hien nay ' + miniutesNow + ' ngay cu ' + miniutesLast);
+
+        if (fn_DateCompare(now, lastDay) == 0) {
           console.log('VAN LA NGAY CU');
+          console.log('data nhan dc', data);
           setAward(data);
         } else {
-          console.log('qua ngay moi');
+          getData('history').then((val) => {
+            if (val == null) {
+              setData('history', award);
+            } else {
+              console.log('di vao set history', val);
+              const his = [...val, award];
+              setData('history', his);
+            }
+          });
         }
       }
     } catch (error) {
@@ -68,120 +83,56 @@ const HomeScreen = () => {
       console.log(error);
     }
   };
-  // const setHistoryLocal = (data) => {
-  //   setTimeout(async () => {
-  //     await AsyncStorage.setItem('historyAwardLocal', JSON.stringify(data));
-  //   }, 100);
-  // };
-  // const getHistoryLocal = async () => {
-  //   const value = await AsyncStorage.getItem('historyAwardLocal');
-  //   let data = JSON.parse(value);
-  //   console.log('data value', data);
-  //   // setHistoryAward(data);
-  //   // console.log('data history', historyAward);
-  // };
+
   const pedomestorCount = () => {
     curentAward().then((value) => {
-      const now = new Date();
-
-      Pedometer.startPedometerUpdatesFromDate(
-        now.getTime(),
-        (pedometerData) => {
-          const curentDay = new Date().getMinutes();
-          const lastDay = new Date(Number(value.startDate)).getMinutes();
-          console.log(curentDay + ' and ' + lastDay);
-          setAward({
-            distance: Number(value.distance) + pedometerData.distance,
-            numberOfSteps:
-              Number(value.numberOfSteps) + pedometerData.numberOfSteps,
-            startDate: pedometerData.startDate,
-            endDate: pedometerData.endDate,
-          });
-        },
-      );
-    });
-  };
-
-  const sleep = (time) =>
-    new Promise((resolve) => setTimeout(() => resolve(), time));
-  const taskRandom = async (taskData) => {
-    if (Platform.OS === 'ios') {
-      console.warn(
-        'This task will not keep your app alive in the background by itself, use other library like react-native-track-player that use audio,',
-        'geolocalization, etc. to keep your app alive in the background while you excute the JS from this library.',
-      );
-    }
-    await new Promise(async (resolve) => {
-      // For loop with a delay
-      const {delay} = taskData;
-      for (let i = 0; BackgroundJob.isRunning(); i++) {
-        console.log('Runned -> ', i);
-        await BackgroundJob.updateNotification({
-          taskDesc: 'app is running ',
-          progressBar: {
-            max: 50,
-            value: 27,
-            //indeterminate: true,
+      getData('inforUser').then((val) => {
+        let number = BWR(val.gender, val.age, val.Weight, val.height);
+        // console.log('calories Burn', Math.ceil(caloburn));
+        const nows = new Date();
+        Pedometer.startPedometerUpdatesFromDate(
+          nows.getTime(),
+          (pedometerData) => {
+            const duration = getMinute(
+              pedometerData.endDate,
+              pedometerData.startDate,
+            );
+            console.log('duaration', duration);
+            setAward({
+              distance: Number(value.distance) + pedometerData.distance,
+              numberOfSteps:
+                Number(value.numberOfSteps) + pedometerData.numberOfSteps,
+              startDate: pedometerData.startDate,
+              endDate: pedometerData.endDate,
+              miniutes: Number(value.miniutes) + duration,
+              Calories: CaloriesBurn(
+                number,
+                3.5,
+                Number(value.miniutes) + duration,
+              ),
+            });
           },
-        });
-        await sleep(delay);
-      }
+        );
+      });
     });
-  };
-  const options = {
-    taskName: 'RuningZone',
-    taskTitle: 'Tap is Running',
-    taskDesc: 'ExampleTask desc',
-    taskIcon: {
-      name: 'ic_launcher',
-      type: 'mipmap',
-    },
-    color: '#ff00ff',
-    linkingURI: 'exampleScheme://chat/jane',
-    parameters: {
-      delay: 10000,
-    },
-  };
-  const backgroundTask = async () => {
-    try {
-      console.log('Trying to start background service');
-      await BackgroundJob.start(taskRandom, options);
-      console.log('Successful start!');
-    } catch (e) {
-      console.log('Error', e);
-    }
   };
 
   useEffect(() => {
     recieveData();
-    //getHistoryLocal();
+    removeData('history');
     setTimeout(() => {
       pedomestorCount();
     }, 400);
 
     //backgroundTask();
-
-    // let number = BWR('nu', 20, 70, 170);
-    // console.log('BWR is', number);
-    // let caloburn = CaloriesBurn(number, 3.5, 120);
-    // console.log('calories Burn', Math.ceil(caloburn));
-    return () => {
-      BackgroundJob.stop();
-    };
   }, []);
-  useEffect(() => {
-    setStoreAward();
 
-    //luu lai time luc bat dau hoat dong
-    // if (duration.numberOfSteps == 1) {
-    //   AsyncStorage.setItem('starTime', duration.endDate);
-    //   console.log('time start', duration.endDate);
-    // }
-    // console.log('duaration', duration);
+  useEffect(() => {
+    setTimeout(() => {
+      setStoreAward();
+    }, 200);
   }, [award.numberOfSteps]);
-  // useEffect(() => {
-  //   pedomestorCount();
-  // });
+
   return (
     <View>
       <Text>{award.distance}</Text>
