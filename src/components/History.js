@@ -8,6 +8,7 @@ import { BarChart } from 'react-native-svg-charts';
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import { Dimensions } from 'react-native';
 import { color } from 'react-native-reanimated';
+import CircularProgres from './Component/CircularProgres';
 
 export default History = ({navigation}) => {
   const windowWidth = Dimensions.get('window').width;
@@ -28,19 +29,46 @@ export default History = ({navigation}) => {
         <View style={styles.top}>
           <View style={styles.icon}>
                     <View style={styles.itemicon}>
-                      <Icon name="fire"  size={40} color='#ffff'/>             
+                      <CircularProgres
+                        size={50}
+                        width={2}
+                        backgroundWidth={3}
+                        fill={10}
+                        tintColor="#00ffff"
+                        backgroundColor="#FFF"
+                        lineCap="round"
+                        rotation={0}
+                      />            
                     </View> 
                   <View><Text style={styles.text} >O KCAL</Text></View> 
               </View> 
               <View style={styles.icon}>
                     <View style={styles.itemicon}>
-                      <Icon name="map-marker-radius-outline"  size={40} color='#ffff'/>             
+                    <CircularProgres
+                        size={50}
+                        width={2}
+                        backgroundWidth={3}
+                        fill={10}
+                        tintColor="#00ffff"
+                        backgroundColor="#FFF"
+                        lineCap="round"
+                        rotation={0}
+                      />                    
                     </View> 
                   <View><Text style={styles.text} >O M</Text></View> 
               </View> 
               <View style={styles.icon}>
                     <View style={styles.itemicon}>
-                      <Icon name="clock-time-two-outline"  size={40} color='#ffff'/>             
+                    <CircularProgres
+                        size={50}
+                        width={2}
+                        backgroundWidth={3}
+                        fill={10}
+                        tintColor="#00ffff"
+                        backgroundColor="#FFF"
+                        lineCap="round"
+                        rotation={0}
+                      />                     
                     </View> 
                   <View><Text style={styles.text} >O MM</Text></View> 
               </View> 
@@ -95,15 +123,15 @@ top:{
 body:{
   flex:1,
 },
-itemicon:{
-  alignItems:'center',
-  justifyContent:'center',
-  borderRadius:50,
-  borderWidth:2,
-  borderColor:'white',
-  width:60,
-  height:60,
-},
+// itemicon:{
+//   alignItems:'center',
+//   justifyContent:'center',
+//   borderRadius:50,
+//   borderWidth:2,
+//   borderColor:'white',
+//   width:60,
+//   height:60,
+// },
 text:{
   color:'white',
   marginTop:5,

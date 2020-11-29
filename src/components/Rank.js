@@ -48,7 +48,7 @@ export default Rank = ({navigation}) => {
     return(
       <View key={index} style={styles.boderContainer}>
        <View style={styles.boder}>
-         <View><Text style={{colors:'black',fontSize:18,marginLeft:20}}>{item.number}</Text></View>
+         <View><Text style={{color:'black',fontSize:18,marginLeft:20}}>{item.number}</Text></View>
          <View><Image source={require('../components/image/avatar.jpg')} style={{width:25,height:25,marginLeft:20}}/></View>
          <View><Text style={{colors:'black',fontSize:18,marginLeft:20}}>{item.name}</Text></View>
          <View><Text style={{colors:'black',fontSize:18,marginLeft:20}}>{item.kilometer}</Text></View>
