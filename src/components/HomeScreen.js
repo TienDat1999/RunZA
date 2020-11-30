@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
-import {get} from 'react-native/Libraries/Utilities/PixelRatio';
-import moment from 'moment';
+
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
 const HomeScreen = () => {
@@ -87,32 +86,34 @@ const HomeScreen = () => {
   const pedomestorCount = () => {
     curentAward().then((value) => {
       getData('inforUser').then((val) => {
-        let number = BWR(val.gender, val.age, val.Weight, val.height);
-        // console.log('calories Burn', Math.ceil(caloburn));
-        const nows = new Date();
-        Pedometer.startPedometerUpdatesFromDate(
-          nows.getTime(),
-          (pedometerData) => {
-            const duration = getMinute(
-              pedometerData.endDate,
-              pedometerData.startDate,
-            );
-            console.log('duaration', duration);
-            setAward({
-              distance: Number(value.distance) + pedometerData.distance,
-              numberOfSteps:
-                Number(value.numberOfSteps) + pedometerData.numberOfSteps,
-              startDate: pedometerData.startDate,
-              endDate: pedometerData.endDate,
-              miniutes: Number(value.miniutes) + duration,
-              Calories: CaloriesBurn(
-                number,
-                3.5,
-                Number(value.miniutes) + duration,
-              ),
-            });
-          },
-        );
+        if (val != null) {
+          let number = BWR(val.gender, val.age, val.Weight, val.height);
+          // console.log('calories Burn', Math.ceil(caloburn));
+          const nows = new Date();
+          Pedometer.startPedometerUpdatesFromDate(
+            nows.getTime(),
+            (pedometerData) => {
+              const duration = getMinute(
+                pedometerData.endDate,
+                pedometerData.startDate,
+              );
+              console.log('duaration', duration);
+              setAward({
+                distance: Number(value.distance) + pedometerData.distance,
+                numberOfSteps:
+                  Number(value.numberOfSteps) + pedometerData.numberOfSteps,
+                startDate: pedometerData.startDate,
+                endDate: pedometerData.endDate,
+                miniutes: Number(value.miniutes) + duration,
+                Calories: CaloriesBurn(
+                  number,
+                  3.5,
+                  Number(value.miniutes) + duration,
+                ),
+              });
+            },
+          );
+        }
       });
     });
   };

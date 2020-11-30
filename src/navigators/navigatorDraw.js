@@ -10,6 +10,7 @@ import Login from '../screens/login';
 import WaitLoading from '../components/common/waitLoading';
 import AsyncStorage from '@react-native-community/async-storage';
 import {authContext} from '../components/common/authContext';
+import {History} from '../components/History';
 const HomeScreenEml = ({navigation}) => {
   return <HomeScreen navigation={navigation} />;
 };
@@ -67,10 +68,7 @@ const NavigatorDraw = () => {
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen name="Home" component={HomeScreenEml} />
-            <Drawer.Screen
-              name="Notifications"
-              component={NotificationsScreen}
-            />
+            <Drawer.Screen name="History" component={History} />
             <Drawer.Screen name="Profile" component={ProfileElm} />
           </Drawer.Navigator>
           {/* <Button
