@@ -120,7 +120,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     recieveData();
-    removeData('history');
     setTimeout(() => {
       pedomestorCount();
     }, 400);
