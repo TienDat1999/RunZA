@@ -17,15 +17,30 @@ export default History = ({navigation}) => {
   <LinearGradient colors={[ '#000029','#000029' ]} style={{flex:1}}>
     <View  style={styles.container} >
       <View style={styles.header}>
-        <View><Text style={{fontSize:20, textAlign:"center", color:'#ffff'}}> SEP, 2020 </Text></View>
+        <View><Text style={{fontSize:20, textAlign:"center", color:'#ffff'}}> itb </Text></View>
          <View style={{marginTop:5}}><Text style={{fontSize:25, textAlign:"center", color:'#ffff'}}> 1.200 </Text></View>
       </View>
       <View style={styles.body}>
-          <Calendar
+          {/* <Calendar
           style={{marginLeft:5,marginRight:5}}
           theme={{calendarBackground:'#000029',
          }}
-       />
+       /> */
+       <View style={{borderColor:'white', borderWidth:1,height:'75%'}}>
+        <Calendar
+        style={[styles.calendar, {height: 300}]}
+        dayComponent={({date, state}) => {
+          return (
+            <View>
+              <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>
+                {date.day}
+              </Text>
+            </View>
+          );
+        }}
+      />
+    </View>
+       }
         <View style={styles.top}>
           <View style={styles.icon}>
                     <View style={styles.itemicon}>
@@ -37,6 +52,7 @@ export default History = ({navigation}) => {
                         tintColor="#00ffff"
                         backgroundColor="#FFF"
                         lineCap="round"
+                        image
                         rotation={0}
                       />            
                     </View> 
@@ -49,6 +65,7 @@ export default History = ({navigation}) => {
                         width={2}
                         backgroundWidth={3}
                         fill={10}
+                        steps={""}
                         tintColor="#00ffff"
                         backgroundColor="#FFF"
                         lineCap="round"
@@ -113,25 +130,25 @@ container:{
 
 footer:{
   marginTop:10,
+  borderColor:'white',
+  borderWidth:1
 },
 top:{
   flexDirection: 'row',
   justifyContent:'space-around',
-  marginTop:5,
-  marginBottom:5
+  marginTop:'5%',
+  marginBottom:5,
+  borderWidth:1,
+  borderColor:'white'
 },
 body:{
   flex:1,
 },
-// itemicon:{
-//   alignItems:'center',
-//   justifyContent:'center',
-//   borderRadius:50,
-//   borderWidth:2,
-//   borderColor:'white',
-//   width:60,
-//   height:60,
-// },
+itemicon:{
+  borderWidth:1,
+  borderColor:'white',
+  marginTop:10
+},
 text:{
   color:'white',
   marginTop:5,

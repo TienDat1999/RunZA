@@ -11,6 +11,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import { createStackNavigator } from '@react-navigation/stack';
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -109,31 +110,34 @@ const HomeScreen = () => {
     <View style={styles.container}>
       {/* <LinearGradient colors={['#0000']} style={{flex: 1}}> */}
         <View style={styles.header}>
-        <TouchableOpacity>
-            <View style={styles.buttonmenu}>
-              <Icons name="menu" size={30} color="#ffff" />
-            </View>
-            </TouchableOpacity>
-          <View style={{borderWidth:1, borderColor:'white',width:windowWidth-100,height:windowHeight*0.45,marginTop:30,alignItems:'center'}}>
-            <CircularProgres
-              size={windowHeight*0.45}
-              width={10}
-              backgroundWidth={9}
-              fill={56}
-              steps={56}
-              tintColor="#00ffff"
-              backgroundColor="#FFF"
-              lineCap="round"
-              rotation={0}
-            >
-              <Text style={{ fontSize: 18 }}>{'30%'}</Text>
-            </CircularProgres>
-          </View> 
+          <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
           <TouchableOpacity>
-            <View style={styles.buttonshare}>
-            < Icons name="share-variant" size={30} color="#ffff" />
-            </View>
-          </TouchableOpacity>
+              <View style={styles.buttonmenu}>
+                <Icons name="menu" size={30} color="#ffff" />
+              </View>
+              </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.buttonshare}>
+              < Icons name="share-variant" size={30} color="#ffff" />
+              </View>
+            </TouchableOpacity>
+          </View>
+        <View style={{ alignItems:'center'}}>
+          <View style={{borderWidth:1, borderColor:'white',width:windowWidth-100,height:windowHeight*0.45,marginTop:30,alignItems:'center'}}>
+          <View style={{position:'absolute',top:"10%",left:"40%"}}><Icons name="fire" size={70} style={{color:"#ffff"}}/></View>
+              <CircularProgres
+                size={windowHeight*0.45}
+                width={10}
+                backgroundWidth={9}
+                fill={56}
+                steps={56}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+          </View>
+          </View> 
         </View>
         <View style={styles.body}>
           <View style={styles.icon}>
@@ -142,12 +146,12 @@ const HomeScreen = () => {
                 size={50}
                 width={2}
                 backgroundWidth={3}
-                fill={10}
-                steps={''}
+                fill={10}               
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
                 rotation={0}/> 
+                <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
             </View>
             <View>
               <Text style={styles.text}>O KCAL</Text>
@@ -165,6 +169,7 @@ const HomeScreen = () => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
             </View>
             <View>
               <Text style={styles.text}>O M</Text>
@@ -182,6 +187,7 @@ const HomeScreen = () => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
             </View>
             <View>
               <Text style={styles.text}>O MM</Text>
@@ -223,9 +229,8 @@ const styles = StyleSheet.create({
     backgroundColor:'black'
   },
   header: {
-    alignItems: 'center',
-    flexDirection:'row',
-    justifyContent:'space-between'
+    flex:1,
+    marginTop:5
   },
   body: {
     flexDirection: 'row',
@@ -235,16 +240,11 @@ const styles = StyleSheet.create({
   icon: {
     flexDirection: 'column',
   },
-  // itemicon: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   borderRadius: 50,
-  //   borderWidth: 2,
-  //   borderColor: 'white',
-  //   width: 60,
-  //   height: 60,
-  //   marginTop: 10,
-  // },
+  itemicon: {
+    borderWidth:1,
+    borderColor:"#ffff",
+    position:'relative'
+  },
   text: {
     color: 'white',
     marginTop: 10,
@@ -259,12 +259,12 @@ const styles = StyleSheet.create({
     borderWidth:1
   },
   buttonmenu:{
-    alignItems:'flex-start',
     flex:1,
+    marginLeft:5,
   },
   buttonshare:{
-    alignItems:'flex-start',
-    flex:1
+    flex:1,
+    marginRight:5,
   }
 });
 export default HomeScreen;
