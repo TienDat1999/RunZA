@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -46,6 +46,11 @@ export default Profile = ({navigation}) => {
   return (
     <LinearGradient colors={['#000029', '#000029']} style={{flex: 1}}>
       <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <View style={styles.buttonback}>
+                <Icons name='arrow-back-ios' size={30} color="#ffff" />
+        </View>
+        </TouchableOpacity>
         <View>
           <Image
             // source={require('../components/image/avatar.jpg')}
@@ -60,7 +65,7 @@ export default Profile = ({navigation}) => {
         <View style={styles.boderprofile}>
           <View style={styles.itemprofile}>
             <View style={{marginRight: 20, marginBottom: 10}}>
-              <Icon name="face" size={30} color="black" />
+              <Entypo name="creative-commons-attribution" size={30} color="black" />
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -84,7 +89,7 @@ export default Profile = ({navigation}) => {
           </View>
           <View style={styles.itemprofile}>
             <View style={{marginTop: 10}}>
-              <Icon name="human-male-height-variant" size={30} color="black" />
+             <Entypo name="creative-commons-attribution" size={30} color="#3B5998"></Entypo>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -174,4 +179,9 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 20,
   },
+  buttonback:{
+    marginTop:10,
+    marginLeft:10,
+    marginBottom:10
+  }
 });

@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {Button, View, Text, Linking} from 'react-native';
+import {Switch, View, Text, StyleSheet, TouchableOpacity,Dimensions} from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
+import { BarChart } from 'react-native-svg-charts';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
+import LinearGradient from 'react-native-linear-gradient';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
-
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 //const NUMBER_STEP_KEY = 'numberOfSteps';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   // const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
     distance: null,
@@ -133,19 +136,169 @@ const HomeScreen = () => {
       setStoreAward();
     }, 200);
   }, [award.numberOfSteps]);
-
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
   return (
-    <View>
-      <Text>{award.distance}</Text>
-      <CircularProgres
-        size={200}
-        width={10}
-        fill={Number(award.numberOfSteps)}
-        tintColor="#00e0ff"
-        backgroundColor="#3d5875"
-        steps={Number(award.numberOfSteps)}
-      />
+    <View style={styles.container}>
+      {/* <LinearGradient colors={['#0000']} style={{flex: 1}}> */}
+        <View style={styles.header}>
+          <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
+          <TouchableOpacity onPress ={() => navigation.openDrawer()}>
+              <View style={styles.buttonmenu}>
+                <Icons name="menu" size={30} color="#ffff" />
+              </View>
+              </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.buttonshare}>
+              < Icons name="share-variant" size={30} color="#ffff" />
+              </View>
+            </TouchableOpacity>
+          </View>
+        <View style={{ alignItems:'center'}}>
+          <View style={{borderWidth:1, borderColor:'white',width:windowWidth-100,height:windowHeight*0.45,marginTop:30,alignItems:'center'}}>
+          <View style={{position:'absolute',top:"10%",left:"40%"}}><Icons name="run-fast" size={70} style={{color:"#ffff"}}/></View>
+              <CircularProgres
+                size={windowHeight*0.4}
+                width={6}
+                backgroundWidth={13}
+                fill={56}
+                steps={10000}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+          </View>
+          </View> 
+        </View>
+        <View style={styles.body}>
+          <View style={styles.icon}>
+            <View style={styles.itemicon}>
+              <CircularProgres
+                size={50}
+                width={4}
+                backgroundWidth={3}
+                fill={50}               
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}/> 
+                <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
+            </View>
+            <View>
+              <Text style={styles.text}>O KCAL</Text>
+            </View>
+          </View>
+          <View style={styles.icon}>
+            <View style={styles.itemicon}>
+            <CircularProgres
+                size={50}
+                width={2}
+                backgroundWidth={3}
+                fill={10}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+              
+              <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
+              
+            </View>
+            <View>
+              <Text style={styles.text}>O M</Text>
+            </View>
+          </View>
+          <View style={styles.icon}>
+            <View style={styles.itemicon}>
+            <CircularProgres
+                size={50}
+                width={2}
+                backgroundWidth={3}
+                fill={10}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+              <View style={{position:'absolute',top:"15%",left:"20%"}}><Icons name="fire" size={30} style={{color:"#ffff"}}/></View>
+            </View>
+            <View>
+              <Text style={styles.text}>O MM</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.footer}>
+        <VerticalBarGraph
+            data={[20, 45, 28, 80, 99, 43, 50]}
+            labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+            width={windowWidth*0.95 }
+            height={windowHeight*0.26}
+            barRadius={5}
+            barWidthPercentage={0.65}
+            barColor='#56CCF2'
+            baseConfig={{
+              hasXAxisBackgroundLines: false,
+              xAxisLabelStyle: {
+                position: 'right',
+                suffix: 'km',
+                color:'white'
+              },      
+              yAxisLabelStyle: {
+                color:'white'
+              },      
+            }}
+            style={{
+              marginBottom: 20,
+            }}
+          />
+        </View>
+      {/* </LinearGradient> */}
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:'black'
+  },
+  header: {
+    flex:1,
+    marginTop:10
+  },
+  body: {
+    flexDirection: 'row',
+    marginTop: 10,
+    justifyContent:'space-around',
+  },
+  icon: {
+    flexDirection: 'column',
+  },
+  itemicon: {
+    borderWidth:1,
+    borderColor:"#ffff",
+    position:'relative'
+  },
+  text: {
+    color: 'white',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  footer: {
+    marginTop:20,
+    justifyContent:'flex-end',
+    borderColor:'white',
+    marginLeft:5,
+    marginRight:5,
+    borderWidth:1
+  },
+  buttonmenu:{
+    flex:1,
+    marginLeft:7,
+  },
+  buttonshare:{
+    flex:1,
+    marginRight:7,
+  }
+});
 export default HomeScreen;
