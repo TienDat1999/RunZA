@@ -45,7 +45,14 @@ export const History = ({navigation}) => {
          }}
        /> */
        <View style={{borderColor:'white', borderWidth:1,height:'75%'}}>
-        <Calendar
+         <Calendar
+          style={{marginLeft:5,marginRight:5}}
+          theme={{calendarBackground:'#000029',monthTextColor: 'white',
+          indicatorColor: 'white',
+          dayTextColor: 'white'
+         }}
+       />
+        {/* <Calendar
         theme={{ backgroundColor: '#ffff',
         calendarBackground: '#0000',
         monthTextColor: 'white',
@@ -61,7 +68,7 @@ export const History = ({navigation}) => {
             </View>
           );
         }}
-      />
+      /> */}
     </View>
        }
         <View style={styles.top}>

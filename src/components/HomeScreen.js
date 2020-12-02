@@ -156,7 +156,7 @@ const HomeScreen = ({navigation}) => {
           </View>
         <View style={{ alignItems:'center'}}>
           <View style={{borderWidth:1, borderColor:'white',width:windowWidth-100,height:windowHeight*0.45,marginTop:30,alignItems:'center'}}>
-          <View style={{position:'absolute',top:"10%",left:"40%"}}><Icons name="run-fast" size={70} style={{color:"#ffff"}}/></View>
+          <View style={{position:'absolute',top:"10%",left:"40%"}}><Icons name="run-fast" size={windowWidth*0.18} style={{color:"#ffff"}}/></View>
               <CircularProgres
                 size={windowHeight*0.4}
                 width={6}

@@ -1,17 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Entypo from 'react-native-vector-icons/Entypo';
 import LinearGradient from 'react-native-linear-gradient';
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
   Text,
   View,
   Button,
   StyleSheet,
   Image,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 export default Profile = ({navigation}) => {
+  const [selectedValue, setSelectedValue] = useState("Male");
   const defautvalue = {
     name: 'user',
     gender: 'nam',
@@ -51,78 +55,80 @@ export default Profile = ({navigation}) => {
                 <Icons name='arrow-back-ios' size={30} color="#ffff" />
         </View>
         </TouchableOpacity>
-        <View>
-          <Image
-            // source={require('../components/image/avatar.jpg')}
-            style={{borderRadius: 50, alignItems: 'center'}}
-          />
+        <View style={styles.profile}>
+          <View style={{borderColor:'white', borderWidth:1,width:'30%',alignItems:'center'}} ><Icon name="face" color="white" size={100} /></View>
           <View style={{marginTop: 10}}>
             <Text style={{fontSize: 20, color: 'white'}}>{profile.name}</Text>
           </View>
         </View>
       </View>
       <View style={styles.body}>
-        <View style={styles.boderprofile}>
-          <View style={styles.itemprofile}>
-            <View style={{marginRight: 20, marginBottom: 10}}>
-              <Entypo name="creative-commons-attribution" size={30} color="black" />
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setProfile({...profile, age: profile.age - 1});
-              }}>
+          <View style={styles.boderprofile}>
+            <View style={{flexDirection:'row'}}>
+              <View style={styles.icon} >
+                  <View style={styles.icons}><Icon name="face" size={35} /></View>
+                  <View style={styles.icons}><Icon name="face" size={35} /></View>
+                  <View style={styles.icons}><Icon name="face" size={35} /></View>
+                  <View style={styles.icons}><Icon name="face" size={35} /></View>
+              </View>
               <View style={styles.minusbutton}>
-                <Entypo name="minus" size={20} color="#3B5998"></Entypo>
+                  <TouchableOpacity onPress={() => {setProfile({...profile, age: profile.age - 1});}}>
+                      <View style={styles.minusbuttons}><Entypo name="minus" color="white" size={30}/></View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {setProfile({...profile, height: profile.height - 1});}}>
+                      <View style={styles.minusbuttons}><Entypo name="minus"  color="white" size={30}/></View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {setProfile({...profile, Weight: profile.Weight - 1});}}>
+                      <View style={styles.minusbuttons}><Entypo name="minus"  color="white" size={30}/></View>
+                  </TouchableOpacity>                
               </View>
-            </TouchableOpacity>
-            <View>
-              <Text style={{marginLeft: 20}}>{profile.age}</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setProfile({...profile, age: profile.age + 1});
-              }}>
+              <View style={styles.text}>
+                  <View>
+                    <Text style={styles.texts}>{profile.age}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.texts}>{profile.height}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.texts}>{profile.Weight}</Text>
+                  </View>
+                  <View style={{borderColor:'white',borderWidth:1,flex:1,marginTop:'25%',width:'120%',marginLeft:'20%'}}>
+                  <Picker
+                      selectedValue={selectedValue}
+                      style={{ height: '5%', width: '100%', alignItems:'center',flex:1 }}
+                      onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    >
+                      <Picker.Item label="Male" value="Male" />
+                      <Picker.Item label="Female" value="Female" />
+                    </Picker>
+                  </View>
+              
+              </View>
               <View style={styles.plusbutton}>
-                <Entypo name="plus" size={20} color="#3B5998"></Entypo>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.itemprofile}>
-            <View style={{marginTop: 10}}>
-             <Entypo name="creative-commons-attribution" size={30} color="#3B5998"></Entypo>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setProfile({...profile, height: profile.height - 1});
-              }}>
-              <View style={{marginLeft: 40, marginRight: 20}}>
-                <Entypo name="minus" size={20} color="#3B5998"></Entypo>
-              </View>
-            </TouchableOpacity>
-            <View>
-              <Text>{profile.height}</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setProfile({...profile, height: profile.height + 1});
-              }}>
-              <View style={styles.plusbutton}>
-                <Entypo name="plus" size={20} color="#3B5998"></Entypo>
-              </View>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setProfile({...profile, age: profile.age + 1});}}>
+                    <View style={styles.plusbuttons}><Entypo name="plus" size={30} color="white"/></View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setProfile({...profile, height: profile.height + 1});}}>
+                    <View style={styles.plusbuttons}><Entypo name="plus" size={30} color="white"/></View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setProfile({...profile, Weight: profile.Weight + 1});}}>
+                    <View style={styles.plusbuttons}><Entypo name="plus" size={30} color="white"/></View>
+                </TouchableOpacity>            
+              </View>   
           </View>
           <View style={styles.buttonStyle}>
-            <Button
-              buttonStyle=""
-              title="SAVE"
-              onPress={() => {
-                console.log('save infor');
-                setInforUser();
-              }}
-            />
+                      <Button
+                        color="#1C1D25"
+                        borderRadius="50"
+                        title="SAVE"
+                        onPress={() => {
+                          console.log('save infor');
+                          setInforUser();
+                        }}
+                      />
+                  </View>
           </View>
         </View>
-      </View>
     </LinearGradient>
   );
 };
@@ -130,16 +136,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
+  profile: {
     alignItems: 'center',
-    marginTop: 40,
     flexDirection: 'column',
+    borderColor:'red',
+    borderWidth:1,
   },
   body: {
     backgroundColor: 'white',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection:'row'
   },
   boderprofile: {
     backgroundColor: '#ffff',
@@ -149,8 +157,8 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 15,
     marginBottom: 16,
-    height: 400,
-    width: 307,
+    height: "70%",
+    width: "80%",
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'green',
     shadowOpacity: 0.1,
@@ -158,30 +166,46 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#71B7B7',
   },
-  itemprofile: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-  },
-  minusbutton: {
-    marginLeft: 20,
-    marginRight: 25,
-  },
-  plusbutton: {
-    marginLeft: 50,
-    marginRight: 50,
-  },
-  buttonStyle: {
-    justifyContent: 'center',
-    marginTop: 40,
-    marginRight: 20,
-    marginLeft: 20,
-  },
   buttonback:{
     marginTop:10,
     marginLeft:10,
     marginBottom:10
+  },
+  icons:{
+    marginTop:'25%',
+    marginLeft:'1%',
+    marginRight:'10%',
+    alignItems:'center'
+  },
+minusbuttons:{
+    marginTop:'52%',
+    marginRight:'1%',
+    borderWidth:1,
+    borderColor:'black',
+    alignItems:'center',
+    backgroundColor:'red',
+    borderRadius:70
+  },
+  plusbuttons:{
+    marginTop:'52 %',
+    marginRight:'1%',
+    borderWidth:1,
+    borderColor:'black',
+    alignItems:'center',
+    backgroundColor:'#33DCFF',
+    borderRadius:100
+  },
+ buttonStyle:{
+   marginTop:'10%',
+   marginLeft:'20%',
+   marginRight:'20%',
+ },
+  texts:{
+    marginTop:'22%',
+    marginLeft:'15%',
+    marginRight:'10%',
+    fontSize:20,
+    textAlign:'center'
+
   }
 });
