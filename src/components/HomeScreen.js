@@ -31,15 +31,6 @@ const HomeScreen = ({navigation}) => {
     miniutes: null,
     Calories: null,
   });
-  const [awards, setAwards] = useState({
-    distance: 584,
-    numberOfSteps: 5454,
-    startDate: 1607990400000,
-    endDate: null,
-    miniutes: 51,
-    Calories: 5121,
-  });
-  const day = [1607904000000, 1607472000000, 1607990400000];
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -76,14 +67,11 @@ const HomeScreen = ({navigation}) => {
         const data = JSON.parse(value);
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
-        const miniutesNow = new Date(Number(now)).getMinutes();
-        const miniutesLast = new Date(Number(lastDay)).getMinutes();
-        console.log('hien nay ' + miniutesNow + ' ngay cu ' + miniutesLast);
-
         if (fn_DateCompare(now, lastDay) == 0) {
-          console.log('VAN LA NGAY CU');
-          console.log('data nhan dc', data);
           setAward(data);
+
+          // console.log('VAN LA NGAY CU');
+          // console.log('data nhan dc', data);
         } else {
           getData('history').then((val) => {
             console.log('val', val);
@@ -91,7 +79,7 @@ const HomeScreen = ({navigation}) => {
             const week = moment(Number(number)).week();
             const type = new Date(Number(award.startDate));
             if (val == null) {
-              console.log('di vao history null');
+              // console.log('di vao history null');
               const month = [
                 {weeks: week, days: [{...award, type: type.getDate()}]},
               ];
@@ -146,7 +134,7 @@ const HomeScreen = ({navigation}) => {
                 pedometerData.endDate,
                 pedometerData.startDate,
               );
-              console.log('duaration', duration);
+              //console.log('duaration', duration);
               setAward({
                 distance: Number(value.distance) + pedometerData.distance,
                 numberOfSteps:
@@ -168,7 +156,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    recieveData();
+    // recieveData();
     //removeData('history');
     setTimeout(() => {
       pedomestorCount();

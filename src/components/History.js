@@ -9,6 +9,8 @@ import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
+import moment from 'moment';
+import {LoginManager} from 'react-native-fbsdk';
 export const History = ({navigation}) => {
   const [history, setHistory] = useState(null);
   const [selectDay, setSelectDay] = useState('');
@@ -20,49 +22,83 @@ export const History = ({navigation}) => {
     numberOfSteps: 0,
     startDate: null,
   });
-
-  const setDatada = () => {
-    setHistory(datahis);
-  };
+  const [weekChart, setWeekChart] = useState([1, 0, 0, 0, 0, 0, 0]);
+  // console.log(weekChart);
   useEffect(() => {
-    //  finndF();
-    setDatada();
-    // getData('his').then((val) => {
-    //   if (val) {
-    //     setHistory(val);
-    //   }
-    // });
+    //  setData('history', datahis);
+    FindWeekNow();
   }, []);
   const findHistory = (data) => {
-    if (history) {
-      history
-        .find((eml) => {
-          const m = new Date(Number(data) + 1);
-          const c = new Date(Number(eml.startDate));
-          if (fn_DateCompare(m, c) == 0) {
+    getData('history').then((history) => {
+      if (history) {
+        const weeks = history.find((elm) => {
+          const weekchoose = moment(Number(data)).week();
+          const weeklocal = elm.weeks;
+          if (weekchoose == weeklocal) {
             return true;
-          } else {
-            return false;
           }
-        })
-        .find((elm) => {
-          console.log(elm);
         });
-      if (val) {
-        setIsDateChoose(val);
+        if (weeks) {
+          const days = weeks.days.find((elm) => {
+            const m = new Date(Number(data) + 1);
+            const c = new Date(Number(elm.startDate));
+            if (fn_DateCompare(m, c) == 0) {
+              return true;
+            }
+          });
+          if (days) {
+            setIsDateChoose(days);
+          } else {
+            setIsDateChoose({
+              Calories: 0,
+              distance: 0,
+              endDate: null,
+              miniutes: 0,
+              numberOfSteps: 0,
+              startDate: null,
+            });
+          }
+        } else {
+          setIsDateChoose({
+            Calories: 0,
+            distance: 0,
+            endDate: null,
+            miniutes: 0,
+            numberOfSteps: 0,
+            startDate: null,
+          });
+        }
       } else {
-        setIsDateChoose({
-          Calories: 0,
-          distance: 0,
-          endDate: null,
-          miniutes: 0,
-          numberOfSteps: 0,
-          startDate: null,
-        });
+        console.log('not history');
       }
-    } else {
-      console.log('not history');
-    }
+    });
+  };
+  const FindWeekNow = () => {
+    getData('history').then((history) => {
+      if (history) {
+        const weeksNow = history.find((elm) => {
+          const weekNow = moment().week();
+          if (weekNow == elm.weeks) {
+            return true;
+          }
+        });
+        const weekCharts = [];
+        if (weeksNow) {
+          // weekCharts.push(weeksNow.days[0].numberOfSteps);
+          let number = 0;
+          for (let i = 0; i < 7; i++) {
+            if (weeksNow.days[number].type == i) {
+              weekCharts.push(weeksNow.days[number].numberOfSteps);
+              number = number + 1;
+            } else {
+              weekCharts.push(0);
+            }
+          }
+          // console.log('week chart là', weekCharts);
+          setWeekChart(weekCharts);
+        }
+      }
+    });
   };
 
   const windowWidth = Dimensions.get('window').width;
@@ -90,7 +126,7 @@ export const History = ({navigation}) => {
             monthTextColor: '#00CCCC',
           }}
           onDayPress={(day) => {
-            console.log(day.timestamp);
+            //console.log(day.timestamp);
             setSelectDay(day.dateString);
             findHistory(day.timestamp);
             // console.log(day.timestamp);
@@ -170,8 +206,8 @@ export const History = ({navigation}) => {
       <View style={styles.footer}>
         <View style={styles.chart}>
           <VerticalBarGraph
-            data={[20, 45, 28, 80, 99, 43, 50]}
-            labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+            data={weekChart}
+            labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
             width={windowWidth * 0.95}
             height={windowHeight * 0.26}
             barRadius={5}
@@ -181,7 +217,6 @@ export const History = ({navigation}) => {
               hasXAxisBackgroundLines: false,
               xAxisLabelStyle: {
                 position: 'right',
-                suffix: 'km',
                 color: 'white',
               },
               yAxisLabelStyle: {
