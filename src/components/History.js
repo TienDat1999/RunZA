@@ -1,194 +1,246 @@
 import React, {useState, useEffect} from 'react';
 import {Button, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
-import { Dimensions } from 'react-native';
-import Icon from "react-native-vector-icons/MaterialIcons";
+import {Dimensions} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import CircularProgres from '../components/common/CircularProgres';
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import {Calendar} from 'react-native-calendars';
+import {fn_DateCompare} from '../components/common/equalDate';
+import {datahis} from './common/data';
 export const History = ({navigation}) => {
   const [history, setHistory] = useState(null);
+  const [selectDay, setSelectDay] = useState('');
+  const [isDateChoose, setIsDateChoose] = useState({
+    Calories: 0,
+    distance: 0,
+    endDate: null,
+    miniutes: 0,
+    numberOfSteps: 0,
+    startDate: null,
+  });
 
-  const finndF = () => {
+  const setDatada = () => {
+    setHistory(datahis);
+  };
+  useEffect(() => {
+    //  finndF();
+    setDatada();
+    // getData('his').then((val) => {
+    //   if (val) {
+    //     setHistory(val);
+    //   }
+    // });
+  }, []);
+  const findHistory = (data) => {
     if (history) {
-      const val = history.find((id) => id.product_id == '5');
-      console.log('history is', val);
+      history
+        .find((eml) => {
+          const m = new Date(Number(data) + 1);
+          const c = new Date(Number(eml.startDate));
+          if (fn_DateCompare(m, c) == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .find((elm) => {
+          console.log(elm);
+        });
+      if (val) {
+        setIsDateChoose(val);
+      } else {
+        setIsDateChoose({
+          Calories: 0,
+          distance: 0,
+          endDate: null,
+          miniutes: 0,
+          numberOfSteps: 0,
+          startDate: null,
+        });
+      }
     } else {
       console.log('not history');
     }
   };
-  useEffect(() => {
-    finndF();
-    getData('his').then((val) => {
-      if (val) {
-        setHistory(val);
-      }
-    });
-  }, []);
+
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   return (
     // <LinearGradient colors={[ '#000029','#000029' ]} style={{flex:1}}>
-    <View  style={styles.container} >
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <View style={styles.buttonback}>
-                <Icon name="arrow-back-ios" size={30} color="#ffff" />
-        </View>
+          <View style={styles.buttonback}>
+            <Icon name="arrow-back-ios" size={30} color="#ffff" />
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-          {/* <Calendar
-          style={{marginLeft:5,marginRight:5}}
-          theme={{calendarBackground:'#000029',
-         }}
-       /> */
-       <View style={{borderColor:'white', borderWidth:1,height:'75%'}}>
         <Calendar
-        theme={{ backgroundColor: '#ffff',
-        calendarBackground: '#0000',
-        monthTextColor: 'white',
-        indicatorColor: 'blue',
-      }}
-        style={[styles.calendar, {height: 300}]}
-        dayComponent={({date, state}) => {
-          return (
-            <View>
-              <Text style={{textAlign: 'center', color: state === 'disabled' ? 'white' : 'white'}}>
-                {date.day}
-              </Text>
-            </View>
-          );
-        }}
-      />
-    </View>
-       }
+          style={{marginLeft: 5, marginRight: 5}}
+          theme={{
+            backgroundColor: '#33FF99',
+            calendarBackground: '#000000',
+            textSectionTitleColor: '#00CCCC',
+
+            dayTextColor: '#FFFF',
+            todayTextColor: '#00adf5',
+            monthTextColor: '#00CCCC',
+          }}
+          onDayPress={(day) => {
+            console.log(day.timestamp);
+            setSelectDay(day.dateString);
+            findHistory(day.timestamp);
+            // console.log(day.timestamp);
+          }}
+          markedDates={{
+            [selectDay]: {
+              selectedColor: '#FF9900',
+              selected: true,
+            },
+          }}
+        />
+
         <View style={styles.top}>
           <View style={styles.icon}>
-                    <View style={styles.itemicon}>
-                      <CircularProgres
-                        size={50}
-                        width={2}
-                        backgroundWidth={3}
-                        fill={10}
-                        tintColor="#00ffff"
-                        backgroundColor="#FFF"
-                        lineCap="round"
-                        image
-                        rotation={0}
-                      />            
-                    </View> 
-                  <View><Text style={styles.text} >O KCAL</Text></View> 
-              </View> 
-              <View style={styles.icon}>
-                    <View style={styles.itemicon}>
-                    <CircularProgres
-                        size={50}
-                        width={2}
-                        backgroundWidth={3}
-                        fill={10}
-                        steps={""}
-                        tintColor="#00ffff"
-                        backgroundColor="#FFF"
-                        lineCap="round"
-                        rotation={0}
-                      />                    
-                    </View> 
-                  <View><Text style={styles.text} >O M</Text></View> 
-              </View> 
-              <View style={styles.icon}>
-                    <View style={styles.itemicon}>
-                    <CircularProgres
-                        size={50}
-                        width={2}
-                        backgroundWidth={3}
-                        fill={10}
-                        tintColor="#00ffff"
-                        backgroundColor="#FFF"
-                        lineCap="round"
-                        rotation={0}
-                      />                     
-                    </View> 
-                  <View><Text style={styles.text} >O MM</Text></View> 
-              </View> 
-        </View> 
-
+            <View style={styles.itemicon}>
+              {/* calories */}
+              <CircularProgres
+                size={50}
+                width={2}
+                backgroundWidth={3}
+                fill={Number(isDateChoose.Calories)}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                image
+                rotation={0}
+              />
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {' '}
+                {Math.ceil(Number(isDateChoose.Calories))}CKAL
+              </Text>
+            </View>
+          </View>
+          <View style={styles.icon}>
+            <View style={styles.itemicon}>
+              {/* distance */}
+              <CircularProgres
+                size={50}
+                width={2}
+                backgroundWidth={3}
+                fill={Number(isDateChoose.distance)}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {' '}
+                {Math.ceil(Number(isDateChoose.distance))}M
+              </Text>
+            </View>
+          </View>
+          <View style={styles.icon}>
+            <View style={styles.itemicon}>
+              {/* minutes */}
+              <CircularProgres
+                size={50}
+                width={2}
+                backgroundWidth={3}
+                fill={Number(isDateChoose.miniutes)}
+                tintColor="#00ffff"
+                backgroundColor="#FFF"
+                lineCap="round"
+                rotation={0}
+              />
+            </View>
+            <View>
+              <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
+            </View>
+          </View>
+        </View>
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-        <VerticalBarGraph
+          <VerticalBarGraph
             data={[20, 45, 28, 80, 99, 43, 50]}
             labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
-            width={windowWidth*0.95 }
-            height={windowHeight*0.26}
+            width={windowWidth * 0.95}
+            height={windowHeight * 0.26}
             barRadius={5}
             barWidthPercentage={0.65}
-            barColor='#56CCF2'
+            barColor="#56CCF2"
             baseConfig={{
               hasXAxisBackgroundLines: false,
               xAxisLabelStyle: {
                 position: 'right',
                 suffix: 'km',
-                color:'white'
-              },      
+                color: 'white',
+              },
               yAxisLabelStyle: {
-                color:'white'
-              },      
+                color: 'white',
+              },
             }}
             style={{
               paddingTop: 10,
             }}
           />
-        </View>  
-        </View>   
+        </View>
       </View>
-  // </LinearGradient>
+    </View>
+    // </LinearGradient>
   );
 };
-const styles=StyleSheet.create({
-container:{
- flex:1,
- backgroundColor:'black'
-},
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
 
-footer:{
-  marginTop:10,
-  borderColor:'white',
-  borderWidth:1
-},
-top:{
-  flexDirection: 'row',
-  justifyContent:'space-around',
-  marginTop:'5%',
-  marginBottom:5,
-  borderWidth:1,
-  borderColor:'white'
-},
-body:{
-  flex:1,
-},
-itemicon:{
-  borderWidth:1,
-  borderColor:'white',
-  marginTop:10
-},
-text:{
-  color:'white',
-  marginTop:5,
-  textAlign:'center',
-},
-chart: {
-  marginTop:20,
-  justifyContent:'flex-end',
-  borderColor:'white',
-  marginLeft:5,
-  marginRight:5,
-  borderWidth:1
-},
-buttonback:{
-  marginTop:10,
-  marginLeft:10,
-  marginBottom:10
-}
-})
+  footer: {
+    marginTop: 10,
+    borderColor: 'white',
+    borderWidth: 1,
+  },
+  top: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: '5%',
+    marginBottom: 5,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
+  body: {
+    flex: 1,
+  },
+  itemicon: {
+    borderWidth: 1,
+    borderColor: 'white',
+    marginTop: 10,
+  },
+  text: {
+    color: 'white',
+    marginTop: 5,
+    textAlign: 'center',
+  },
+  chart: {
+    marginTop: 20,
+    justifyContent: 'flex-end',
+    borderColor: 'white',
+    marginLeft: 5,
+    marginRight: 5,
+    borderWidth: 1,
+  },
+  buttonback: {
+    marginTop: 10,
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+});

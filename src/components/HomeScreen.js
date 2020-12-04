@@ -17,7 +17,9 @@ import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
-//const NUMBER_STEP_KEY = 'numberOfSteps';
+import moment from 'moment';
+
+const NUMBER_STEP_DIVIDE = 10;
 
 const HomeScreen = ({navigation}) => {
   // const [isEnabled, setIsEnabled] = useState(false);
@@ -29,7 +31,15 @@ const HomeScreen = ({navigation}) => {
     miniutes: null,
     Calories: null,
   });
-
+  const [awards, setAwards] = useState({
+    distance: 584,
+    numberOfSteps: 5454,
+    startDate: 1607990400000,
+    endDate: null,
+    miniutes: 51,
+    Calories: 5121,
+  });
+  const day = [1607904000000, 1607472000000, 1607990400000];
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -41,8 +51,7 @@ const HomeScreen = ({navigation}) => {
       return null;
     }
   };
-  //history award data
-  const [historyAward, setHistoryAward] = useState([]);
+  // so sanh khoang cach phut
   const getMinute = (fist, second) => {
     const miniutesNow = new Date(Number(fist)).getMinutes();
     const miniutesLast = new Date(Number(second)).getMinutes();
@@ -67,9 +76,9 @@ const HomeScreen = ({navigation}) => {
         const data = JSON.parse(value);
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
-        // const miniutesNow = new Date(Number(now)).getMinutes();
-        // const miniutesLast = new Date(Number(lastDay)).getMinutes();
-        //console.log('hien nay ' + miniutesNow + ' ngay cu ' + miniutesLast);
+        const miniutesNow = new Date(Number(now)).getMinutes();
+        const miniutesLast = new Date(Number(lastDay)).getMinutes();
+        console.log('hien nay ' + miniutesNow + ' ngay cu ' + miniutesLast);
 
         if (fn_DateCompare(now, lastDay) == 0) {
           console.log('VAN LA NGAY CU');
@@ -77,12 +86,42 @@ const HomeScreen = ({navigation}) => {
           setAward(data);
         } else {
           getData('history').then((val) => {
+            console.log('val', val);
+            const number = award.startDate;
+            const week = moment(Number(number)).week();
+            const type = new Date(Number(award.startDate));
             if (val == null) {
-              setData('history', award);
+              console.log('di vao history null');
+              const month = [
+                {weeks: week, days: [{...award, type: type.getDate()}]},
+              ];
+              setData('history', month);
             } else {
-              console.log('di vao set history', val);
-              const his = [...val, award];
-              setData('history', his);
+              //  console.log(val[val.length - 1].weeks, 'dsfsdf', week);
+              if (val[val.length - 1].weeks == week) {
+                // console.log(val[val.length - 1]);
+                const lastWeek = val[val.length - 1];
+                const tmp = {
+                  ...lastWeek,
+                  days: [...lastWeek.days, {...award, type: type.getDate()}],
+                };
+                // console.log(tmp);
+                // // const t = val;
+                const data = [];
+                for (var i = 0; i < val.length - 1; i++) {
+                  data.push(val[i]);
+                }
+                const his = [...data, tmp];
+                setData('history', his);
+                // console.log('di vao set history', his);
+              } else {
+                const his = [
+                  ...val,
+                  {weeks: week, days: [{...award, type: type.getDate()}]},
+                ];
+                setData('history', his);
+                //console.log('tuan moi', his);
+              }
             }
           });
         }
@@ -130,16 +169,16 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     recieveData();
+    //removeData('history');
     setTimeout(() => {
       pedomestorCount();
-    }, 400);
+    }, 500);
+    // getData('history').then((val) => console.log('get his', val));
     //backgroundTask();
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      setStoreAward();
-    }, 200);
+    setStoreAward();
   }, [award.numberOfSteps]);
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -181,7 +220,7 @@ const HomeScreen = ({navigation}) => {
               size={windowHeight * 0.4}
               width={6}
               backgroundWidth={13}
-              fill={Number(award.Calories)}
+              fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
               steps={Number(award.numberOfSteps)}
               tintColor="#00ffff"
               backgroundColor="#FFF"
@@ -210,7 +249,9 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            <Text style={styles.text}>O KCAL</Text>
+            <Text style={styles.text}>
+              {Math.ceil(Number(award.Calories))}KCAl
+            </Text>
           </View>
         </View>
         <View style={styles.icon}>
@@ -232,7 +273,9 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            <Text style={styles.text}>O M</Text>
+            <Text style={styles.text}>
+              {Math.ceil(Number(award.distance))}M
+            </Text>
           </View>
         </View>
         <View style={styles.icon}>
@@ -253,14 +296,29 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View>
-            <Text style={styles.text}>O MM</Text>
+            <Text style={styles.text}>
+              {Math.ceil(Number(award.miniutes))}MM
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.footer}>
         <VerticalBarGraph
-          data={[20, 45, 28, 80, 99, 43, 50]}
-          labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+          data={[20, 45, 28, 80, 99, 43, 50, 28, 80, 99, 43, 50]}
+          labels={[
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+          ]}
           width={windowWidth * 0.95}
           height={windowHeight * 0.26}
           barRadius={5}
