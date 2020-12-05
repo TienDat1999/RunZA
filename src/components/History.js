@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Button, View, Text, StyleSheet, TouchableOpacity,Image} from 'react-native';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +9,7 @@ import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
+import moment from 'moment';
 export const History = ({navigation}) => {
   const [history, setHistory] = useState(null);
   const [selectDay, setSelectDay] = useState('');
@@ -26,7 +27,7 @@ export const History = ({navigation}) => {
   };
   useEffect(() => {
     //  finndF();
-    setDatada();
+    //setDatada();
     // getData('his').then((val) => {
     //   if (val) {
     //     setHistory(val);
@@ -92,7 +93,9 @@ export const History = ({navigation}) => {
           onDayPress={(day) => {
             console.log(day.timestamp);
             setSelectDay(day.dateString);
-            findHistory(day.timestamp);
+            const week = moment(Number(day.timestamp)).week();
+            console.log(week);
+           // findHistory(day.timestamp);
             // console.log(day.timestamp);
           }}
           markedDates={{
@@ -118,6 +121,9 @@ export const History = ({navigation}) => {
                 image
                 rotation={0}
               />
+               <View style={{position: 'absolute', top: '15%', left: '20%'}}>
+              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
+            </View>
             </View>
             <View>
               <Text style={styles.text}>
@@ -139,6 +145,9 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position: 'absolute', top: '15%', left: '20%'}}>
+               <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
+               </View>
             </View>
             <View>
               <Text style={styles.text}>
@@ -160,6 +169,9 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position: 'absolute', top: '15%', left: '25%'}}>
+              <Image style={{width:30,height:30}} source={require('./image/location.png')} />
+            </View>
             </View>
             <View>
               <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
@@ -243,4 +255,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 10,
   },
+  header:{
+    flexDirection:'row',
+  }
 });

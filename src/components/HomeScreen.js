@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
+  Dimensions,Image
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -245,7 +245,7 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
             <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
             </View>
           </View>
           <View>
@@ -269,7 +269,7 @@ const HomeScreen = ({navigation}) => {
             />
 
             <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+              <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
             </View>
           </View>
           <View>
@@ -291,8 +291,8 @@ const HomeScreen = ({navigation}) => {
               lineCap="round"
               rotation={0}
             />
-            <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+            <View style={{position: 'absolute', top: '15%', left: '25%'}}>
+              <Image style={{width:30,height:30}} source={require('./image/location.png')} />
             </View>
           </View>
           <View>

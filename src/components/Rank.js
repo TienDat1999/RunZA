@@ -56,11 +56,13 @@ export default class CustomExample extends Component {
         return (
             <View colors={[, '#0000', '#00029']}
                 style={{ backgroundColor: 'black'}}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                <View style={{flexDirection:'row'}}>
+                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
                     <View style={styles.buttonback}>
                             <Icons name='arrow-back-ios' size={30} color="#ffff" />
                     </View>
                  </TouchableOpacity>
+                 </View> 
                  <View style={{alignItems:'center'}}>
                 <Text style={{ fontSize: 25, color: 'white', }}>RANKING</Text>
                 <View style={{
