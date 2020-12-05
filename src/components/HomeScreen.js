@@ -292,7 +292,7 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
             <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
-              <Image style={{width:30,height:30}} source={require('./image/location.png')} />
+              <Image style={{width:30,height:30}} source={require('./image/waylocation.png')} />
             </View>
           </View>
           <View>
