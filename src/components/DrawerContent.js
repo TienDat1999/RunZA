@@ -16,9 +16,8 @@ export function DrawerContent(props){
          <View style={styles.container}>         
            <View style={styles.header}>        
             <View style={styles.avatar}>
-              <View>
-                  <Icons name="face" size={40} style={{  borderWidth: 30,borderRadius:50,marginTop:40, marginLeft:20}} />              
-              </View>      
+              <View style={{  borderWidth:1,borderColor:'white',width:100, height:100}}>
+                </View>                
               <View>   
                 <Text style={{fontSize:20, color:'white', marginTop:20, marginLeft:20}}> TONY STARK </Text>
               </View>  
@@ -161,5 +160,10 @@ body:{
 },
 drawerSection:{
  color:'white'
+},
+avatar:{
+  flexDirection:'column',
+  alignItems:'center',
+  marginTop:20
 }
 });

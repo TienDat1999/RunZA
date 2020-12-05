@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Button, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -10,7 +17,6 @@ import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
 import moment from 'moment';
-import {LoginManager} from 'react-native-fbsdk';
 export const History = ({navigation}) => {
   const [selectDay, setSelectDay] = useState('');
   const [isDateChoose, setIsDateChoose] = useState({
@@ -127,7 +133,9 @@ export const History = ({navigation}) => {
           onDayPress={(day) => {
             //console.log(day.timestamp);
             setSelectDay(day.dateString);
-            findHistory(day.timestamp);
+            const week = moment(Number(day.timestamp)).week();
+            console.log(week);
+            // findHistory(day.timestamp);
             // console.log(day.timestamp);
           }}
           markedDates={{
@@ -153,11 +161,17 @@ export const History = ({navigation}) => {
                 image
                 rotation={0}
               />
+              <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+                <Image
+                  style={{width: 30, height: 35}}
+                  source={require('./image/fire.png')}
+                />
+              </View>
             </View>
             <View>
               <Text style={styles.text}>
                 {' '}
-                {Math.ceil(Number(isDateChoose.Calories))}CKAL
+                {Math.ceil(Number(isDateChoose.Calories))}
               </Text>
             </View>
           </View>
@@ -174,11 +188,17 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+                <Image
+                  style={{width: 30, height: 35}}
+                  source={require('./image/clock.png')}
+                />
+              </View>
             </View>
             <View>
               <Text style={styles.text}>
                 {' '}
-                {Math.ceil(Number(isDateChoose.distance))}M
+                {Math.ceil(Number(isDateChoose.distance))}MM
               </Text>
             </View>
           </View>
@@ -195,6 +215,12 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
+              <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+                <Image
+                  style={{width: 30, height: 30}}
+                  source={require('./image/location.png')}
+                />
+              </View>
             </View>
             <View>
               <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
@@ -258,10 +284,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     marginTop: 10,
+    alignItems: 'center',
   },
   text: {
     color: 'white',
-    marginTop: 5,
+    marginTop: 10,
     textAlign: 'center',
   },
   chart: {
@@ -276,5 +303,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     marginBottom: 10,
+  },
+  header: {
+    flexDirection: 'row',
+  },
+  icon: {
+    flexDirection: 'column',
+    width: 100,
+    marginTop: 10,
+    marginLeft: 10,
   },
 });

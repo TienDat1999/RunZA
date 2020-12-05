@@ -1,7 +1,16 @@
 export const datahis = [
   {
-    weeks: 49,
-    days: [
+    week: 49,
+    data: [
+      {
+        Calories: 153,
+        distance: 167.64000898599625,
+        endDate: null,
+        miniutes: 16,
+        numberOfSteps: 220,
+        startDate: '1606608000000',
+        type: 0,
+      },
       {
         Calories: 56,
         distance: 167.64000898599625,
@@ -38,6 +47,15 @@ export const datahis = [
         startDate: '1606953600000',
         type: 4,
       },
+      {
+        Calories: 84512,
+        distance: 8465,
+        endDate: null,
+        miniutes: 123,
+        numberOfSteps: 2220,
+        startDate: '1607040000000',
+        type: 5,
+      },
 
       {
         Calories: 654,
@@ -46,6 +64,75 @@ export const datahis = [
         miniutes: 96,
         numberOfSteps: 474,
         startDate: '1607126400000',
+        type: 6,
+      },
+    ],
+  },
+  {
+    week: 50,
+    data: [
+      {
+        Calories: 153,
+        distance: 167.64000898599625,
+        endDate: null,
+        miniutes: 16,
+        numberOfSteps: 430,
+        startDate: '1607212800000',
+        type: 0,
+      },
+      {
+        Calories: 56,
+        distance: 167.64000898599625,
+        endDate: null,
+        miniutes: 578,
+        numberOfSteps: 22,
+        startDate: '1607299200000',
+        type: 1,
+      },
+      {
+        Calories: 85,
+
+        distance: 167.64000898599625,
+        endDate: null,
+        miniutes: 837,
+        numberOfSteps: 2200,
+        startDate: '1607385600000',
+        type: 2,
+      },
+      {
+        Calories: 86,
+        distance: 842,
+        endDate: null,
+        miniutes: 89,
+        numberOfSteps: 679,
+        startDate: '1607472000000',
+        type: 3,
+      },
+      {
+        Calories: 65,
+        distance: 85,
+        endDate: null,
+        miniutes: 98,
+        numberOfSteps: 583,
+        startDate: '1607558400000',
+        type: 4,
+      },
+      {
+        Calories: 84512,
+        distance: 8465,
+        endDate: null,
+        miniutes: 983,
+        numberOfSteps: 2220,
+        startDate: '1607644800000',
+        type: 5,
+      },
+      {
+        Calories: 654,
+        distance: 25,
+        endDate: null,
+        miniutes: 96,
+        numberOfSteps: 338,
+        startDate: '1607731200000',
         type: 6,
       },
     ],

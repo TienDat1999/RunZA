@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
+  Dimensions,Image
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -220,7 +220,7 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
             }}>
             <View style={{position: 'absolute', top: '10%', left: '40%'}}>
-              <Icons name="run-fast" size={70} style={{color: '#ffff'}} />
+              <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
             </View>
             <CircularProgres
               size={windowHeight * 0.4}
@@ -251,8 +251,8 @@ const HomeScreen = ({navigation}) => {
               lineCap="round"
               rotation={0}
             />
-            <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+            <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
             </View>
           </View>
           <View>
@@ -275,8 +275,8 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
 
-            <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
+              <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
             </View>
           </View>
           <View>
@@ -298,8 +298,8 @@ const HomeScreen = ({navigation}) => {
               lineCap="round"
               rotation={0}
             />
-            <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Icons name="fire" size={30} style={{color: '#ffff'}} />
+            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
+              <Image style={{width:30,height:30}} source={require('./image/location.png')} />
             </View>
           </View>
           <View>
@@ -350,13 +350,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-around',
+    borderWidth:1,
+    borderColor:'white'
   },
   icon: {
     flexDirection: 'column',
+    width:100,
+    marginTop:10,
+    marginLeft:10
   },
   itemicon: {
     borderColor: '#ffff',
     position: 'relative',
+    alignItems:'center'
   },
   text: {
     color: 'white',
