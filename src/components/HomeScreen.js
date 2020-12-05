@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,Image
+  Dimensions,
+  Image,
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -16,7 +17,8 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LineGraph from '@chartiful/react-native-line-graph';
+
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import moment from 'moment';
 
 const NUMBER_STEP_DIVIDE = 10;
@@ -252,7 +254,10 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
             <View style={{position: 'absolute', top: '15%', left: '35%'}}>
-              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
+              <Image
+                style={{width: 30, height: 35}}
+                source={require('./image/fire.png')}
+              />
             </View>
           </View>
           <View>
@@ -275,8 +280,11 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
 
-            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
-              <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
+            <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+              <Image
+                style={{width: 30, height: 35}}
+                source={require('./image/clock.png')}
+              />
             </View>
           </View>
           <View>
@@ -298,8 +306,11 @@ const HomeScreen = ({navigation}) => {
               lineCap="round"
               rotation={0}
             />
-            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
-              <Image style={{width:30,height:30}} source={require('./image/location.png')} />
+            <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+              <Image
+                style={{width: 30, height: 30}}
+                source={require('./image/distance.png')}
+              />
             </View>
           </View>
           <View>
@@ -310,26 +321,44 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <LineGraph
-          data={[100, 15, 7, 20, 14, 12, 85]}
-          width={windowWidth * 0.85}
-          height={200}
-          lineColor="#4EE2EC"
-          dotColor="#4EE2EC"
-          lineWidth={5}
-          isBezier
-          dotSize={5}
-          hasDots
-          hasShadow
+        <VerticalBarGraph
+          data={[100, 15, 7, 20, 14, 12, 85, 100, 15, 7, 20, 14]}
+          labels={[
+            '2',
+            '4',
+            '6',
+            '8',
+            '10',
+            '12',
+            '14',
+            '16',
+            '18',
+            '20',
+            '22',
+            '24',
+          ]}
+          width={windowWidth * 0.9}
+          height={windowHeight * 0.23}
+          barRadius={5}
+          barWidthPercentage={0.5}
+          barColor="#56CCF2"
           baseConfig={{
-            startAtZero: true,
             hasXAxisBackgroundLines: false,
+            xAxisLabelStyle: {
+              position: 'right',
+              color: 'black',
+            },
+            yAxisLabelStyle: {
+              color: 'black',
+            },
           }}
           style={{
-            marginBottom: 30,
-            paddingTop: 20,
-            borderRadius: 20,
+            borderRadius: 15,
             backgroundColor: `#ffff`,
+            paddingTop: 10,
+            marginBottom: 30,
+            marginLeft: 15,
+            marginRight: 15,
           }}
         />
       </View>
@@ -350,19 +379,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-around',
-    borderWidth:1,
-    borderColor:'white'
+    borderColor: 'white',
   },
   icon: {
     flexDirection: 'column',
-    width:100,
-    marginTop:10,
-    marginLeft:10
+    width: 100,
+    marginTop: 10,
+    marginLeft: 10,
   },
   itemicon: {
     borderColor: '#ffff',
     position: 'relative',
-    alignItems:'center'
+    alignItems: 'center',
   },
   text: {
     color: 'white',

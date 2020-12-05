@@ -12,10 +12,11 @@ import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import CircularProgres from '../components/common/CircularProgres';
-import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+//import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
+import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
 export const History = ({navigation}) => {
   const [selectDay, setSelectDay] = useState('');
@@ -217,8 +218,8 @@ export const History = ({navigation}) => {
               />
               <View style={{position: 'absolute', top: '15%', left: '35%'}}>
                 <Image
-                  style={{width: 30, height: 30}}
-                  source={require('./image/location.png')}
+                  style={{width: 30, height: 35}}
+                  source={require('./image/distance.png')}
                 />
               </View>
             </View>
@@ -230,26 +231,29 @@ export const History = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-          <VerticalBarGraph
+          <LineGraph
             data={weekChart}
             labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
-            width={windowWidth * 0.95}
-            height={windowHeight * 0.26}
-            barRadius={5}
-            barWidthPercentage={0.65}
-            barColor="#56CCF2"
+            width={windowWidth * 0.85}
+            height={200}
+            lineColor="#4EE2EC"
+            dotColor="#4EE2EC"
+            lineWidth={5}
+            isBezier
+            dotSize={5}
+            hasDots
+            hasShadow
             baseConfig={{
+              startAtZero: true,
               hasXAxisBackgroundLines: false,
-              xAxisLabelStyle: {
-                position: 'right',
-                color: 'white',
-              },
-              yAxisLabelStyle: {
-                color: 'white',
-              },
             }}
             style={{
-              paddingTop: 10,
+              marginBottom: 30,
+              paddingTop: 20,
+              marginLeft: 15,
+              marginRight: 15,
+              borderRadius: 15,
+              backgroundColor: `#ffff`,
             }}
           />
         </View>
@@ -267,21 +271,18 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 10,
     borderColor: 'white',
-    borderWidth: 1,
   },
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: '5%',
     marginBottom: 5,
-    borderWidth: 1,
     borderColor: 'white',
   },
   body: {
     flex: 1,
   },
   itemicon: {
-    borderWidth: 1,
     borderColor: 'white',
     marginTop: 10,
     alignItems: 'center',
@@ -297,7 +298,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
-    borderWidth: 1,
   },
   buttonback: {
     marginTop: 10,
