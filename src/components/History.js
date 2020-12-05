@@ -121,16 +121,16 @@ export const History = ({navigation}) => {
                 image
                 rotation={0}
               />
-               <View style={{position: 'absolute', top: '15%', left: '20%'}}>
-              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
-            </View>
+               <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+                 <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
+                </View>
             </View>
             <View>
               <Text style={styles.text}>
                 {' '}
-                {Math.ceil(Number(isDateChoose.Calories))}CKAL
+                {Math.ceil(Number(isDateChoose.Calories))}
               </Text>
-            </View>
+            </View> 
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
@@ -145,16 +145,16 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
-              <View style={{position: 'absolute', top: '15%', left: '20%'}}>
+              <View style={{position: 'absolute', top: '15%', left: '35%'}}>
                <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
                </View>
             </View>
-            <View>
+             <View>
               <Text style={styles.text}>
                 {' '}
-                {Math.ceil(Number(isDateChoose.distance))}M
+                {Math.ceil(Number(isDateChoose.distance))}MM
               </Text>
-            </View>
+            </View> 
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
@@ -169,13 +169,13 @@ export const History = ({navigation}) => {
                 lineCap="round"
                 rotation={0}
               />
-              <View style={{position: 'absolute', top: '15%', left: '25%'}}>
+              <View style={{position: 'absolute', top: '15%', left: '35%'}}>
               <Image style={{width:30,height:30}} source={require('./image/location.png')} />
             </View>
             </View>
             <View>
               <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
-            </View>
+            </View> 
           </View>
         </View>
       </View>
@@ -236,10 +236,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     marginTop: 10,
+    alignItems:'center',
   },
   text: {
     color: 'white',
-    marginTop: 5,
+    marginTop: 10,
     textAlign: 'center',
   },
   chart: {
@@ -257,5 +258,11 @@ const styles = StyleSheet.create({
   },
   header:{
     flexDirection:'row',
+  },
+  icon:{
+    flexDirection: 'column',
+    width:100,
+    marginTop:10,
+    marginLeft:10
   }
 });

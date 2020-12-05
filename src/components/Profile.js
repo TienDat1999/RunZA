@@ -65,6 +65,7 @@ export default Profile = ({navigation}) => {
         </View>
       </View>
       <View style={styles.body}>
+        <View style={{marginTop:"7%",height: "100%", width: "90%", alignItems:'center'}}>
           <View style={styles.boderprofile}>
             <View style={{flexDirection:'row'}}>
               <View style={styles.icon} >
@@ -131,7 +132,7 @@ export default Profile = ({navigation}) => {
                   </View>
           </View>
         </View>
-    
+        </View>
     </View>
   );
 };
@@ -145,11 +146,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderColor:'red',
     borderWidth:1,
-    height:"20%"
+    height:"20%",
   },
   body: {
     backgroundColor: 'white',
-    alignItems: 'center',
     justifyContent: 'center',
     flexDirection:'row',
     flex:1
@@ -210,7 +210,7 @@ minusbuttons:{
    marginRight:'20%',
  },
   texts:{
-    marginTop:'25%',
+    marginTop:'29%',
     marginLeft:'15%',
     marginRight:'10%',
     fontSize:20,
