@@ -72,7 +72,7 @@ const HomeScreen = ({navigation}) => {
         if (fn_DateCompare(now, lastDay) == 0) {
           setAward(data);
           // if (nowHour > lastHour) {
-          //   getData('dayNow').then((day) => {
+          //   getData('dayChart').then((day) => {
           //     if (day) {
           //       let arrnumber = day;
           //       let number = arrnumber.reduce(
@@ -81,11 +81,11 @@ const HomeScreen = ({navigation}) => {
           //       let val = number - arrnumber[arrnumber.length - 1];
           //       arrnumber.push(val);
           //       setTimeout(() => {
-          //         setData('dayNow', arrnumber);
+          //         setData('dayChart', arrnumber);
           //       }, 50);
           //     } else {
           //       arrnumber = [data.numberOfSteps];
-          //       setData('dayNow', arrnumber);
+          //       setData('dayChart', arrnumber);
           //     }
           //   });
           // }
