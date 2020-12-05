@@ -71,7 +71,7 @@ export default Profile = ({navigation}) => {
               <View style={styles.icon} >
                   <View style={styles.icons}><Image style={{width:35,height:35}} source={require('./image/age.png')}/></View>
                   <View style={styles.icons}><Image style={{width:35,height:35}} source={require('./image/height.png')}/></View>
-                  <View style={styles.icons}><Image style={{width:35,height:35}} source={require('./image/weighing-machine.png')}/></View>
+                  <View style={styles.icons}><Image style={{width:35,height:35}} source={require('./image/weight.png')}/></View>
                   <View style={styles.icons}><Image style={{width:35,height:35}} source={require('./image/sex.png')}/></View>
               </View>
               <View style={{flexDirection:'column'}}>
