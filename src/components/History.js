@@ -170,7 +170,7 @@ export const History = ({navigation}) => {
                 rotation={0}
               />
               <View style={{position: 'absolute', top: '15%', left: '35%'}}>
-               <Image style={{width:30,height:35}} source={require('./image/waylocation.png')} />
+               <Image style={{width:30,height:35}} source={require('./image/distance.png')} />
                </View>
             </View>
             <View>
