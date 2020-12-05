@@ -12,7 +12,6 @@ import {datahis} from './common/data';
 import moment from 'moment';
 import {LoginManager} from 'react-native-fbsdk';
 export const History = ({navigation}) => {
-  const [history, setHistory] = useState(null);
   const [selectDay, setSelectDay] = useState('');
   const [isDateChoose, setIsDateChoose] = useState({
     Calories: 0,

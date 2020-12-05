@@ -16,7 +16,7 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
 
 const NUMBER_STEP_DIVIDE = 10;
@@ -67,9 +67,28 @@ const HomeScreen = ({navigation}) => {
         const data = JSON.parse(value);
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
+        const nowHour = new Date().getHours();
+        const lastHour = new Date(Number(data.startDate)).getHours();
         if (fn_DateCompare(now, lastDay) == 0) {
           setAward(data);
-
+          // if (nowHour > lastHour) {
+          //   getData('dayNow').then((day) => {
+          //     if (day) {
+          //       let arrnumber = day;
+          //       let number = arrnumber.reduce(
+          //         (accumulator, currentValue) => accumulator + currentValue,
+          //       );
+          //       let val = number - arrnumber[arrnumber.length - 1];
+          //       arrnumber.push(val);
+          //       setTimeout(() => {
+          //         setData('dayNow', arrnumber);
+          //       }, 50);
+          //     } else {
+          //       arrnumber = [data.numberOfSteps];
+          //       setData('dayNow', arrnumber);
+          //     }
+          //   });
+          // }
           // console.log('VAN LA NGAY CU');
           // console.log('data nhan dc', data);
         } else {
@@ -194,7 +213,6 @@ const HomeScreen = ({navigation}) => {
         <View style={{alignItems: 'center'}}>
           <View
             style={{
-              borderWidth: 1,
               borderColor: 'white',
               width: windowWidth - 100,
               height: windowHeight * 0.45,
@@ -208,9 +226,10 @@ const HomeScreen = ({navigation}) => {
               size={windowHeight * 0.4}
               width={6}
               backgroundWidth={13}
-              fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
+              //fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
+              fill={50}
               steps={Number(award.numberOfSteps)}
-              tintColor="#00ffff"
+              tintColor="#4EE2EC"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
@@ -227,7 +246,7 @@ const HomeScreen = ({navigation}) => {
               width={4}
               backgroundWidth={3}
               fill={Number(award.Calories)}
-              tintColor="#00ffff"
+              tintColor="#4EE2EC"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
@@ -291,40 +310,26 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <VerticalBarGraph
-          data={[20, 45, 28, 80, 99, 43, 50, 28, 80, 99, 43, 50]}
-          labels={[
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-          ]}
-          width={windowWidth * 0.95}
-          height={windowHeight * 0.26}
-          barRadius={5}
-          barWidthPercentage={0.65}
-          barColor="#56CCF2"
+        <LineGraph
+          data={[100, 15, 7, 20, 14, 12, 85]}
+          width={windowWidth * 0.85}
+          height={200}
+          lineColor="#4EE2EC"
+          dotColor="#4EE2EC"
+          lineWidth={5}
+          isBezier
+          dotSize={5}
+          hasDots
+          hasShadow
           baseConfig={{
+            startAtZero: true,
             hasXAxisBackgroundLines: false,
-            xAxisLabelStyle: {
-              position: 'right',
-              suffix: 'km',
-              color: 'white',
-            },
-            yAxisLabelStyle: {
-              color: 'white',
-            },
           }}
           style={{
-            marginBottom: 20,
+            marginBottom: 30,
+            paddingTop: 20,
+            borderRadius: 20,
+            backgroundColor: `#ffff`,
           }}
         />
       </View>
@@ -350,7 +355,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   itemicon: {
-    borderWidth: 1,
     borderColor: '#ffff',
     position: 'relative',
   },
@@ -363,9 +367,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'flex-end',
     borderColor: 'white',
-    marginLeft: 5,
-    marginRight: 5,
-    borderWidth: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   buttonmenu: {
     flex: 1,
