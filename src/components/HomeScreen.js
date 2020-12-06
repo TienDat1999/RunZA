@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Switch,
   View,
   Text,
   StyleSheet,
@@ -26,12 +25,12 @@ const NUMBER_STEP_DIVIDE = 10;
 const HomeScreen = ({navigation}) => {
   // const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
-    distance: null,
-    numberOfSteps: null,
-    startDate: null,
+    distance: 0,
+    numberOfSteps: 0,
+    startDate: 0,
     endDate: null,
     miniutes: null,
-    Calories: null,
+    Calories: 0,
   });
   //  lay du lieu tu local
   const curentAward = async () => {
@@ -61,39 +60,50 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const chartHandle = () => {
+    const arr = [1, 2, 3, 4, 5];
+    for (let i = 0; i < arr.length - 1; i + 2) {
+      arr[i] = arr[i] + arr[i + 1];
+    }
+    console.log(arr);
+  };
   // //get du lieu tu local
   const recieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('award');
+      console.log(value);
       if (value != null) {
         const data = JSON.parse(value);
+
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
         const nowHour = new Date().getHours();
         const lastHour = new Date(Number(data.startDate)).getHours();
         if (fn_DateCompare(now, lastDay) == 0) {
           setAward(data);
-          // if (nowHour > lastHour) {
-          //   getData('dayChart').then((day) => {
-          //     if (day) {
-          //       let arrnumber = day;
-          //       let number = arrnumber.reduce(
-          //         (accumulator, currentValue) => accumulator + currentValue,
-          //       );
-          //       let val = number - arrnumber[arrnumber.length - 1];
-          //       arrnumber.push(val);
-          //       setTimeout(() => {
-          //         setData('dayChart', arrnumber);
-          //       }, 50);
-          //     } else {
-          //       arrnumber = [data.numberOfSteps];
-          //       setData('dayChart', arrnumber);
-          //     }
-          //   });
-          // }
-          // console.log('VAN LA NGAY CU');
-          // console.log('data nhan dc', data);
+          if (nowHour > lastHour) {
+            getData('dayChart').then((day) => {
+              console.log('day is', day);
+              if (day) {
+                let arrnumber = day;
+                let number = arrnumber.reduce(
+                  (accumulator, currentValue) => accumulator + currentValue,
+                );
+                let val = data.numberOfSteps - number;
+                arrnumber.push(val);
+                setTimeout(() => {
+                  setData('dayChart', arrnumber);
+                }, 50);
+              } else {
+                let arrnumber = [data.numberOfSteps];
+                setData('dayChart', arrnumber);
+              }
+            });
+          }
+          console.log('VAN LA NGAY CU');
+          console.log('data nhan dc', data);
         } else {
+          console.log('di vao day');
           getData('history').then((val) => {
             console.log('val', val);
             const number = award.startDate;
@@ -133,6 +143,7 @@ const HomeScreen = ({navigation}) => {
               }
             }
           });
+          removeData('dayChart');
         }
       }
     } catch (error) {
@@ -177,12 +188,21 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    // recieveData();
+    recieveData();
     //removeData('history');
-    setTimeout(() => {
-      pedomestorCount();
-    }, 500);
-    // getData('history').then((val) => console.log('get his', val));
+    // chartHandle();
+    let iscount = true;
+    if (iscount) {
+      setTimeout(() => {
+        pedomestorCount();
+      }, 500);
+    }
+
+    //getData('history').then((val) => console.log('get his', val));
+    return () => {
+      iscount = false;
+    };
+
     //backgroundTask();
   }, []);
 

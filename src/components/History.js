@@ -134,9 +134,9 @@ export const History = ({navigation}) => {
           onDayPress={(day) => {
             //console.log(day.timestamp);
             setSelectDay(day.dateString);
-            const week = moment(Number(day.timestamp)).week();
-            console.log(week);
-            // findHistory(day.timestamp);
+            // const week = moment(Number(day.timestamp)).week();
+            // console.log(week);
+            findHistory(day.timestamp);
             // console.log(day.timestamp);
           }}
           markedDates={{
