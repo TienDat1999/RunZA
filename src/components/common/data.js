@@ -18,7 +18,7 @@ export const datahis = [
         miniutes: 12,
         numberOfSteps: 22,
         startDate: '1606694400000',
-        type:1,
+        type: 1,
       },
       {
         Calories: 85,
@@ -27,7 +27,7 @@ export const datahis = [
         miniutes: 65,
         numberOfSteps: 2200,
         startDate: '1606780800000',
-        type:2,
+        type: 2,
       },
       {
         Calories: 86,
@@ -36,7 +36,7 @@ export const datahis = [
         miniutes: 89,
         numberOfSteps: 23,
         startDate: '1606867200000',
-        type:3,
+        type: 3,
       },
       {
         Calories: 65,
@@ -45,7 +45,7 @@ export const datahis = [
         miniutes: 98,
         numberOfSteps: 583,
         startDate: '1606953600000',
-        type:4,
+        type: 4,
       },
       {
         Calories: 84512,
@@ -54,8 +54,9 @@ export const datahis = [
         miniutes: 123,
         numberOfSteps: 2220,
         startDate: '1607040000000',
-        type:5,
+        type: 5,
       },
+
       {
         Calories: 654,
         distance: 25,
@@ -63,7 +64,7 @@ export const datahis = [
         miniutes: 96,
         numberOfSteps: 474,
         startDate: '1607126400000',
-        type:6,
+        type: 6,
       },
     ],
   },

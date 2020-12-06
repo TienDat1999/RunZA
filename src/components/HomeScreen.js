@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Switch,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,Image
+  Dimensions,
+  Image,
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -16,6 +16,7 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import moment from 'moment';
 
@@ -24,22 +25,13 @@ const NUMBER_STEP_DIVIDE = 10;
 const HomeScreen = ({navigation}) => {
   // const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
-    distance: null,
-    numberOfSteps: null,
-    startDate: null,
+    distance: 0,
+    numberOfSteps: 0,
+    startDate: 0,
     endDate: null,
     miniutes: null,
-    Calories: null,
+    Calories: 0,
   });
-  const [awards, setAwards] = useState({
-    distance: 584,
-    numberOfSteps: 5454,
-    startDate: 1607990400000,
-    endDate: null,
-    miniutes: 51,
-    Calories: 5121,
-  });
-  const day = [1607904000000, 1607472000000, 1607990400000];
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -68,30 +60,57 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const chartHandle = () => {
+    const arr = [1, 2, 3, 4, 5];
+    for (let i = 0; i < arr.length - 1; i + 2) {
+      arr[i] = arr[i] + arr[i + 1];
+    }
+    console.log(arr);
+  };
   // //get du lieu tu local
   const recieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('award');
+      console.log(value);
       if (value != null) {
         const data = JSON.parse(value);
+
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
-        const miniutesNow = new Date(Number(now)).getMinutes();
-        const miniutesLast = new Date(Number(lastDay)).getMinutes();
-        console.log('hien nay ' + miniutesNow + ' ngay cu ' + miniutesLast);
-
+        const nowHour = new Date().getHours();
+        const lastHour = new Date(Number(data.startDate)).getHours();
         if (fn_DateCompare(now, lastDay) == 0) {
+          setAward(data);
+          if (nowHour > lastHour) {
+            getData('dayChart').then((day) => {
+              console.log('day is', day);
+              if (day) {
+                let arrnumber = day;
+                let number = arrnumber.reduce(
+                  (accumulator, currentValue) => accumulator + currentValue,
+                );
+                let val = data.numberOfSteps - number;
+                arrnumber.push(val);
+                setTimeout(() => {
+                  setData('dayChart', arrnumber);
+                }, 50);
+              } else {
+                let arrnumber = [data.numberOfSteps];
+                setData('dayChart', arrnumber);
+              }
+            });
+          }
           console.log('VAN LA NGAY CU');
           console.log('data nhan dc', data);
-          setAward(data);
         } else {
+          console.log('di vao day');
           getData('history').then((val) => {
             console.log('val', val);
             const number = award.startDate;
             const week = moment(Number(number)).week();
             const type = new Date(Number(award.startDate));
             if (val == null) {
-              console.log('di vao history null');
+              // console.log('di vao history null');
               const month = [
                 {weeks: week, days: [{...award, type: type.getDate()}]},
               ];
@@ -124,6 +143,7 @@ const HomeScreen = ({navigation}) => {
               }
             }
           });
+          removeData('dayChart');
         }
       }
     } catch (error) {
@@ -146,7 +166,7 @@ const HomeScreen = ({navigation}) => {
                 pedometerData.endDate,
                 pedometerData.startDate,
               );
-              console.log('duaration', duration);
+              //console.log('duaration', duration);
               setAward({
                 distance: Number(value.distance) + pedometerData.distance,
                 numberOfSteps:
@@ -170,10 +190,19 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     recieveData();
     //removeData('history');
-    setTimeout(() => {
-      pedomestorCount();
-    }, 500);
-    // getData('history').then((val) => console.log('get his', val));
+    // chartHandle();
+    let iscount = true;
+    if (iscount) {
+      setTimeout(() => {
+        pedomestorCount();
+      }, 500);
+    }
+
+    //getData('history').then((val) => console.log('get his', val));
+    return () => {
+      iscount = false;
+    };
+
     //backgroundTask();
   }, []);
 
@@ -206,6 +235,7 @@ const HomeScreen = ({navigation}) => {
         <View style={{alignItems: 'center'}}>
           <View
             style={{
+              borderColor: 'white',
               width: windowWidth - 100,
               height: windowHeight * 0.45,
               marginTop: 30,
@@ -218,9 +248,10 @@ const HomeScreen = ({navigation}) => {
               size={windowHeight * 0.4}
               width={6}
               backgroundWidth={13}
-              fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
+              //fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
+              fill={50}
               steps={Number(award.numberOfSteps)}
-              tintColor="#00ffff"
+              tintColor="#4EE2EC"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
@@ -237,13 +268,16 @@ const HomeScreen = ({navigation}) => {
               width={4}
               backgroundWidth={3}
               fill={Number(award.Calories)}
-              tintColor="#00ffff"
+              tintColor="#4EE2EC"
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
             />
             <View style={{position: 'absolute', top: '15%', left: '35%'}}>
-              <Image style={{width:30,height:35}} source={require('./image/fire.png')} />
+              <Image
+                style={{width: 30, height: 35}}
+                source={require('./image/fire.png')}
+              />
             </View>
           </View>
           <View>
@@ -266,8 +300,11 @@ const HomeScreen = ({navigation}) => {
               rotation={0}
             />
 
-            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
-              <Image style={{width:30,height:35}} source={require('./image/clock.png')} />
+            <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+              <Image
+                style={{width: 30, height: 35}}
+                source={require('./image/clock.png')}
+              />
             </View>
           </View>
           <View>
@@ -289,8 +326,11 @@ const HomeScreen = ({navigation}) => {
               lineCap="round"
               rotation={0}
             />
-            <View style={{position: 'absolute', top: '15%',  left: '35%'}}>
-              <Image style={{width:30,height:30}} source={require('./image/distance.png')} />
+            <View style={{position: 'absolute', top: '15%', left: '35%'}}>
+              <Image
+                style={{width: 30, height: 30}}
+                source={require('./image/distance.png')}
+              />
             </View>
           </View>
           <View>
@@ -302,39 +342,43 @@ const HomeScreen = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <VerticalBarGraph
-          data={[20, 45, 28, 80, 99, 43, 50, 28, 80, 99, 43, 50]}
+          data={[100, 15, 7, 20, 14, 12, 85, 100, 15, 7, 20, 14]}
           labels={[
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
+            '2',
+            '4',
+            '6',
+            '8',
+            '10',
+            '12',
+            '14',
+            '16',
+            '18',
+            '20',
+            '22',
+            '24',
           ]}
-          width={windowWidth * 0.95}
-          height={windowHeight * 0.26}
+          width={windowWidth * 0.9}
+          height={windowHeight * 0.23}
           barRadius={5}
-          barWidthPercentage={0.65}
+          barWidthPercentage={0.5}
           barColor="#56CCF2"
           baseConfig={{
             hasXAxisBackgroundLines: false,
             xAxisLabelStyle: {
               position: 'right',
-              suffix: 'km',
-              color: 'white',
+              color: 'black',
             },
             yAxisLabelStyle: {
-              color: 'white',
+              color: 'black',
             },
           }}
           style={{
-            marginBottom: 20,
+            borderRadius: 15,
+            backgroundColor: `#ffff`,
+            paddingTop: 10,
+            marginBottom: 30,
+            marginLeft: 15,
+            marginRight: 15,
           }}
         />
       </View>
@@ -355,17 +399,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-around',
+    borderColor: 'white',
   },
   icon: {
     flexDirection: 'column',
-    width:100,
-    marginTop:10,
-    marginLeft:10
+    width: 100,
+    marginTop: 10,
+    marginLeft: 10,
   },
   itemicon: {
-
+    borderColor: '#ffff',
     position: 'relative',
-    alignItems:'center'
+    alignItems: 'center',
   },
   text: {
     color: 'white',
@@ -375,8 +420,9 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 20,
     justifyContent: 'flex-end',
-    marginLeft: 5,
-    marginRight: 5,
+    borderColor: 'white',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   buttonmenu: {
     flex: 1,
