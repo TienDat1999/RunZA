@@ -59,7 +59,7 @@ export default class CustomExample extends Component {
                 <View style={{flexDirection:'row'}}>
                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
                     <View style={styles.buttonback}>
-                            <Icons name='arrow-back-ios' size={30} color="#ffff" />
+                            <Icons name='arrow-back-ios' size={25} color="#ffff" />
                     </View>
                  </TouchableOpacity>
                  </View> 

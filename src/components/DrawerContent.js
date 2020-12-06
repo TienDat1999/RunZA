@@ -144,8 +144,6 @@ icon:{
 header:{
   flexDirection:'row',
   justifyContent:'center',
-  borderColor:'white',
-  borderWidth:1
 },
 footer:{
   flex:1,

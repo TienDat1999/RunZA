@@ -206,8 +206,6 @@ const HomeScreen = ({navigation}) => {
         <View style={{alignItems: 'center'}}>
           <View
             style={{
-              borderWidth: 1,
-              borderColor: 'white',
               width: windowWidth - 100,
               height: windowHeight * 0.45,
               marginTop: 30,
@@ -357,8 +355,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     justifyContent: 'space-around',
-    borderWidth:1,
-    borderColor:'white'
   },
   icon: {
     flexDirection: 'column',
@@ -367,8 +363,7 @@ const styles = StyleSheet.create({
     marginLeft:10
   },
   itemicon: {
-    borderWidth: 1,
-    borderColor: '#ffff',
+
     position: 'relative',
     alignItems:'center'
   },
@@ -380,10 +375,8 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 20,
     justifyContent: 'flex-end',
-    borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
-    borderWidth: 1,
   },
   buttonmenu: {
     flex: 1,

@@ -74,7 +74,7 @@ export const History = ({navigation}) => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <View style={styles.buttonback}>
-            <Icon name="arrow-back-ios" size={30} color="#ffff" />
+            <Icon name="arrow-back-ios" size={25} color="#ffff" />
           </View>
         </TouchableOpacity>
       </View>
@@ -218,23 +218,17 @@ const styles = StyleSheet.create({
 
   footer: {
     marginTop: 10,
-    borderColor: 'white',
-    borderWidth: 1,
   },
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: '5%',
     marginBottom: 5,
-    borderWidth: 1,
-    borderColor: 'white',
   },
   body: {
     flex: 1,
   },
   itemicon: {
-    borderWidth: 1,
-    borderColor: 'white',
     marginTop: 10,
     alignItems:'center',
   },
@@ -246,10 +240,8 @@ const styles = StyleSheet.create({
   chart: {
     marginTop: 20,
     justifyContent: 'flex-end',
-    borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
-    borderWidth: 1,
   },
   buttonback: {
     marginTop: 10,
