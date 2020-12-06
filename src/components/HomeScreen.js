@@ -27,7 +27,7 @@ const HomeScreen = ({navigation}) => {
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
-    startDate: 0,
+    startDate: null,
     endDate: null,
     miniutes: null,
     Calories: 0,
@@ -189,7 +189,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     recieveData();
-    //removeData('history');
+    // removeData('award');
     // chartHandle();
     let iscount = true;
     if (iscount) {
