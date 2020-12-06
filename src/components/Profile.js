@@ -54,11 +54,11 @@ export default Profile = ({navigation}) => {
       <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <View style={styles.buttonback}>
-                <Icons name='arrow-back-ios' size={30} color="#ffff" />
+                <Icons name='arrow-back-ios' size={25} color="#ffff" />
         </View>
         </TouchableOpacity>
         <View style={styles.profile}>
-          <View style={{borderColor:'white', borderWidth:1,width:'30%',alignItems:'center'}} ><Icon name="face" color="white" size={100} /></View>
+          <View style={{width:'30%',alignItems:'center'}} ><Icon name="face" color="white" size={100} /></View>
           <View style={{marginTop: 10}}>
             <Text style={{fontSize: 20, color: 'white'}}>{profile.name}</Text>
           </View>
@@ -144,8 +144,6 @@ const styles = StyleSheet.create({
   profile: {
     alignItems: 'center',
     flexDirection: 'column',
-    borderColor:'red',
-    borderWidth:1,
     height:"20%",
   },
   body: {
@@ -173,7 +171,8 @@ const styles = StyleSheet.create({
   },
   buttonback:{
     marginLeft:10,
-    marginBottom:10
+    marginBottom:10,
+    marginTop:10
   },
   icon:{
     flexDirection:'column',

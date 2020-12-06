@@ -115,11 +115,12 @@ export const History = ({navigation}) => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <View style={styles.buttonback}>
-            <Icon name="arrow-back-ios" size={30} color="#ffff" />
+            <Icon name="arrow-back-ios" size={25} color="#ffff" />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
+      <View><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
         <Calendar
           style={{marginLeft: 5, marginRight: 5}}
           theme={{
@@ -235,7 +236,7 @@ export const History = ({navigation}) => {
             data={weekChart}
             labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
             width={windowWidth * 0.85}
-            height={200}
+            height={windowHeight * 0.27}
             lineColor="#4EE2EC"
             dotColor="#4EE2EC"
             lineWidth={5}
@@ -275,7 +276,6 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: '5%',
     marginBottom: 5,
     borderColor: 'white',
   },
@@ -289,13 +289,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    marginTop: 10,
+    marginTop: 5,
     textAlign: 'center',
   },
   chart: {
     marginTop: 20,
     justifyContent: 'flex-end',
-    borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
   },
