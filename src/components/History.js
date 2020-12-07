@@ -16,9 +16,9 @@ import CircularProgres from '../components/common/CircularProgres';
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
-import LineGraph from '@chartiful/react-native-line-graph';
+//import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
-
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 const NUMBER_STEP_DIVIDE = 20;
 
 export const History = ({navigation}) => {
@@ -105,7 +105,7 @@ export const History = ({navigation}) => {
               weekCharts.push(0);
             }
           }
-          // console.log('week chart là', weekCharts);
+          console.log('week chart là', weekCharts);
           setWeekChart(weekCharts);
         }
       }
@@ -232,29 +232,32 @@ export const History = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-          <LineGraph
+          <VerticalBarGraph
             data={weekChart}
+            //data={[8, 8, 9, 12]}
             labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
-            width={windowWidth * 0.85}
-            height={200}
-            lineColor="#4EE2EC"
-            dotColor="#4EE2EC"
-            lineWidth={5}
-            isBezier
-            dotSize={5}
-            hasDots
-            hasShadow
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.23}
+            barRadius={5}
+            barWidthPercentage={0.5}
+            barColor="#56CCF2"
             baseConfig={{
-              startAtZero: true,
               hasXAxisBackgroundLines: false,
+              xAxisLabelStyle: {
+                position: 'right',
+                color: 'black',
+              },
+              yAxisLabelStyle: {
+                color: 'black',
+              },
             }}
             style={{
-              marginBottom: 30,
-              paddingTop: 20,
-              marginLeft: 15,
-              marginRight: 15,
               borderRadius: 15,
               backgroundColor: `#ffff`,
+              paddingTop: 10,
+              marginBottom: 30,
+              marginLeft: 15,
+              marginRight: 15,
             }}
           />
         </View>

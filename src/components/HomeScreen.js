@@ -15,7 +15,7 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
 import {datahis, dayCharts} from './common/data';
 const NUMBER_STEP_DIVIDE = 20;
@@ -140,12 +140,13 @@ const HomeScreen = ({navigation}) => {
             getData('history').then((val) => {
               console.log('val', val);
               const number = award.startDate;
+              const weekNow = moment().week();
               const week = moment(Number(number)).week();
               const type = new Date(Number(award.startDate));
               if (val == null) {
                 // console.log('di vao history null');
                 const month = [
-                  {weeks: week, days: [{...award, type: type.getDate()}]},
+                  {weeks: weekNow, days: [{...award, type: type.getDate()}]},
                 ];
                 setData('history', month);
               } else {
@@ -224,7 +225,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     recieveData();
 
-    //removeData('dayChart');
+    //removeData('history');
     // setData('dayChart', dayCharts);
     //setData('history', datahis);
     chartHandle();
@@ -379,45 +380,28 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <VerticalBarGraph
-          //data={[100, 15, 7, 20, 14, 12, 85, 100, 15, 7, 20, 14]}
+        <LineGraph
           data={dayChart}
-          labels={[
-            '2',
-            '4',
-            '6',
-            '8',
-            '10',
-            '12',
-            '14',
-            '16',
-            '18',
-            '20',
-            '22',
-            '24',
-          ]}
-          width={windowWidth * 0.9}
+          width={windowWidth * 0.85}
           height={windowHeight * 0.23}
-          barRadius={5}
-          barWidthPercentage={0.5}
-          barColor="#56CCF2"
+          lineColor="#4EE2EC"
+          dotColor="#4EE2EC"
+          lineWidth={5}
+          isBezier
+          dotSize={5}
+          hasDots
+          hasShadow
           baseConfig={{
+            startAtZero: true,
             hasXAxisBackgroundLines: false,
-            xAxisLabelStyle: {
-              position: 'right',
-              color: 'black',
-            },
-            yAxisLabelStyle: {
-              color: 'black',
-            },
           }}
           style={{
-            borderRadius: 15,
-            backgroundColor: `#ffff`,
-            paddingTop: 10,
             marginBottom: 30,
+            paddingTop: 20,
             marginLeft: 15,
             marginRight: 15,
+            borderRadius: 15,
+            backgroundColor: `#ffff`,
           }}
         />
       </View>
