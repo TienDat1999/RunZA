@@ -18,6 +18,9 @@ import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
 import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
+
+const NUMBER_STEP_DIVIDE = 20;
+
 export const History = ({navigation}) => {
   const [selectDay, setSelectDay] = useState('');
   const [isDateChoose, setIsDateChoose] = useState({
@@ -37,6 +40,7 @@ export const History = ({navigation}) => {
   const findHistory = (data) => {
     getData('history').then((history) => {
       if (history) {
+        //  console.log('di vao his');
         const weeks = history.find((elm) => {
           const weekchoose = moment(Number(data)).week();
           const weeklocal = elm.weeks;
@@ -81,6 +85,7 @@ export const History = ({navigation}) => {
   };
   const FindWeekNow = () => {
     getData('history').then((history) => {
+      //console.log(history);
       if (history) {
         const weeksNow = history.find((elm) => {
           const weekNow = moment().week();
@@ -115,12 +120,11 @@ export const History = ({navigation}) => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <View style={styles.buttonback}>
-            <Icon name="arrow-back-ios" size={25} color="#ffff" />
+            <Icon name="arrow-back-ios" size={30} color="#ffff" />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-      <View><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
         <Calendar
           style={{marginLeft: 5, marginRight: 5}}
           theme={{
@@ -133,12 +137,8 @@ export const History = ({navigation}) => {
             monthTextColor: '#00CCCC',
           }}
           onDayPress={(day) => {
-            //console.log(day.timestamp);
             setSelectDay(day.dateString);
-            // const week = moment(Number(day.timestamp)).week();
-            // console.log(week);
             findHistory(day.timestamp);
-            // console.log(day.timestamp);
           }}
           markedDates={{
             [selectDay]: {
@@ -154,9 +154,9 @@ export const History = ({navigation}) => {
               {/* calories */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.Calories)}
+                fill={Number(isDateChoose.Calories) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -172,19 +172,18 @@ export const History = ({navigation}) => {
             </View>
             <View>
               <Text style={styles.text}>
-                {' '}
-                {Math.ceil(Number(isDateChoose.Calories))}
+                {Math.ceil(Number(isDateChoose.Calories))} KCAL
               </Text>
             </View>
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              {/* distance */}
+              {/* minute */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.distance)}
+                fill={Number(isDateChoose.miniutes) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -199,19 +198,18 @@ export const History = ({navigation}) => {
             </View>
             <View>
               <Text style={styles.text}>
-                {' '}
-                {Math.ceil(Number(isDateChoose.distance))}MM
+                {Math.ceil(Number(isDateChoose.miniutes))} MM
               </Text>
             </View>
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              {/* minutes */}
+              {/* distance */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.miniutes)}
+                fill={Number(isDateChoose.distance) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -225,7 +223,9 @@ export const History = ({navigation}) => {
               </View>
             </View>
             <View>
-              <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
+              <Text style={styles.text}>
+                {Math.ceil(isDateChoose.distance)} MM
+              </Text>
             </View>
           </View>
         </View>
@@ -236,7 +236,7 @@ export const History = ({navigation}) => {
             data={weekChart}
             labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
             width={windowWidth * 0.85}
-            height={windowHeight * 0.27}
+            height={200}
             lineColor="#4EE2EC"
             dotColor="#4EE2EC"
             lineWidth={5}
@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    marginTop: '5%',
     marginBottom: 5,
     borderColor: 'white',
   },
@@ -289,12 +290,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    marginTop: 5,
+    marginTop: 10,
     textAlign: 'center',
   },
   chart: {
     marginTop: 20,
     justifyContent: 'flex-end',
+    borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
   },

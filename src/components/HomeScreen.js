@@ -9,18 +9,16 @@ import {
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
-import {BarChart} from 'react-native-svg-charts';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
 //import LinearGradient from 'react-native-linear-gradient';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import moment from 'moment';
-
-const NUMBER_STEP_DIVIDE = 10;
+import {datahis, dayCharts} from './common/data';
+const NUMBER_STEP_DIVIDE = 20;
 
 const HomeScreen = ({navigation}) => {
   // const [isEnabled, setIsEnabled] = useState(false);
@@ -32,6 +30,7 @@ const HomeScreen = ({navigation}) => {
     miniutes: null,
     Calories: 0,
   });
+  const [dayChart, setDayChart] = useState([1, 0, 0, 0, 0, 0]);
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -47,8 +46,16 @@ const HomeScreen = ({navigation}) => {
   const getMinute = (fist, second) => {
     const miniutesNow = new Date(Number(fist)).getMinutes();
     const miniutesLast = new Date(Number(second)).getMinutes();
-
-    return miniutesNow - miniutesLast;
+    const hourNow = new Date(Number(fist)).getHours();
+    const hourLast = new Date(Number(second)).getHours();
+    if (hourNow == hourLast) {
+      return miniutesNow - miniutesLast;
+    } else if (hourNow > hourLast) {
+      let number = hourNow - hourLast;
+      return number * 60 - hourLast + hourNow;
+    } else {
+      return 0;
+    }
   };
 
   const setStoreAward = async () => {
@@ -61,89 +68,116 @@ const HomeScreen = ({navigation}) => {
   };
 
   const chartHandle = () => {
-    const arr = [1, 2, 3, 4, 5];
-    for (let i = 0; i < arr.length - 1; i + 2) {
-      arr[i] = arr[i] + arr[i + 1];
-    }
-    console.log(arr);
+    getData('dayChart').then((arr) => {
+      if (arr) {
+        // console.log(arr);
+        let number = 0;
+        const arrfll = [];
+        for (let i = 0; i < 24; i++) {
+          // console.log(arr[i]);
+          if (arr[number].type == i) {
+            arrfll.push(arr[number].steps);
+            if (number < arr.length - 1) {
+              number = number + 1;
+            }
+          } else {
+            arrfll.push(0);
+          }
+        }
+        const rr = [];
+        if (arrfll) {
+          for (let i = 0; i < arrfll.length; i = i + 2) {
+            rr.push(arrfll[i] + arrfll[i + 1]);
+          }
+          // console.log(rr);
+          setDayChart(rr);
+        }
+      }
+    });
   };
   // //get du lieu tu local
   const recieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('award');
-      console.log(value);
       if (value != null) {
         const data = JSON.parse(value);
-
         const now = new Date().getTime();
         const lastDay = new Date(Number(data.startDate)).getTime();
         const nowHour = new Date().getHours();
-        const lastHour = new Date(Number(data.startDate)).getHours();
-        if (fn_DateCompare(now, lastDay) == 0) {
-          setAward(data);
-          if (nowHour > lastHour) {
-            getData('dayChart').then((day) => {
-              console.log('day is', day);
-              if (day) {
-                let arrnumber = day;
-                let number = arrnumber.reduce(
-                  (accumulator, currentValue) => accumulator + currentValue,
-                );
-                let val = data.numberOfSteps - number;
-                arrnumber.push(val);
-                setTimeout(() => {
+        const lastHour = new Date(Number(data.endDate)).getHours();
+        console.log('data nhan dc', data);
+        if (data.startDate) {
+          if (fn_DateCompare(now, lastDay) == 0) {
+            setAward(data);
+            if (nowHour > lastHour) {
+              getData('dayChart').then((day) => {
+                const type = new Date(Number(data.startDate));
+                if (day) {
+                  const arrnumber = day;
+                  const sum = arrnumber.reduce((a, b) => a + b.steps, 0);
+                  const val = data.numberOfSteps - sum;
+                  const value = {steps: val, type: type.getHours()};
+                  arrnumber.push(value);
+                  setTimeout(() => {
+                    setData('dayChart', arrnumber);
+                  }, 50);
+                } else {
+                  const arrnumber = [
+                    {
+                      steps: data.numberOfSteps,
+                      type: type.getHours(),
+                    },
+                  ];
+
                   setData('dayChart', arrnumber);
-                }, 50);
-              } else {
-                let arrnumber = [data.numberOfSteps];
-                setData('dayChart', arrnumber);
-              }
-            });
-          }
-          console.log('VAN LA NGAY CU');
-          console.log('data nhan dc', data);
-        } else {
-          console.log('di vao day');
-          getData('history').then((val) => {
-            console.log('val', val);
-            const number = award.startDate;
-            const week = moment(Number(number)).week();
-            const type = new Date(Number(award.startDate));
-            if (val == null) {
-              // console.log('di vao history null');
-              const month = [
-                {weeks: week, days: [{...award, type: type.getDate()}]},
-              ];
-              setData('history', month);
-            } else {
-              //  console.log(val[val.length - 1].weeks, 'dsfsdf', week);
-              if (val[val.length - 1].weeks == week) {
-                // console.log(val[val.length - 1]);
-                const lastWeek = val[val.length - 1];
-                const tmp = {
-                  ...lastWeek,
-                  days: [...lastWeek.days, {...award, type: type.getDate()}],
-                };
-                // console.log(tmp);
-                // // const t = val;
-                const data = [];
-                for (var i = 0; i < val.length - 1; i++) {
-                  data.push(val[i]);
                 }
-                const his = [...data, tmp];
-                setData('history', his);
-                // console.log('di vao set history', his);
-              } else {
-                const his = [
-                  ...val,
+              });
+            }
+            console.log('VAN LA NGAY CU');
+            console.log('data nhan dc', data);
+          } else {
+            // console.log('di vao day');
+            getData('history').then((val) => {
+              console.log('val', val);
+              const number = award.startDate;
+              const week = moment(Number(number)).week();
+              const type = new Date(Number(award.startDate));
+              if (val == null) {
+                // console.log('di vao history null');
+                const month = [
                   {weeks: week, days: [{...award, type: type.getDate()}]},
                 ];
-                setData('history', his);
-                //console.log('tuan moi', his);
+                setData('history', month);
+              } else {
+                //  console.log(val[val.length - 1].weeks, 'dsfsdf', week);
+                if (val[val.length - 1].weeks == week) {
+                  // console.log(val[val.length - 1]);
+                  const lastWeek = val[val.length - 1];
+                  const tmp = {
+                    ...lastWeek,
+                    days: [...lastWeek.days, {...award, type: type.getDate()}],
+                  };
+                  // console.log(tmp);
+                  // // const t = val;
+                  const data = [];
+                  for (var i = 0; i < val.length - 1; i++) {
+                    data.push(val[i]);
+                  }
+                  const his = [...data, tmp];
+                  setData('history', his);
+                  // console.log('di vao set history', his);
+                } else {
+                  const his = [
+                    ...val,
+                    {weeks: week, days: [{...award, type: type.getDate()}]},
+                  ];
+                  setData('history', his);
+                  //console.log('tuan moi', his);
+                }
               }
-            }
-          });
-          removeData('dayChart');
+            });
+            removeData('dayChart');
+          }
         }
       }
     } catch (error) {
@@ -189,14 +223,18 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     recieveData();
-    // removeData('award');
-    // chartHandle();
+
+    //removeData('dayChart');
+    // setData('dayChart', dayCharts);
+    //setData('history', datahis);
+    chartHandle();
     let iscount = true;
     if (iscount) {
       setTimeout(() => {
         pedomestorCount();
       }, 500);
     }
+    0;
 
     //getData('history').then((val) => console.log('get his', val));
     return () => {
@@ -248,8 +286,8 @@ const HomeScreen = ({navigation}) => {
               size={windowHeight * 0.4}
               width={6}
               backgroundWidth={13}
-              //fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
-              fill={50}
+              fill={Number(award.numberOfSteps / NUMBER_STEP_DIVIDE)}
+              // fill={50}
               steps={Number(award.numberOfSteps)}
               tintColor="#4EE2EC"
               backgroundColor="#FFF"
@@ -267,7 +305,7 @@ const HomeScreen = ({navigation}) => {
               size={50}
               width={4}
               backgroundWidth={3}
-              fill={Number(award.Calories)}
+              fill={Number(award.Calories) / NUMBER_STEP_DIVIDE}
               tintColor="#4EE2EC"
               backgroundColor="#FFF"
               lineCap="round"
@@ -282,7 +320,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.text}>
-              {Math.ceil(Number(award.Calories))}KCAl
+              {Math.ceil(Number(award.Calories))} KCAl
             </Text>
           </View>
         </View>
@@ -293,7 +331,7 @@ const HomeScreen = ({navigation}) => {
               size={50}
               width={2}
               backgroundWidth={3}
-              fill={Number(award.distance)}
+              fill={Number(award.distance) / NUMBER_STEP_DIVIDE}
               tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
@@ -309,7 +347,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.text}>
-              {Math.ceil(Number(award.distance))}M
+              {Math.ceil(Number(award.distance))} M
             </Text>
           </View>
         </View>
@@ -320,7 +358,7 @@ const HomeScreen = ({navigation}) => {
               size={50}
               width={2}
               backgroundWidth={3}
-              fill={Number(award.miniutes)}
+              fill={Number(award.miniutes) / NUMBER_STEP_DIVIDE}
               tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
@@ -335,14 +373,15 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.text}>
-              {Math.ceil(Number(award.miniutes))}MM
+              {Math.ceil(Number(award.miniutes))} MM
             </Text>
           </View>
         </View>
       </View>
       <View style={styles.footer}>
         <VerticalBarGraph
-          data={[100, 15, 7, 20, 14, 12, 85, 100, 15, 7, 20, 14]}
+          //data={[100, 15, 7, 20, 14, 12, 85, 100, 15, 7, 20, 14]}
+          data={dayChart}
           labels={[
             '2',
             '4',
