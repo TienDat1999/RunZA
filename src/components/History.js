@@ -18,7 +18,6 @@ import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
 //import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
-import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 const NUMBER_STEP_DIVIDE = 20;
 
 export const History = ({navigation}) => {
@@ -232,7 +231,7 @@ export const History = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-          <VerticalBarGraph
+          {/* <VerticalBarGraph
             data={weekChart}
             //data={[8, 8, 9, 12]}
             labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
@@ -259,7 +258,7 @@ export const History = ({navigation}) => {
               marginLeft: 15,
               marginRight: 15,
             }}
-          />
+          /> */}
         </View>
       </View>
     </View>

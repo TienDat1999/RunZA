@@ -39,7 +39,7 @@ const options = {
     delay: 10000,
   },
 };
-const backgroundTask = async () => {
+export const backgroundTask = async () => {
   try {
     console.log('Trying to start background service');
     await BackgroundJob.start(taskRandom, options);

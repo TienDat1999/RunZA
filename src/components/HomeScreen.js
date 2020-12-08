@@ -15,8 +15,8 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LineGraph from '@chartiful/react-native-line-graph';
 import moment from 'moment';
+import {LineChart} from 'react-native-chart-kit';
 import {datahis, dayCharts} from './common/data';
 const NUMBER_STEP_DIVIDE = 20;
 
@@ -30,7 +30,7 @@ const HomeScreen = ({navigation}) => {
     miniutes: null,
     Calories: 0,
   });
-  const [dayChart, setDayChart] = useState([1, 0, 0, 0, 0, 0]);
+  const [dayChart, setDayChart] = useState([0]);
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -380,10 +380,9 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <LineGraph
+        {/* <LineGraph
           data={dayChart}
-          width={windowWidth * 0.85}
-          height={windowHeight * 0.23}
+        
           lineColor="#4EE2EC"
           dotColor="#4EE2EC"
           lineWidth={5}
@@ -402,6 +401,61 @@ const HomeScreen = ({navigation}) => {
             marginRight: 15,
             borderRadius: 15,
             backgroundColor: `#ffff`,
+          }}
+        /> */}
+        <LineChart
+          data={{
+            labels: [
+              '0',
+              '2',
+              '4',
+              '6',
+              '8',
+              '10',
+              '12',
+              '14',
+              '16',
+              '18',
+              '20',
+              '22',
+              '24',
+            ],
+            datasets: [
+              {
+                data: dayChart,
+              },
+            ],
+          }}
+          width={windowWidth * 0.9}
+          height={windowHeight * 0.23}
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
+          yAxisInterval={1} // optional, defaults to 1
+          withShadow
+          chartConfig={{
+            backgroundColor: '#FFFF',
+            backgroundGradientFrom: '#fFFF',
+            backgroundGradientTo: '#B4CFEC',
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForDots: {
+              r: '2',
+              strokeWidth: '1',
+              stroke: '#000',
+            },
+          }}
+          bezier
+          style={{
+            marginBottom: 30,
+            paddingTop: 20,
+            marginLeft: 15,
+            marginRight: 15,
+            borderRadius: 15,
+            borderRadius: 16,
           }}
         />
       </View>
