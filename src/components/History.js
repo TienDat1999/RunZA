@@ -10,13 +10,14 @@ import {
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
+
 import CircularProgres from '../components/common/CircularProgres';
-//import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
-//import LineGraph from '@chartiful/react-native-line-graph';
+
+import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
 const NUMBER_STEP_DIVIDE = 20;
 
@@ -30,7 +31,7 @@ export const History = ({navigation}) => {
     numberOfSteps: 0,
     startDate: null,
   });
-  const [weekChart, setWeekChart] = useState([1, 0, 0, 0, 0, 0, 0]);
+  const [weekChart, setWeekChart] = useState([0, 0, 0, 0, 0, 0, 0]);
   // console.log(weekChart);
   useEffect(() => {
     //  setData('history', datahis);
@@ -141,7 +142,7 @@ export const History = ({navigation}) => {
           }}
           markedDates={{
             [selectDay]: {
-              selectedColor: '#FF9900',
+              selectedColor: '#00ffff',
               selected: true,
             },
           }}
@@ -231,34 +232,47 @@ export const History = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-          {/* <VerticalBarGraph
-            data={weekChart}
-            //data={[8, 8, 9, 12]}
-            labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
+          <LineChart
+            data={{
+              labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+              datasets: [
+                {
+                  data: weekChart,
+                },
+              ],
+            }}
             width={windowWidth * 0.9}
             height={windowHeight * 0.23}
-            barRadius={5}
-            barWidthPercentage={0.5}
-            barColor="#56CCF2"
-            baseConfig={{
-              hasXAxisBackgroundLines: false,
-              xAxisLabelStyle: {
-                position: 'right',
-                color: 'black',
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
+            yAxisInterval={1} // optional, defaults to 1
+            withShadow
+            chartConfig={{
+              backgroundColor: '#FFFF',
+              backgroundGradientFrom: '#fFFF',
+              backgroundGradientTo: '#B4CFEC',
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16,
               },
-              yAxisLabelStyle: {
-                color: 'black',
+              propsForDots: {
+                r: '2',
+                strokeWidth: '1',
+                stroke: '#000',
               },
             }}
+            bezier
             style={{
-              borderRadius: 15,
-              backgroundColor: `#ffff`,
-              paddingTop: 10,
               marginBottom: 30,
+              paddingTop: 20,
               marginLeft: 15,
               marginRight: 15,
+              borderRadius: 15,
+              borderRadius: 16,
             }}
-          /> */}
+          />
         </View>
       </View>
     </View>

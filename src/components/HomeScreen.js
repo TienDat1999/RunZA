@@ -380,29 +380,6 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        {/* <LineGraph
-          data={dayChart}
-        
-          lineColor="#4EE2EC"
-          dotColor="#4EE2EC"
-          lineWidth={5}
-          isBezier
-          dotSize={5}
-          hasDots
-          hasShadow
-          baseConfig={{
-            startAtZero: true,
-            hasXAxisBackgroundLines: false,
-          }}
-          style={{
-            marginBottom: 30,
-            paddingTop: 20,
-            marginLeft: 15,
-            marginRight: 15,
-            borderRadius: 15,
-            backgroundColor: `#ffff`,
-          }}
-        /> */}
         <LineChart
           data={{
             labels: [
