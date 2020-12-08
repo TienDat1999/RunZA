@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -19,9 +19,14 @@ import moment from 'moment';
 import {LineChart} from 'react-native-chart-kit';
 import {datahis, dayCharts} from './common/data';
 import {backgroundTask} from './common/backGroundTask';
+import ViewShot from 'react-native-view-shot';
+import Share from 'react-native-share';
+import {ShareDialog} from 'react-native-fbsdk';
+
 const NUMBER_STEP_DIVIDE = 20;
 
 const HomeScreen = ({navigation}) => {
+  const ref = useRef(null);
   const [isEnabled, setIsEnabled] = useState(true);
   const [award, setAward] = useState({
     distance: 0,
@@ -32,6 +37,20 @@ const HomeScreen = ({navigation}) => {
     Calories: 0,
   });
   const [dayChart, setDayChart] = useState([0]);
+
+  const handleShareAward = async (uir) => {
+    const shareOption = {
+      mesage: 'this is test',
+      url: uir,
+    };
+    try {
+      const ShareRespone = Share.open(shareOption);
+      console.log(JSON.stringify(ShareRespone));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //  lay du lieu tu local
   const curentAward = async () => {
     const value = await AsyncStorage.getItem('award');
@@ -249,7 +268,10 @@ const HomeScreen = ({navigation}) => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   return (
-    <View style={styles.container}>
+    <ViewShot
+      style={styles.container}
+      ref={ref}
+      options={{format: 'jpg', quality: 0.9}}>
       <View style={styles.header}>
         <View
           style={{
@@ -262,7 +284,12 @@ const HomeScreen = ({navigation}) => {
               <Icons name="menu" size={30} color="#ffff" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              ref.current.capture().then((uri) => {
+                handleShareAward(uri);
+              });
+            }}>
             <View style={styles.buttonshare}>
               <Icons name="share-variant" size={30} color="#ffff" />
             </View>
@@ -280,6 +307,7 @@ const HomeScreen = ({navigation}) => {
             <View style={{position: 'absolute', top: '10%', left: '40%'}}>
               <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
             </View>
+
             <CircularProgres
               size={windowHeight * 0.4}
               width={6}
@@ -400,7 +428,7 @@ const HomeScreen = ({navigation}) => {
               },
             ],
           }}
-          width={windowWidth * 0.9}
+          width={windowWidth * 0.93}
           height={windowHeight * 0.23}
           // yAxisLabel="$"
           // yAxisSuffix="k"
@@ -433,7 +461,7 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </View>
-    </View>
+    </ViewShot>
   );
 };
 const styles = StyleSheet.create({
@@ -476,11 +504,11 @@ const styles = StyleSheet.create({
   },
   buttonmenu: {
     flex: 1,
-    marginLeft: 7,
+    marginLeft: 10,
   },
   buttonshare: {
     flex: 1,
-    marginRight: 7,
+    marginRight: 10,
   },
 });
 export default HomeScreen;
