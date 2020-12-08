@@ -14,7 +14,7 @@ import HomeScreen from '../components/HomeScreen'
 import Rank from '../components/Rank';
 import Track from '../components/Track';
 import Profile from '../components/Profile';
- 
+import Notification from '../components/Notification';
 
 // const HomeScreenEml = ({navigation}) => {
 //   return <HomeScreen navigation={navigation} />;
@@ -77,6 +77,7 @@ const NavigatorDraw = () => {
                 <Drawer.Screen name="Track" component={Track} />
                 <Drawer.Screen name="History" component={History} />
                 <Drawer.Screen name="Rank" component={Rank} />
+                <Drawer.Screen name="Notification" component={Notification} />
             </Drawer.Navigator>
         </NavigationContainer>
         {/* )} */}

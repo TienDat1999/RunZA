@@ -102,9 +102,9 @@ export function DrawerContent(props){
                           size={size}
                           />
                           )}
-                          label="Notifications"
+                          label="Notification"
                           labelStyle={{color:"white"}}
-                          onPress={() => {props.navigation.navigate('Notifications')}}
+                          onPress={() => {props.navigation.navigate('Notification')}}
                         />
                                    
               </Drawer.Section>
