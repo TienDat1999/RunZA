@@ -4,8 +4,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import LinearGradient from 'react-native-linear-gradient';
-import DropDownPicker from 'react-native-dropdown-picker';
+
 import {
   Text,
   View,

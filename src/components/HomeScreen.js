@@ -252,7 +252,7 @@ const HomeScreen = ({navigation}) => {
   const windowHeight = Dimensions.get('window').height;
   return (
     <View style={styles.container}>
-      {/* <LinearGradient colors={['#0000']} style={{flex: 1}}> */}
+   
       <View style={styles.header}>
         <View
           style={{
@@ -436,7 +436,7 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </View>
-      {/* </LinearGradient> */}
+   
     </View>
   );
 };
