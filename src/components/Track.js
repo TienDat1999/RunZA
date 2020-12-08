@@ -80,6 +80,7 @@ const Track = () => {
     if (run === true) {
       let newtime = timerun;
       let newroute = [...route];
+      requestPermission();
       Geolocation.getCurrentPosition((position) => {
         let newregion = {
           latitude: position.coords.latitude,
@@ -99,31 +100,67 @@ const Track = () => {
         setInterval(async () => {
           newtime++;
 
+          if (newtime === 2) {
+            let testpoint = newroute.concat({
+              latitude: 21.00809,
+              longitude: 105.867511,
+            });
+            setRoute(testpoint);
+          }
+          if (newtime === 4) {
+            let testpoint = newroute.concat({
+              latitude: 21.008245,
+              longitude: 105.865317,
+            });
+            setRoute(testpoint);
+            let start = {latitude: 21.008245, longitude: 105.865317};
+
+            let end = newroute[0];
+            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
+            let newdis = distance + haversine(start, end, {unit: 'meter'});
+
+            setDistance(newdis);
+          }
+          if (newtime === 6) {
+            let testpoint = newroute.concat({
+              latitude: 21.007924,
+              longitude: 105.866454,
+            });
+            setRoute(testpoint);
+            let start = {latitude: 21.007924, longitude: 105.866454};
+
+            let end = newroute[0];
+            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
+            let newdis = distance + haversine(start, end, {unit: 'meter'});
+
+            setDistance(newdis);
+          }
           // console.log(newtime);
 
-          if (newtime % 10 === 0) {
-            Geolocation.getCurrentPosition(
-              (position) => {
-                let newpoint = newroute.concat({
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
-                });
-                // console.log(newpoint);
-                setRoute(newpoint);
-              },
+          // if (newtime % 10 === 0) {
+          //   Geolocation.getCurrentPosition(
+          //     (position) => {
+          //       let newpoint = newroute.concat({
+          //         latitude: position.coords.latitude,
+          //         longitude: position.coords.longitude,
+          //       });
+          //       // console.log(newpoint);
+          //       setRoute(newpoint);
+          //     },
 
-              // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
-            );
-            if (newtime > 10) {
-              let start = route[Math.floor(newtime / 10) - 1];
+          //     // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
+          //   );
+          //   // if (newtime >= 10) {
+          //   //   let start = newroute[Math.floor(newtime / 10) - 1];
 
-              let end = route[Math.floor(newtime / 10)];
-              // console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-              // let newdis = haversine(start, end);
-              // let newdi1 = distance + newdis;
-              // setDistance(newdis);
-            }
-          }
+          //   //   let end = newroute[Math.floor(newtime / 10)];
+          //   //   console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
+          //   //   let newdis =distance + haversine(start, end);
+          //   //   setDistance(newdis);
+          //   // }
+
+          // }
+
           // console.log(route, 'aaaaaaaaaaaaaaa');
           setTimerun(newtime);
         }, 1000),
@@ -153,13 +190,11 @@ const Track = () => {
             coordinate={region}
             title={'Vi Tri Hien Tai Cua Ban'}
             onDragEnd={(e) => console.log(e)}
+            image={require('./../asset/images/running.png')}
+            image={require('./../asset/images/running.png')}
           />
           <Polyline
-            coordinates={[
-              {latitude: 21.011027, longitude: 105.864653},
-              {latitude: 21.009495, longitude: 105.863419},
-              {latitude: 21.007434, longitude: 105.864586},
-            ]}
+            coordinates={route}
             strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
             strokeWidth={2}
           />
@@ -203,7 +238,7 @@ const Track = () => {
             <Image source={require('./../asset/images/location.png')} />
           </View>
           <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
-            {distance} M
+            {Math.floor(distance)} M
           </Text>
         </View>
         <View>
