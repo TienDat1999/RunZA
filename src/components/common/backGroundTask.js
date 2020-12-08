@@ -12,31 +12,30 @@ const taskRandom = async (taskData) => {
     // For loop with a delay
     const {delay} = taskData;
     for (let i = 0; BackgroundJob.isRunning(); i++) {
-      console.log('Runned -> ', i);
-      await BackgroundJob.updateNotification({
-        taskDesc: 'app is running ',
-        progressBar: {
-          max: 50,
-          value: 27,
-          //indeterminate: true,
-        },
-      });
+      // console.log('Runned -> ', i);
+      // await BackgroundJob.updateNotification({
+      //   progressBar: {
+      //     max: 50,
+      //     value: 27,
+      //     //indeterminate: true,
+      //   },
+      // });
       await sleep(delay);
     }
   });
 };
 const options = {
-  taskName: 'RuningZone',
-  taskTitle: 'Tap is Running',
-  taskDesc: 'ExampleTask desc',
+  taskName: 'RunningZone',
+  taskTitle: 'Running Zone',
+  taskDesc: 'app is running',
   taskIcon: {
     name: 'ic_launcher',
     type: 'mipmap',
   },
   color: '#ff00ff',
-  linkingURI: 'exampleScheme://chat/jane',
+  //  linkingURI: 'exampleScheme://chat/jane',
   parameters: {
-    delay: 10000,
+    delay: 36000,
   },
 };
 export const backgroundTask = async () => {

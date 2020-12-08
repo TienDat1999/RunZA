@@ -18,10 +18,11 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import {LineChart} from 'react-native-chart-kit';
 import {datahis, dayCharts} from './common/data';
+import {backgroundTask} from './common/backGroundTask';
 const NUMBER_STEP_DIVIDE = 20;
 
 const HomeScreen = ({navigation}) => {
-  // const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
@@ -229,20 +230,17 @@ const HomeScreen = ({navigation}) => {
     // setData('dayChart', dayCharts);
     //setData('history', datahis);
     chartHandle();
-    let iscount = true;
-    if (iscount) {
+    if (isEnabled == true) {
+      backgroundTask();
       setTimeout(() => {
         pedomestorCount();
       }, 500);
     }
-    0;
 
     //getData('history').then((val) => console.log('get his', val));
     return () => {
-      iscount = false;
+      setIsEnabled(false);
     };
-
-    //backgroundTask();
   }, []);
 
   useEffect(() => {
@@ -252,7 +250,6 @@ const HomeScreen = ({navigation}) => {
   const windowHeight = Dimensions.get('window').height;
   return (
     <View style={styles.container}>
-   
       <View style={styles.header}>
         <View
           style={{
@@ -436,7 +433,6 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </View>
-   
     </View>
   );
 };
