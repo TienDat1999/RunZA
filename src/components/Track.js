@@ -253,41 +253,6 @@ const Track = () => {
                 backgroundColor: 'white',
               }}
               onPress={async () => {
-                let newroute = [...route];
-                try {
-                  const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                    {
-                      title: 'App',
-                      message:
-                        'are you sure you want to share your location with the app ?',
-                    },
-                  );
-                  Geolocation.getCurrentPosition(
-                    (position) => {
-                      let newpoint = newroute.concat({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                      });
-
-                      setRoute(newpoint);
-                    },
-
-                    (error) => {
-                      Alert.alert('');
-
-                      console.log(error);
-                    },
-                    {
-                      enableHighAccuracy: true,
-                      timeout: 20000,
-                      maximumAge: 1000,
-                    },
-                    // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
-                  );
-                } catch (error) {
-                  console.log(error);
-                }
                 await setRun(!run);
               }}>
               <Text
