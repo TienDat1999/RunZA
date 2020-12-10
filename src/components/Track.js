@@ -105,15 +105,17 @@ const Track = () => {
                   });
 
                   await setRoute(newpoint);
+                  if (newtime > 5) {
+                    console.log(newpoint, newtime, 111111);
 
-                  let indexpoint = Math.floor(newtime / 5);
-                  let start = newpoint[indexpoint - 1];
-                  let end = newpoint[indexpoint];
-
-                  if (end != undefined && start != undefined) {
-                    dis += haversine(start, end, {unit: 'meter'});
-                    console.log(haversine(start, end, {unit: 'meter'}));
-                    await setDistance(dis);
+                    console.log(newpoint[Math.floor(newtime / 5)]);
+                    console.log(newpoint[Math.floor(newtime / 5 - 1)]);
+                    dis += haversine(
+                      newpoint[Math.floor(newtime / 5 - 1)],
+                      newpoint[Math.floor(newtime / 5)],
+                      {unit: 'meter'},
+                    );
+                    setDistance(dis);
                   }
                 },
 
@@ -147,6 +149,7 @@ const Track = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#0b0938'}}>
+      {/* {console.log(route, 2333333)} */}
       <View style={{height: 80}}></View>
       <View style={{flex: 1, marginBottom: 20}}>
         <MapView
@@ -252,7 +255,6 @@ const Track = () => {
                 backgroundColor: 'white',
               }}
               onPress={async () => {
-                setRun(!run);
                 let newroute = [...route];
                 try {
                   const granted = await PermissionsAndroid.request(
@@ -269,7 +271,7 @@ const Track = () => {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                       });
-                      // console.log(newpoint);
+
                       setRoute(newpoint);
                     },
 
@@ -288,6 +290,7 @@ const Track = () => {
                 } catch (error) {
                   console.log(error);
                 }
+                await setRun(!run);
               }}>
               <Text
                 style={{textAlign: 'center', fontSize: 18, fontWeight: '700'}}>
