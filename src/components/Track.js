@@ -29,6 +29,7 @@ const Track = () => {
   });
   const [distance, setDistance] = useState(0);
   const [route, setRoute] = useState([]);
+  const [disarr, setDisarr] = useState(0);
   const requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -39,6 +40,7 @@ const Track = () => {
             'are you sure you want to share your location with the app ?',
         },
       );
+
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         Geolocation.getCurrentPosition(
           (position) => {
@@ -61,6 +63,11 @@ const Track = () => {
 
             console.log(error);
           },
+          {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000,
+          },
         );
       } else {
         console.log('Camera permission denied');
@@ -80,88 +87,52 @@ const Track = () => {
     if (run === true) {
       let newtime = timerun;
       let newroute = [...route];
+      let dis = distance;
+
       requestPermission();
-      Geolocation.getCurrentPosition((position) => {
-        let newregion = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-          coordinate: new AnimatedRegion({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0,
-            longitudeDelta: 0,
-          }),
-        };
-        setRegion(newregion);
-      });
+
       setLoop(
         setInterval(async () => {
           newtime++;
 
-          if (newtime === 2) {
-            let testpoint = newroute.concat({
-              latitude: 21.00809,
-              longitude: 105.867511,
-            });
-            setRoute(testpoint);
+          if (newtime % 5 === 0) {
+            try {
+              await Geolocation.getCurrentPosition(
+                async (position) => {
+                  let newpoint = newroute.concat({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                  });
+
+                  await setRoute(newpoint);
+
+                  let indexpoint = Math.floor(newtime / 5);
+                  let start = newpoint[indexpoint - 1];
+                  let end = newpoint[indexpoint];
+
+                  if (end != undefined && start != undefined) {
+                    dis += haversine(start, end, {unit: 'meter'});
+                    console.log(haversine(start, end, {unit: 'meter'}));
+                    await setDistance(dis);
+                  }
+                },
+
+                (error) => {
+                  Alert.alert('');
+
+                  console.log(error);
+                },
+                {
+                  enableHighAccuracy: true,
+                  timeout: 20000,
+                  maximumAge: 1000,
+                },
+              );
+            } catch (error) {
+              console.log(error);
+            }
           }
-          if (newtime === 4) {
-            let testpoint = newroute.concat({
-              latitude: 21.008245,
-              longitude: 105.865317,
-            });
-            setRoute(testpoint);
-            let start = {latitude: 21.008245, longitude: 105.865317};
 
-            let end = newroute[0];
-            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-            let newdis = distance + haversine(start, end, {unit: 'meter'});
-
-            setDistance(newdis);
-          }
-          if (newtime === 6) {
-            let testpoint = newroute.concat({
-              latitude: 21.007924,
-              longitude: 105.866454,
-            });
-            setRoute(testpoint);
-            let start = {latitude: 21.007924, longitude: 105.866454};
-
-            let end = newroute[0];
-            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-            let newdis = distance + haversine(start, end, {unit: 'meter'});
-
-            setDistance(newdis);
-          }
-          // console.log(newtime);
-
-          // if (newtime % 10 === 0) {
-          //   Geolocation.getCurrentPosition(
-          //     (position) => {
-          //       let newpoint = newroute.concat({
-          //         latitude: position.coords.latitude,
-          //         longitude: position.coords.longitude,
-          //       });
-          //       // console.log(newpoint);
-          //       setRoute(newpoint);
-          //     },
-
-          //     // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
-          //   );
-          //   // if (newtime >= 10) {
-          //   //   let start = newroute[Math.floor(newtime / 10) - 1];
-
-          //   //   let end = newroute[Math.floor(newtime / 10)];
-          //   //   console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-          //   //   let newdis =distance + haversine(start, end);
-          //   //   setDistance(newdis);
-          //   // }
-
-          // }
-
-          // console.log(route, 'aaaaaaaaaaaaaaa');
           setTimerun(newtime);
         }, 1000),
       );
@@ -170,10 +141,9 @@ const Track = () => {
       clearInterval(loop);
     }
     return () => {
-      console.log('clear');
       clearInterval(loop);
     };
-  }, [run, route]);
+  }, [run, timerun]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#0b0938'}}>
@@ -190,7 +160,6 @@ const Track = () => {
             coordinate={region}
             title={'Vi Tri Hien Tai Cua Ban'}
             onDragEnd={(e) => console.log(e)}
-            image={require('./../asset/images/running.png')}
             image={require('./../asset/images/running.png')}
           />
           <Polyline
@@ -237,9 +206,15 @@ const Track = () => {
             }}>
             <Image source={require('./../asset/images/location.png')} />
           </View>
-          <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
-            {Math.floor(distance)} M
-          </Text>
+          {distance > 1000 ? (
+            <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
+              {Math.floor(distance / 1000)} KM
+            </Text>
+          ) : (
+            <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
+              {Math.floor(distance)} M
+            </Text>
+          )}
         </View>
         <View>
           <View
@@ -276,8 +251,43 @@ const Track = () => {
                 justifyContent: 'center',
                 backgroundColor: 'white',
               }}
-              onPress={() => {
+              onPress={async () => {
                 setRun(!run);
+                let newroute = [...route];
+                try {
+                  const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                      title: 'App',
+                      message:
+                        'are you sure you want to share your location with the app ?',
+                    },
+                  );
+                  Geolocation.getCurrentPosition(
+                    (position) => {
+                      let newpoint = newroute.concat({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                      });
+                      // console.log(newpoint);
+                      setRoute(newpoint);
+                    },
+
+                    (error) => {
+                      Alert.alert('');
+
+                      console.log(error);
+                    },
+                    {
+                      enableHighAccuracy: true,
+                      timeout: 20000,
+                      maximumAge: 1000,
+                    },
+                    // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
               }}>
               <Text
                 style={{textAlign: 'center', fontSize: 18, fontWeight: '700'}}>
