@@ -93,8 +93,6 @@ const Track = () => {
 
       setLoop(
         setInterval(async () => {
-          newtime++;
-
           if (newtime % 5 === 0) {
             try {
               await Geolocation.getCurrentPosition(
@@ -105,11 +103,11 @@ const Track = () => {
                   });
 
                   await setRoute(newpoint);
-                  if (newtime > 5) {
+                  if (newtime >= 5) {
                     console.log(newpoint, newtime, 111111);
 
+                    console.log(newpoint[Math.floor(newtime / 5) - 1]);
                     console.log(newpoint[Math.floor(newtime / 5)]);
-                    console.log(newpoint[Math.floor(newtime / 5 - 1)]);
                     dis += haversine(
                       newpoint[Math.floor(newtime / 5 - 1)],
                       newpoint[Math.floor(newtime / 5)],
@@ -134,7 +132,7 @@ const Track = () => {
               console.log(error);
             }
           }
-
+          newtime++;
           setTimerun(newtime);
         }, 1000),
       );
@@ -211,7 +209,7 @@ const Track = () => {
           </View>
           {distance > 1000 ? (
             <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
-              {Math.floor(distance / 1000)} KM
+              {Math.round((distance / 1000) * 100) / 100} KM
             </Text>
           ) : (
             <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
