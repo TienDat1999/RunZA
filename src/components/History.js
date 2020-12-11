@@ -10,14 +10,17 @@ import {
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
+
 import CircularProgres from '../components/common/CircularProgres';
-//import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
+
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
-import LineGraph from '@chartiful/react-native-line-graph';
+
+import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
+const NUMBER_STEP_DIVIDE = 20;
+
 export const History = ({navigation}) => {
   const [selectDay, setSelectDay] = useState('');
   const [isDateChoose, setIsDateChoose] = useState({
@@ -28,7 +31,7 @@ export const History = ({navigation}) => {
     numberOfSteps: 0,
     startDate: null,
   });
-  const [weekChart, setWeekChart] = useState([1, 0, 0, 0, 0, 0, 0]);
+  const [weekChart, setWeekChart] = useState([0, 0, 0, 0, 0, 0, 0]);
   // console.log(weekChart);
   useEffect(() => {
     //  setData('history', datahis);
@@ -37,6 +40,7 @@ export const History = ({navigation}) => {
   const findHistory = (data) => {
     getData('history').then((history) => {
       if (history) {
+        //  console.log('di vao his');
         const weeks = history.find((elm) => {
           const weekchoose = moment(Number(data)).week();
           const weeklocal = elm.weeks;
@@ -81,6 +85,7 @@ export const History = ({navigation}) => {
   };
   const FindWeekNow = () => {
     getData('history').then((history) => {
+      //console.log(history);
       if (history) {
         const weeksNow = history.find((elm) => {
           const weekNow = moment().week();
@@ -100,7 +105,7 @@ export const History = ({navigation}) => {
               weekCharts.push(0);
             }
           }
-          // console.log('week chart là', weekCharts);
+          console.log('week chart là', weekCharts);
           setWeekChart(weekCharts);
         }
       }
@@ -115,12 +120,12 @@ export const History = ({navigation}) => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <View style={styles.buttonback}>
-            <Icon name="arrow-back-ios" size={25} color="#ffff" />
+            <Icon name="arrow-back-ios" size={30} color="#ffff" />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-      <View><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
+      <View style={{padding: 5}}><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
         <Calendar
           style={{marginLeft: 5, marginRight: 5}}
           theme={{
@@ -133,16 +138,12 @@ export const History = ({navigation}) => {
             monthTextColor: '#00CCCC',
           }}
           onDayPress={(day) => {
-            //console.log(day.timestamp);
             setSelectDay(day.dateString);
-            // const week = moment(Number(day.timestamp)).week();
-            // console.log(week);
             findHistory(day.timestamp);
-            // console.log(day.timestamp);
           }}
           markedDates={{
             [selectDay]: {
-              selectedColor: '#FF9900',
+              selectedColor: '#00ffff',
               selected: true,
             },
           }}
@@ -154,9 +155,9 @@ export const History = ({navigation}) => {
               {/* calories */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.Calories)}
+                fill={Number(isDateChoose.Calories) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -172,19 +173,18 @@ export const History = ({navigation}) => {
             </View>
             <View>
               <Text style={styles.text}>
-                {' '}
-                {Math.ceil(Number(isDateChoose.Calories))}
+                {Math.ceil(Number(isDateChoose.Calories))} KCAL
               </Text>
             </View>
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              {/* distance */}
+              {/* minute */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.distance)}
+                fill={Number(isDateChoose.miniutes) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -199,19 +199,18 @@ export const History = ({navigation}) => {
             </View>
             <View>
               <Text style={styles.text}>
-                {' '}
-                {Math.ceil(Number(isDateChoose.distance))}MM
+                {Math.ceil(Number(isDateChoose.miniutes))} MM
               </Text>
             </View>
           </View>
           <View style={styles.icon}>
             <View style={styles.itemicon}>
-              {/* minutes */}
+              {/* distance */}
               <CircularProgres
                 size={50}
-                width={2}
+                width={3}
                 backgroundWidth={3}
-                fill={Number(isDateChoose.miniutes)}
+                fill={Number(isDateChoose.distance) / NUMBER_STEP_DIVIDE}
                 tintColor="#00ffff"
                 backgroundColor="#FFF"
                 lineCap="round"
@@ -225,36 +224,54 @@ export const History = ({navigation}) => {
               </View>
             </View>
             <View>
-              <Text style={styles.text}>{isDateChoose.miniutes}MM</Text>
+              <Text style={styles.text}>
+                {Math.ceil(isDateChoose.distance)} MM
+              </Text>
             </View>
           </View>
         </View>
       </View>
       <View style={styles.footer}>
         <View style={styles.chart}>
-          <LineGraph
-            data={weekChart}
-            labels={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
-            width={windowWidth * 0.85}
-            height={windowHeight * 0.27}
-            lineColor="#4EE2EC"
-            dotColor="#4EE2EC"
-            lineWidth={5}
-            isBezier
-            dotSize={5}
-            hasDots
-            hasShadow
-            baseConfig={{
-              startAtZero: true,
-              hasXAxisBackgroundLines: false,
+          <LineChart
+            data={{
+              labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+              datasets: [
+                {
+                  data: weekChart,
+                },
+              ],
             }}
+            width={windowWidth * 0.9}
+            height={windowHeight * 0.25}
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
+            yAxisInterval={1} // optional, defaults to 1
+            withShadow
+            chartConfig={{
+              backgroundColor: '#FFFF',
+              backgroundGradientFrom: '#fFFF',
+              backgroundGradientTo: '#B4CFEC',
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: '2',
+                strokeWidth: '1',
+                stroke: '#000',
+              },
+            }}
+            bezier
             style={{
               marginBottom: 30,
               paddingTop: 20,
-              marginLeft: 15,
-              marginRight: 15,
+              marginLeft: 20,
+              marginRight: 10,
               borderRadius: 15,
-              backgroundColor: `#ffff`,
+              borderRadius: 16,
             }}
           />
         </View>
@@ -276,11 +293,13 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop:1,
     borderColor: 'white',
   },
   body: {
     flex: 1,
+
   },
   itemicon: {
     borderColor: 'white',
@@ -289,12 +308,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    marginTop: 5,
+    marginTop: 10,
     textAlign: 'center',
   },
   chart: {
     marginTop: 20,
     justifyContent: 'flex-end',
+    borderColor: 'white',
     marginLeft: 5,
     marginRight: 5,
   },

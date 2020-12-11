@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {LoginManager} from 'react-native-fbsdk';
-import Pedometer from 'react-native-pedometer-huangxt';
 import {Button, ImagePickerIOS, View} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -10,11 +9,10 @@ import WaitLoading from '../components/common/waitLoading';
 import AsyncStorage from '@react-native-community/async-storage';
 import {authContext} from '../components/common/authContext';
 import {History} from '../components/History';
-import HomeScreen from '../components/HomeScreen'
+import HomeScreen from '../components/HomeScreen';
 import Rank from '../components/Rank';
 import Track from '../components/Track';
 import Profile from '../components/Profile';
-import Notification from '../components/Notification';
 
 // const HomeScreenEml = ({navigation}) => {
 //   return <HomeScreen navigation={navigation} />;
@@ -70,15 +68,15 @@ const NavigatorDraw = () => {
         ) : login == false ? (
           <Login login={login} />
         ) : ( */}
-         <NavigationContainer>
-            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-                <Drawer.Screen name="Home" component={HomeScreen} />
-                <Drawer.Screen name="Profile" component={Profile} />
-                <Drawer.Screen name="Track" component={Track} />
-                <Drawer.Screen name="History" component={History} />
-                <Drawer.Screen name="Rank" component={Rank} />
-                <Drawer.Screen name="Notification" component={Notification} />
-            </Drawer.Navigator>
+        <NavigationContainer>
+          <Drawer.Navigator
+            drawerContent={(props) => <DrawerContent {...props} />}>
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Profile" component={Profile} />
+            <Drawer.Screen name="Track" component={Track} />
+            <Drawer.Screen name="History" component={History} />
+            <Drawer.Screen name="Rank" component={Rank} />
+          </Drawer.Navigator>
         </NavigationContainer>
         {/* )} */}
       </authContext.Provider>

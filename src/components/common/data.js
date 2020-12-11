@@ -1,7 +1,7 @@
 export const datahis = [
   {
-    week: 49,
-    data: [
+    weeks: 49,
+    days: [
       {
         Calories: 153,
         distance: 167.64000898599625,
@@ -69,8 +69,8 @@ export const datahis = [
     ],
   },
   {
-    week: 50,
-    data: [
+    weeks: 50,
+    days: [
       {
         Calories: 153,
         distance: 167.64000898599625,
@@ -136,5 +136,48 @@ export const datahis = [
         type: 6,
       },
     ],
+  },
+];
+
+export const dayCharts = [
+  {
+    steps: 85,
+    type: 2,
+  },
+  {
+    steps: 875,
+    type: 3,
+  },
+  {
+    steps: 518,
+    type: 6,
+  },
+  {
+    steps: 48,
+    type: 7,
+  },
+  {
+    steps: 758,
+    type: 8,
+  },
+  {
+    steps: 85,
+    type: 12,
+  },
+  {
+    steps: 855,
+    type: 13,
+  },
+  {
+    steps: 84,
+    type: 17,
+  },
+  {
+    steps: 78,
+    type: 18,
+  },
+  {
+    steps: 855,
+    type: 20,
   },
 ];
