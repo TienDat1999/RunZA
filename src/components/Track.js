@@ -106,14 +106,19 @@ const Track = () => {
                   if (newtime >= 5) {
                     console.log(newpoint, newtime, 111111);
 
-                    console.log(newpoint[Math.floor(newtime / 5) - 1]);
-                    console.log(newpoint[Math.floor(newtime / 5)]);
-                    dis += haversine(
-                      newpoint[Math.floor(newtime / 5 - 1)],
-                      newpoint[Math.floor(newtime / 5)],
-                      {unit: 'meter'},
-                    );
-                    setDistance(dis);
+                    console.log('start', newpoint[Math.floor(newtime / 5) - 1]);
+                    console.log('end', newpoint[Math.floor(newtime / 5)]);
+                    if (
+                      newpoint[Math.floor(newtime / 5)] != undefined &&
+                      newpoint[Math.floor(newtime / 5) - 1] != undefined
+                    ) {
+                      dis += haversine(
+                        newpoint[Math.floor(newtime / 5 - 1)],
+                        newpoint[Math.floor(newtime / 5)],
+                        {unit: 'meter'},
+                      );
+                      setDistance(dis);
+                    }
                   }
                 },
 
