@@ -5,6 +5,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RadioGroup from 'react-native-radio-buttons-group';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
+
 export default class notification extends Component {
     state = {
         gender: [

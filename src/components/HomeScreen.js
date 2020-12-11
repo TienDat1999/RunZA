@@ -16,7 +16,7 @@ import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import Moment from 'react-moment';
 import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 import moment from 'moment';
 
@@ -211,6 +211,7 @@ const HomeScreen = ({navigation}) => {
   }, [award.numberOfSteps]);
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
+  const dateToFormat = 'D MMM YYYY';
   return (
     <View style={styles.container}>
       {/* <LinearGradient colors={['#0000']} style={{flex: 1}}> */}
@@ -232,7 +233,8 @@ const HomeScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center'}}>    
+            <Text style={{color:'white', fontSize:20}}>{moment().format('LL')}</Text>
           <View
             style={{
               borderColor: 'white',
