@@ -35,7 +35,7 @@ const options = {
   color: '#ff00ff',
   //  linkingURI: 'exampleScheme://chat/jane',
   parameters: {
-    delay: 36000,
+    delay: 10000,
   },
 };
 export const backgroundTask = async () => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage, {
+  useAsyncStorage,
+} from '@react-native-community/async-storage';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
 //import LinearGradient from 'react-native-linear-gradient';
 import {fn_DateCompare} from '../components/common/equalDate';
@@ -21,11 +23,11 @@ import {datahis, dayCharts} from './common/data';
 import {backgroundTask} from './common/backGroundTask';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
-import {ShareDialog} from 'react-native-fbsdk';
-
+import ModalProfile from './modal';
 const NUMBER_STEP_DIVIDE = 20;
 
 const HomeScreen = ({navigation}) => {
+  const [visible, setVisible] = useState(true);
   const ref = useRef(null);
   const [isEnabled, setIsEnabled] = useState(true);
   const [award, setAward] = useState({
@@ -72,12 +74,37 @@ const HomeScreen = ({navigation}) => {
       return miniutesNow - miniutesLast;
     } else if (hourNow > hourLast) {
       let number = hourNow - hourLast;
-      return number * 60 - hourLast + hourNow;
+      return number * 60 - miniutesLast + miniutesNow;
     } else {
       return 0;
     }
   };
 
+  const getSecondsHandle = (fist, second) => {
+    const secondsNow = new Date(Number(fist)).getSeconds();
+    const secondsLast = new Date(Number(second)).getSeconds();
+    const minutesNow = new Date(Number(fist)).getMinutes();
+    const minutesLast = new Date(Number(second)).getMinutes();
+    // console.log(
+    //   'giay dau',
+    //   secondsNow,
+    //   'gay cuooi',
+    //   secondsLast,
+    //   'phut dau',
+    //   minutesNow,
+    //   'phut cuoi',
+    //   minutesLast,
+    // );
+    if (minutesNow == minutesLast) {
+      return secondsNow - secondsLast;
+    } else if (minutesNow > minutesLast) {
+      let number = minutesNow - minutesLast;
+      return number * 60 - secondsLast + secondsNow;
+    } else {
+      console.log('di vao khong');
+      return 0;
+    }
+  };
   const setStoreAward = async () => {
     const value = JSON.stringify(award);
     try {
@@ -214,25 +241,74 @@ const HomeScreen = ({navigation}) => {
           let number = BWR(val.gender, val.age, val.Weight, val.height);
           // console.log('calories Burn', Math.ceil(caloburn));
           const nows = new Date();
+          let timesDurations = null;
+          let reMunite = 0;
+          let duarationMinute = [];
+          let miniutesStamp = [];
+          let duarationNUmber = 0;
+          let duration = 0;
           Pedometer.startPedometerUpdatesFromDate(
             nows.getTime(),
             (pedometerData) => {
-              const duration = getMinute(
-                pedometerData.endDate,
-                pedometerData.startDate,
-              );
-              //console.log('duaration', duration);
+              if (miniutesStamp.length != 0) {
+                // console.log('time', miniutesStamp);
+                if (miniutesStamp.length >= 2) {
+                  let seconds = getSecondsHandle(
+                    miniutesStamp[1],
+                    miniutesStamp[0],
+                  );
+                  //   console.log('seconds', seconds);
+                  if (seconds >= 10) {
+                    timesDurations = pedometerData.endDate;
+                    let timeStime = miniutesStamp[miniutesStamp.length - 1];
+                    miniutesStamp = [timeStime];
+                    console.log('vao remove khi giay lon hon 10');
+                  } else {
+                    //  console.log('di vao set lai');
+                    duration = getMinute(
+                      pedometerData.endDate,
+                      (timesDurations =
+                        timesDurations || pedometerData.startDate),
+                    );
+                    miniutesStamp = [
+                      miniutesStamp[miniutesStamp.length - 1],
+                      pedometerData.endDate,
+                    ];
+                  }
+                } else {
+                  let arr = [...miniutesStamp, pedometerData.endDate];
+                  miniutesStamp = arr;
+                }
+              } else {
+                miniutesStamp.push(pedometerData.endDate);
+              }
+
+              console.log('duration', duration);
+              //neu ma duaration > reMunite thi push
+              if (duration == reMunite + 1) {
+                reMunite = duration;
+                console.log('re munite', reMunite);
+              } else if (duration < reMunite) {
+                duarationMinute.push(reMunite);
+                reMunite = 0;
+              }
+              console.log('mang', duarationMinute);
+              let sum = duarationMinute.reduce((a, b) => a + b, 0);
+              if (sum != 0) {
+                duarationNUmber = sum;
+              }
+              console.log('duarationNUmber', duarationNUmber);
               setAward({
                 distance: Number(value.distance) + pedometerData.distance,
                 numberOfSteps:
                   Number(value.numberOfSteps) + pedometerData.numberOfSteps,
                 startDate: pedometerData.startDate,
                 endDate: pedometerData.endDate,
-                miniutes: Number(value.miniutes) + duration,
+                miniutes: Number(value.miniutes) + duarationNUmber,
                 Calories: CaloriesBurn(
                   number,
                   3.5,
-                  Number(value.miniutes) + duration,
+                  Number(value.miniutes) + duarationNUmber,
                 ),
               });
             },
@@ -245,7 +321,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     recieveData();
 
-    //removeData('history');
+    //removeData('inforUser');
     // setData('dayChart', dayCharts);
     //setData('history', datahis);
     chartHandle();
@@ -255,7 +331,12 @@ const HomeScreen = ({navigation}) => {
         pedomestorCount();
       }, 500);
     }
-
+    getData('inforUser').then((val) => {
+      if (val) {
+        setVisible(false);
+      }
+    });
+    removeData('timeDuaration');
     //getData('history').then((val) => console.log('get his', val));
     return () => {
       setIsEnabled(false);
@@ -272,6 +353,8 @@ const HomeScreen = ({navigation}) => {
       style={styles.container}
       ref={ref}
       options={{format: 'jpg', quality: 0.9}}>
+      {/* <ModalProfile /> */}
+
       <View style={styles.header}>
         <View
           style={{

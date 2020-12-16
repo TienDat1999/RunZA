@@ -181,3 +181,10 @@ export const dayCharts = [
     type: 20,
   },
 ];
+const user = {
+  name: 'user',
+  gender: 'nam',
+  Weight: 56,
+  height: 170,
+  age: 18,
+};

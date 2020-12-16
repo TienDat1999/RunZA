@@ -17,6 +17,7 @@ import MapView, {
 } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import haversine from 'haversine';
+import {BWR, CaloriesBurn} from './common/calculateCalories';
 const Track = () => {
   const [timerun, setTimerun] = useState(0);
   const [run, setRun] = useState(false);
@@ -29,6 +30,58 @@ const Track = () => {
   });
   const [distance, setDistance] = useState(0);
   const [route, setRoute] = useState([]);
+  const [award, setAward] = useState({
+    distance: 0,
+    numberOfSteps: 0,
+    startDate: null,
+    endDate: null,
+    miniutes: null,
+    Calories: 0,
+  });
+
+  const setStoreAward = async () => {
+    const value = JSON.stringify(award);
+    try {
+      await AsyncStorage.setItem('awardTrack', value);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const curentAward = async () => {
+    const value = await AsyncStorage.getItem('awardTrack');
+    if (value != null) {
+      let data = JSON.parse(value);
+      return data;
+    } else {
+      console.log('lay du lieu tu local null');
+      return null;
+    }
+  };
+  const PedomestorCount = () => {
+    // do something with pedometer data
+    curentAward().then((value) => {
+      getData('inforUser').then((val) => {
+        if (val != null) {
+          let number = BWR(val.gender, val.age, val.Weight, val.height);
+          // console.log('calories Burn', Math.ceil(caloburn));
+          const nows = new Date();
+          Pedometer.startPedometerUpdatesFromDate(
+            nows.getTime(),
+            (pedometerData) => {
+              //console.log('duaration', duration);
+              setAward({
+                distance: Number(value.distance) + pedometerData.distance,
+                numberOfSteps:
+                  Number(value.numberOfSteps) + pedometerData.numberOfSteps,
+                Calories: CaloriesBurn(number, 3.5, timerun / 60),
+              });
+            },
+          );
+        }
+      });
+    });
+  };
+
   const requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -69,6 +122,9 @@ const Track = () => {
       console.warn(err);
     }
   };
+  useEffect(() => {
+    setStoreAward();
+  }, [award.numberOfSteps]);
 
   useEffect(() => {
     requestPermission();
@@ -278,6 +334,7 @@ const Track = () => {
               }}
               onPress={() => {
                 setRun(!run);
+                PedomestorCount();
               }}>
               <Text
                 style={{textAlign: 'center', fontSize: 18, fontWeight: '700'}}>
@@ -295,6 +352,7 @@ const Track = () => {
                   backgroundColor: 'white',
                 }}
                 onPress={() => {
+                  PedomestorCount();
                   setRun(!run);
                 }}>
                 <Text
@@ -319,6 +377,7 @@ const Track = () => {
                   setTimerun(0);
                   setDistance(0);
                   setRoute([]);
+                  Pedometer.stopPedometerUpdates();
                 }}>
                 <Text
                   style={{
@@ -344,10 +403,11 @@ const Track = () => {
               }}
               onPress={() => {
                 setRun(!run);
+                Pedometer.stopPedometerUpdates();
               }}>
               <Text
                 style={{textAlign: 'center', fontSize: 18, fontWeight: '700'}}>
-                Stop
+                Pause
               </Text>
             </TouchableOpacity>
           </View>
