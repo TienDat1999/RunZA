@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   Alert,
   PermissionsAndroid,
+  StyleSheet,
 } from 'react-native';
+import moment from 'moment';
 import MapView, {
   Marker,
   AnimatedRegion,
@@ -16,6 +18,7 @@ import MapView, {
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import haversine from 'haversine';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
 const Track = () => {
@@ -232,8 +235,17 @@ const Track = () => {
   }, [run, route]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#0b0938'}}>
-      <View style={{height: 80}}></View>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <View style={styles.buttonback}>
+          <Icon name="arrow-back-ios" size={30} color="#ffff" />
+        </View>
+      </TouchableOpacity>
+      <View style={{marginTop: 5, alignItems: 'center', padding: 15}}>
+        <Text style={{color: 'white', fontSize: 25}}>
+          {moment().format('LL')}
+        </Text>
+      </View>
       <View style={{flex: 1, marginBottom: 20}}>
         <MapView
           style={{flex: 1}}
@@ -416,4 +428,10 @@ const Track = () => {
     </SafeAreaView>
   );
 };
+const styles = StyleSheet.create({
+  buttonback: {
+    marginTop: 10,
+    marginLeft: 10,
+  },
+});
 export default Track;

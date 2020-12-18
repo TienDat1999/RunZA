@@ -12,7 +12,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RadioGroup from 'react-native-radio-buttons-group';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
-export default ModalProfile = ({isVisible}) => {
+export default ModalProfile = ({modalHandle}) => {
   const [gender, setgender] = useState([
     {
       label: 'Male',
@@ -23,6 +23,9 @@ export default ModalProfile = ({isVisible}) => {
       color: 'green',
     },
   ]);
+  const HandleVisible = () => {
+    modalHandle(false);
+  };
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Modal isVisible={true}>
@@ -126,6 +129,7 @@ export default ModalProfile = ({isVisible}) => {
                 title="SAVE"
                 onPress={() => {
                   console.log('save infor');
+                  HandleVisible();
                 }}
               />
             </View>

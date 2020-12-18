@@ -125,6 +125,7 @@ export const History = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
+      <View style={{padding: 5}}><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
         <Calendar
           style={{marginLeft: 5, marginRight: 5}}
           theme={{
@@ -242,7 +243,7 @@ export const History = ({navigation}) => {
               ],
             }}
             width={windowWidth * 0.9}
-            height={windowHeight * 0.23}
+            height={windowHeight * 0.25}
             // yAxisLabel="$"
             // yAxisSuffix="k"
             yAxisInterval={1} // optional, defaults to 1
@@ -267,8 +268,8 @@ export const History = ({navigation}) => {
             style={{
               marginBottom: 30,
               paddingTop: 20,
-              marginLeft: 15,
-              marginRight: 15,
+              marginLeft: 20,
+              marginRight: 10,
               borderRadius: 15,
               borderRadius: 16,
             }}
@@ -292,12 +293,13 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: '5%',
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop:1,
     borderColor: 'white',
   },
   body: {
     flex: 1,
+
   },
   itemicon: {
     borderColor: 'white',

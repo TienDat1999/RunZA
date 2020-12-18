@@ -292,12 +292,12 @@ const HomeScreen = ({navigation}) => {
                 duarationMinute.push(reMunite);
                 reMunite = 0;
               }
-              console.log('mang', duarationMinute);
+              // console.log('mang', duarationMinute);
               let sum = duarationMinute.reduce((a, b) => a + b, 0);
               if (sum != 0) {
                 duarationNUmber = sum;
               }
-              console.log('duarationNUmber', duarationNUmber);
+              //  console.log('duarationNUmber', duarationNUmber);
               setAward({
                 distance: Number(value.distance) + pedometerData.distance,
                 numberOfSteps:
@@ -317,7 +317,10 @@ const HomeScreen = ({navigation}) => {
       });
     });
   };
-
+  const modalHandle = (val) => {
+    // console.log('da goi toi');
+    setVisible(val);
+  };
   useEffect(() => {
     recieveData();
 
@@ -353,7 +356,7 @@ const HomeScreen = ({navigation}) => {
       style={styles.container}
       ref={ref}
       options={{format: 'jpg', quality: 0.9}}>
-      {/* <ModalProfile /> */}
+      {visible ? <ModalProfile modalHandle={() => modalHandle()} /> : null}
 
       <View style={styles.header}>
         <View
@@ -379,6 +382,11 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center'}}>
+          <View style={{marginTop: 20, alignItems: 'center'}}>
+            <Text style={{color: 'white', fontSize: 25}}>
+              {moment().format('LL')}
+            </Text>
+          </View>
           <View
             style={{
               borderColor: 'white',
@@ -537,8 +545,8 @@ const HomeScreen = ({navigation}) => {
           style={{
             marginBottom: 30,
             paddingTop: 20,
-            marginLeft: 15,
-            marginRight: 15,
+            marginLeft: 20,
+            marginRight: 10,
             borderRadius: 15,
             borderRadius: 16,
           }}
