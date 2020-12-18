@@ -3,6 +3,7 @@ import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Drawer, Text} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import LinearGradient from 'react-native-linear-gradient';
 export function DrawerContent(props) {
   return (
@@ -10,13 +11,7 @@ export function DrawerContent(props) {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.avatar}>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: 'white',
-                width: 100,
-                height: 100,
-              }}></View>
+            <Icon name="user" color="white" size={120} />
             <View>
               <Text
                 style={{
@@ -96,16 +91,6 @@ export function DrawerContent(props) {
                   props.navigation.navigate('Track');
                 }}
               />
-              <DrawerItem
-                icon={({color, size}) => (
-                  <Icons name="bell-outline" color="white" size={size} />
-                )}
-                label="Notifications"
-                labelStyle={{color: 'white'}}
-                onPress={() => {
-                  props.navigation.navigate('Notifications');
-                }}
-              />
             </Drawer.Section>
           </DrawerContentScrollView>
           <Drawer.Section>
@@ -140,6 +125,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
+    flex:0.3
   },
   footer: {
     flex: 1,

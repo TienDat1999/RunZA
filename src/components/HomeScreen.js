@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  Switch
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -22,7 +23,8 @@ import {backgroundTask} from './common/backGroundTask';
 const NUMBER_STEP_DIVIDE = 20;
 
 const HomeScreen = ({navigation}) => {
-  const [isEnabled, setIsEnabled] = useState(true);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
@@ -257,29 +259,30 @@ const HomeScreen = ({navigation}) => {
             justifyContent: 'space-between',
             flexDirection: 'row',
           }}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <TouchableOpacity style={{height:50}} onPress={() => navigation.openDrawer()}>
             <View style={styles.buttonmenu}>
               <Icons name="menu" size={30} color="#ffff" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity style={{height:50}} >
             <View style={styles.buttonshare}>
               <Icons name="share-variant" size={30} color="#ffff" />
             </View>
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center'}}>    
-            <View style={{marginTop:20, alignItems:'center'}}><Text style={{color:'white', fontSize:25}}>{moment().format('LL')}</Text></View>
+            <View style={{marginTop:10, alignItems:'center'}}><Text style={{color:'white', fontSize:20}}>{moment().format('LL')}</Text></View>
           <View
             style={{
               borderColor: 'white',
               width: windowWidth - 100,
               height: windowHeight * 0.45,
-              marginTop: 30,
+              marginTop: 10,
               alignItems: 'center',
             }}>
             <View style={{position: 'absolute', top: '10%', left: '40%'}}>
-              <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
+              {isEnabled ?  <Icons name="run-fast" size={60} style={{color: '#ffff'}}/> : <Icons name="run" size={60} style={{color: '#ffff'}}/> }
+              
             </View>
             <CircularProgres
               size={windowHeight * 0.4}
@@ -292,7 +295,13 @@ const HomeScreen = ({navigation}) => {
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
-            />
+            /> 
+              <Switch style={{marginTop:5}}
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
           </View>
         </View>
       </View>
@@ -469,7 +478,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    marginTop: 20,
+    marginTop:5,
     justifyContent: 'flex-end',
     borderColor: 'white',
     paddingLeft: 10,
@@ -477,7 +486,7 @@ const styles = StyleSheet.create({
   },
   buttonmenu: {
     flex: 1,
-    marginLeft: 7,
+    marginLeft: 7, 
   },
   buttonshare: {
     flex: 1,

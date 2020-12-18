@@ -4,6 +4,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 import {
   Text,
@@ -58,7 +59,7 @@ export default Profile = ({navigation}) => {
         </TouchableOpacity>
         <View style={styles.profile}>
           <View style={{width: '30%', alignItems: 'center'}}>
-            <Icon name="face" color="white" size={100} />
+             <EvilIcons name="user" color="white" size={120} />
           </View>
           <View style={{marginTop: 10}}>
             <Text style={{fontSize: 20, color: 'white'}}>{profile.name}</Text>
@@ -143,16 +144,17 @@ export default Profile = ({navigation}) => {
                     borderWidth: 1,
                     flex: 1,
                     marginTop: '25%',
-                    width: '120%',
-                    marginLeft: '20%',
+                    width: '200%',
+                    height:'150%',
+                    marginLeft: '10%',
                   }}>
                   <Picker
                     selectedValue={selectedValue}
                     style={{
-                      height: '5%',
+                      height: '100%',
                       width: '100%',
                       alignItems: 'center',
-                      flex: 1,
+                      flex: 2,
                     }}
                     onValueChange={(itemValue, itemIndex) =>
                       setSelectedValue(itemValue)
@@ -161,6 +163,17 @@ export default Profile = ({navigation}) => {
                     <Picker.Item label="Female" value="Female" />
                   </Picker>
                 </View>
+              </View>
+              <View style={styles.text} >
+                <View>
+                    <Text style={styles.texts1}>Old</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.texts1}>Cm</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.texts1}>Kg</Text>
+                  </View>
               </View>
               <View style={styles.plusbutton}>
                 <TouchableOpacity
@@ -192,7 +205,7 @@ export default Profile = ({navigation}) => {
             <View style={styles.buttonStyle}>
               <Button
                 color="#1C1D25"
-                borderRadius="50"
+                borderRadius='50'
                 title="SAVE"
                 onPress={() => {
                   console.log('save infor');
@@ -231,7 +244,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 16,
     height: '70%',
-    width: '80%',
+    width: '83%',
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'green',
     shadowOpacity: 0.1,
@@ -274,15 +287,21 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   buttonStyle: {
-    marginTop: '10%',
+    marginTop: '15%',
     marginLeft: '20%',
     marginRight: '20%',
   },
   texts: {
-    marginTop: '29%',
-    marginLeft: '15%',
-    marginRight: '10%',
+    marginTop: '43%',
+    marginLeft: '10%',
+    marginRight:'1%',
     fontSize: 20,
     textAlign: 'center',
   },
+ texts1:{
+  marginTop: '62%',
+  fontSize: 16,
+  textAlign: 'center',
+  marginRight:'10%'
+ }
 });

@@ -185,7 +185,7 @@ const Track = ({navigation}) => {
             <Icon name="arrow-back-ios" size={30} color="#ffff" />
           </View>
         </TouchableOpacity>
-        <View style={{marginTop:5, alignItems:'center', padding: 15,}}><Text style={{color:'white', fontSize:25}}>{moment().format('LL')}</Text></View>
+        <View style={{marginTop:5, alignItems:'center', padding: 15,}}></View>
       <View style={{flex: 1, marginBottom: 20}}>
         <MapView
           style={{flex: 1}}
