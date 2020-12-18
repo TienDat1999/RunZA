@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import Pedometer from 'react-native-pedometer-huangxt';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Button,
   View,
@@ -21,6 +23,7 @@ import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import haversine from 'haversine';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
+import {getData, setData, removeData} from '../components/common/AsyncStorage';
 const Track = () => {
   const [timerun, setTimerun] = useState(0);
   const [run, setRun] = useState(false);
@@ -36,14 +39,12 @@ const Track = () => {
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
-    startDate: null,
-    endDate: null,
-    miniutes: null,
     Calories: 0,
   });
 
   const setStoreAward = async () => {
     const value = JSON.stringify(award);
+    console.log('award', value);
     try {
       await AsyncStorage.setItem('awardTrack', value);
     } catch (e) {
@@ -66,20 +67,35 @@ const Track = () => {
       getData('inforUser').then((val) => {
         if (val != null) {
           let number = BWR(val.gender, val.age, val.Weight, val.height);
-          // console.log('calories Burn', Math.ceil(caloburn));
           const nows = new Date();
-          Pedometer.startPedometerUpdatesFromDate(
-            nows.getTime(),
-            (pedometerData) => {
-              //console.log('duaration', duration);
-              setAward({
-                distance: Number(value.distance) + pedometerData.distance,
-                numberOfSteps:
-                  Number(value.numberOfSteps) + pedometerData.numberOfSteps,
-                Calories: CaloriesBurn(number, 3.5, timerun / 60),
-              });
-            },
-          );
+          if (timerun === 0) {
+            Pedometer.startPedometerUpdatesFromDate(
+              nows.getTime(),
+              (pedometerData) => {
+                setAward({
+                  distance: pedometerData.distance,
+                  numberOfSteps: pedometerData.numberOfSteps,
+                  Calories: CaloriesBurn(number, 3.5, timerun / 60),
+                });
+              },
+            );
+          } else {
+            Pedometer.startPedometerUpdatesFromDate(
+              nows.getTime(),
+              (pedometerData) => {
+                setAward({
+                  distance: Number(value.distance) + pedometerData.distance,
+                  numberOfSteps:
+                    Number(value.numberOfSteps) + pedometerData.numberOfSteps,
+                  Calories: CaloriesBurn(number, 3.5, timerun / 60),
+                });
+              },
+            );
+          }
+
+          // console.log('calories Burn', Math.ceil(caloburn));
+        } else {
+          console.log('da di vao null');
         }
       });
     });
@@ -95,6 +111,7 @@ const Track = () => {
             'are you sure you want to share your location with the app ?',
         },
       );
+
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         Geolocation.getCurrentPosition(
           (position) => {
@@ -116,6 +133,11 @@ const Track = () => {
             Alert.alert('GPS permission denied');
 
             console.log(error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000,
           },
         );
       } else {
@@ -139,88 +161,58 @@ const Track = () => {
     if (run === true) {
       let newtime = timerun;
       let newroute = [...route];
+      let dis = distance;
+
       requestPermission();
-      Geolocation.getCurrentPosition((position) => {
-        let newregion = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-          coordinate: new AnimatedRegion({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0,
-            longitudeDelta: 0,
-          }),
-        };
-        setRegion(newregion);
-      });
+
       setLoop(
         setInterval(async () => {
+          if (newtime % 2 === 0) {
+            try {
+              await Geolocation.getCurrentPosition(
+                async (position) => {
+                  let newpoint = newroute.concat({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                  });
+
+                  await setRoute(newpoint);
+                  if (newtime >= 2) {
+                    // undefine cho nay
+                    // console.log(newpoint, newtime, 111111);
+
+                    // console.log('start', newpoint[Math.floor(newtime / 2) - 1]);
+                    // console.log('end', newpoint[Math.floor(newtime / 2)]);
+                    if (
+                      newpoint[Math.floor(newtime / 2)] != undefined &&
+                      newpoint[Math.floor(newtime / 2) - 1] != undefined
+                    ) {
+                      dis += haversine(
+                        newpoint[Math.floor(newtime / 2 - 1)],
+                        newpoint[Math.floor(newtime / 2)],
+                        {unit: 'meter'},
+                      );
+                      setDistance(dis);
+                    }
+                  }
+                },
+
+                (error) => {
+                  Alert.alert('');
+
+                  console.log(error);
+                },
+                {
+                  enableHighAccuracy: true,
+                  timeout: 20000,
+                  maximumAge: 1000,
+                },
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          }
           newtime++;
-
-          if (newtime === 2) {
-            let testpoint = newroute.concat({
-              latitude: 21.00809,
-              longitude: 105.867511,
-            });
-            setRoute(testpoint);
-          }
-          if (newtime === 4) {
-            let testpoint = newroute.concat({
-              latitude: 21.008245,
-              longitude: 105.865317,
-            });
-            setRoute(testpoint);
-            let start = {latitude: 21.008245, longitude: 105.865317};
-
-            let end = newroute[0];
-            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-            let newdis = distance + haversine(start, end, {unit: 'meter'});
-
-            setDistance(newdis);
-          }
-          if (newtime === 6) {
-            let testpoint = newroute.concat({
-              latitude: 21.007924,
-              longitude: 105.866454,
-            });
-            setRoute(testpoint);
-            let start = {latitude: 21.007924, longitude: 105.866454};
-
-            let end = newroute[0];
-            console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-            let newdis = distance + haversine(start, end, {unit: 'meter'});
-
-            setDistance(newdis);
-          }
-          // console.log(newtime);
-
-          // if (newtime % 10 === 0) {
-          //   Geolocation.getCurrentPosition(
-          //     (position) => {
-          //       let newpoint = newroute.concat({
-          //         latitude: position.coords.latitude,
-          //         longitude: position.coords.longitude,
-          //       });
-          //       // console.log(newpoint);
-          //       setRoute(newpoint);
-          //     },
-
-          //     // {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
-          //   );
-          //   // if (newtime >= 10) {
-          //   //   let start = newroute[Math.floor(newtime / 10) - 1];
-
-          //   //   let end = newroute[Math.floor(newtime / 10)];
-          //   //   console.log(start, end, 'bbbbbbbbbbbbbbbbbbbbbbb');
-          //   //   let newdis =distance + haversine(start, end);
-          //   //   setDistance(newdis);
-          //   // }
-
-          // }
-
-          // console.log(route, 'aaaaaaaaaaaaaaa');
           setTimerun(newtime);
         }, 1000),
       );
@@ -229,22 +221,19 @@ const Track = () => {
       clearInterval(loop);
     }
     return () => {
-      console.log('clear');
       clearInterval(loop);
     };
-  }, [run, route]);
+  }, [run, timerun]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <View style={styles.buttonback}>
-          <Icon name="arrow-back-ios" size={30} color="#ffff" />
+    <SafeAreaView style={{flex: 1, backgroundColor: '#0b0938'}}>
+      {/* {console.log(route, 2333333)} */}
+      <View style={{height: 80}}>
+        <View style={{padding: 5}}>
+          <Text style={{fontSize: 28, color: 'white', textAlign: 'center'}}>
+            {award.numberOfSteps} steps
+          </Text>
         </View>
-      </TouchableOpacity>
-      <View style={{marginTop: 5, alignItems: 'center', padding: 15}}>
-        <Text style={{color: 'white', fontSize: 25}}>
-          {moment().format('LL')}
-        </Text>
       </View>
       <View style={{flex: 1, marginBottom: 20}}>
         <MapView
@@ -257,8 +246,7 @@ const Track = () => {
           <Marker
             coordinate={region}
             title={'Vi Tri Hien Tai Cua Ban'}
-            onDragEnd={(e) => console.log(e)}
-            image={require('./../asset/images/running.png')}
+            // onDragEnd={(e) => console.log(e)}
             image={require('./../asset/images/running.png')}
           />
           <Polyline
@@ -289,7 +277,7 @@ const Track = () => {
             <Image source={require('./../asset/images/kcal.png')} />
           </View>
           <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
-            0 Kcal
+            {Math.ceil(award.Calories)}
           </Text>
         </View>
         <View>
@@ -305,8 +293,17 @@ const Track = () => {
             }}>
             <Image source={require('./../asset/images/location.png')} />
           </View>
+          {/* {distance > 1000 ? (
+            <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
+              {Math.round((distance / 1000) * 100) / 100} KM
+            </Text>
+          ) : (
+            <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
+              {Math.floor(distance)} M
+            </Text>
+          )} */}
           <Text style={{textAlign: 'center', marginTop: 10, color: 'white'}}>
-            {Math.floor(distance)} M
+            {Math.ceil(award.distance)} M
           </Text>
         </View>
         <View>
@@ -344,8 +341,8 @@ const Track = () => {
                 justifyContent: 'center',
                 backgroundColor: 'white',
               }}
-              onPress={() => {
-                setRun(!run);
+              onPress={async () => {
+                await setRun(!run);
                 PedomestorCount();
               }}>
               <Text
@@ -390,6 +387,8 @@ const Track = () => {
                   setDistance(0);
                   setRoute([]);
                   Pedometer.stopPedometerUpdates();
+                  removeData('awardTrack');
+                  setAward({distance: 0, numberOfSteps: 0, Calories: 0});
                 }}>
                 <Text
                   style={{

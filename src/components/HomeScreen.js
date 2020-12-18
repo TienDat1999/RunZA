@@ -283,7 +283,7 @@ const HomeScreen = ({navigation}) => {
                 miniutesStamp.push(pedometerData.endDate);
               }
 
-              console.log('duration', duration);
+              // console.log('duration', duration);
               //neu ma duaration > reMunite thi push
               if (duration == reMunite + 1) {
                 reMunite = duration;
