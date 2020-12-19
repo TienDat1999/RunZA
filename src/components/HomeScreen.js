@@ -31,6 +31,7 @@ const HomeScreen = ({navigation}) => {
   const [visible, setVisible] = useState(true);
   const ref = useRef(null);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [isRun, setIsRun] = useState(true);
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
@@ -331,7 +332,7 @@ const HomeScreen = ({navigation}) => {
     // setData('dayChart', dayCharts);
     //setData('history', datahis);
     chartHandle();
-    if (isEnabled == true) {
+    if (isRun == true) {
       backgroundTask();
       setTimeout(() => {
         pedomestorCount();
@@ -387,8 +388,8 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center'}}>
-          <View style={{marginTop: 20, alignItems: 'center'}}>
-            <Text style={{color: 'white', fontSize: 25}}>
+          <View style={{marginTop: 5, alignItems: 'center'}}>
+            <Text style={{color: 'white', fontSize: 18}}>
               {moment().format('LL')}
             </Text>
           </View>
@@ -535,8 +536,8 @@ const HomeScreen = ({navigation}) => {
               },
             ],
           }}
-          width={windowWidth * 0.93}
-          height={windowHeight * 0.23}
+          width={windowWidth * 0.9}
+          height={windowHeight * 0.18}
           // yAxisLabel="$"
           // yAxisSuffix="k"
           yAxisInterval={1} // optional, defaults to 1
