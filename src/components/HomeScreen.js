@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  Switch,
 } from 'react-native';
 import CircularProgres from './common/CircularProgres';
 import Pedometer from 'react-native-pedometer-huangxt';
@@ -29,7 +30,7 @@ const NUMBER_STEP_DIVIDE = 20;
 const HomeScreen = ({navigation}) => {
   const [visible, setVisible] = useState(true);
   const ref = useRef(null);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
   const [award, setAward] = useState({
     distance: 0,
     numberOfSteps: 0,
@@ -39,7 +40,6 @@ const HomeScreen = ({navigation}) => {
     Calories: 0,
   });
   const [dayChart, setDayChart] = useState([0]);
-
   const handleShareAward = async (uir) => {
     const shareOption = {
       mesage: 'this is test',
@@ -65,6 +65,9 @@ const HomeScreen = ({navigation}) => {
     }
   };
   // so sanh khoang cach phut
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+  };
   const getMinute = (fist, second) => {
     const miniutesNow = new Date(Number(fist)).getMinutes();
     const miniutesLast = new Date(Number(second)).getMinutes();
@@ -101,7 +104,7 @@ const HomeScreen = ({navigation}) => {
       let number = minutesNow - minutesLast;
       return number * 60 - secondsLast + secondsNow;
     } else {
-      console.log('di vao khong');
+      //console.log('di vao khong');
       return 0;
     }
   };
@@ -307,7 +310,7 @@ const HomeScreen = ({navigation}) => {
                 miniutes: Number(value.miniutes) + duarationNUmber,
                 Calories: CaloriesBurn(
                   number,
-                  3.5,
+                  isEnabled ? 9.8 : 3.5,
                   Number(value.miniutes) + duarationNUmber,
                 ),
               });
@@ -365,7 +368,9 @@ const HomeScreen = ({navigation}) => {
             justifyContent: 'space-between',
             flexDirection: 'row',
           }}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity
+            style={{height: 50}}
+            onPress={() => navigation.openDrawer()}>
             <View style={styles.buttonmenu}>
               <Icons name="menu" size={30} color="#ffff" />
             </View>
@@ -392,11 +397,15 @@ const HomeScreen = ({navigation}) => {
               borderColor: 'white',
               width: windowWidth - 100,
               height: windowHeight * 0.45,
-              marginTop: 30,
+              marginTop: 10,
               alignItems: 'center',
             }}>
             <View style={{position: 'absolute', top: '10%', left: '40%'}}>
-              <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
+              {isEnabled ? (
+                <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
+              ) : (
+                <Icons name="run" size={60} style={{color: '#ffff'}} />
+              )}
             </View>
 
             <CircularProgres
@@ -410,6 +419,13 @@ const HomeScreen = ({navigation}) => {
               backgroundColor="#FFF"
               lineCap="round"
               rotation={0}
+            />
+            <Switch
+              style={{marginTop: 5}}
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+              onValueChange={toggleSwitch}
+              value={isEnabled}
             />
           </View>
         </View>
@@ -587,7 +603,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    marginTop: 20,
+    marginTop: 5,
     justifyContent: 'flex-end',
     borderColor: 'white',
     paddingLeft: 10,
