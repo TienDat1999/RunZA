@@ -125,14 +125,23 @@ export const History = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-      <View style={{padding: 5}}><Text style={{fontSize:28, color:'white', textAlign:'center'}}>{isDateChoose.numberOfSteps} steps</Text></View>
+        {/* <View style={{padding: 5}}>
+          <Text style={{fontSize: 28, color: 'white', textAlign: 'center'}}>
+            {isDateChoose.numberOfSteps} steps
+          </Text>
+        </View> */}
         <Calendar
-          style={{marginLeft: 5, marginRight: 5}}
+          style={{
+            height: 300,
+            paddingLeft: 20,
+            paddingRight: 20,
+            marginTop: -10,
+          }}
+          // style={{marginLeft: 20, marginRight: 20, height: '30%', borderColor:'white', borderWidth:1}}
           theme={{
             backgroundColor: '#33FF99',
             calendarBackground: '#000000',
             textSectionTitleColor: '#00CCCC',
-
             dayTextColor: '#FFFF',
             todayTextColor: '#00adf5',
             monthTextColor: '#00CCCC',
@@ -266,12 +275,10 @@ export const History = ({navigation}) => {
             }}
             bezier
             style={{
-              marginBottom: 30,
-              paddingTop: 20,
-              marginLeft: 20,
-              marginRight: 10,
+              marginBottom: 10,
+              paddingTop: 10,
+              alignItems: 'center',
               borderRadius: 15,
-              borderRadius: 16,
             }}
           />
         </View>
@@ -285,21 +292,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
-
   footer: {
     marginTop: 10,
     borderColor: 'white',
+    alignItems: 'center',
   },
   top: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 10,
-    marginTop:1,
+    marginTop: 1,
     borderColor: 'white',
+    flex: 1,
   },
   body: {
     flex: 1,
-
   },
   itemicon: {
     borderColor: 'white',
@@ -312,7 +319,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   chart: {
-    marginTop: 20,
+    marginTop: 10,
     justifyContent: 'flex-end',
     borderColor: 'white',
     marginLeft: 5,

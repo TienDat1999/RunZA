@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Pedometer from 'react-native-pedometer-huangxt';
 import AsyncStorage from '@react-native-community/async-storage';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {
   Button,
   View,
@@ -24,7 +25,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import haversine from 'haversine';
 import {BWR, CaloriesBurn} from './common/calculateCalories';
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
-const Track = () => {
+const Track = ({navigation}) => {
   const [timerun, setTimerun] = useState(0);
   const [run, setRun] = useState(false);
   const [loop, setLoop] = useState();
@@ -226,9 +227,14 @@ const Track = () => {
   }, [run, timerun]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#0b0938'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#000'}}>
       {/* {console.log(route, 2333333)} */}
       <View style={{height: 80}}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <View style={styles.buttonback}>
+            <Icons name="arrow-back-ios" size={25} color="#ffff" />
+          </View>
+        </TouchableOpacity>
         <View style={{padding: 5}}>
           <Text style={{fontSize: 28, color: 'white', textAlign: 'center'}}>
             {award.numberOfSteps} steps

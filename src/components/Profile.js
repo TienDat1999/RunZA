@@ -4,8 +4,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {
   Text,
   View,
@@ -59,9 +58,9 @@ export default Profile = ({navigation}) => {
         </TouchableOpacity>
         <View style={styles.profile}>
           <View style={{width: '30%', alignItems: 'center'}}>
-             <EvilIcons name="user" color="white" size={120} />
+            <EvilIcons name="user" color="white" size={120} />
           </View>
-          <View style={{marginTop: 10}}>
+          <View>
             <Text style={{fontSize: 20, color: 'white'}}>{profile.name}</Text>
           </View>
         </View>
@@ -145,7 +144,7 @@ export default Profile = ({navigation}) => {
                     flex: 1,
                     marginTop: '25%',
                     width: '200%',
-                    height:'150%',
+                    height: '150%',
                     marginLeft: '10%',
                   }}>
                   <Picker
@@ -164,16 +163,16 @@ export default Profile = ({navigation}) => {
                   </Picker>
                 </View>
               </View>
-              <View style={styles.text} >
+              <View style={styles.text}>
                 <View>
-                    <Text style={styles.texts1}>Old</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.texts1}>Cm</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.texts1}>Kg</Text>
-                  </View>
+                  <Text style={styles.texts1}>Old</Text>
+                </View>
+                <View>
+                  <Text style={styles.texts1}>Cm</Text>
+                </View>
+                <View>
+                  <Text style={styles.texts1}>Kg</Text>
+                </View>
               </View>
               <View style={styles.plusbutton}>
                 <TouchableOpacity
@@ -205,7 +204,7 @@ export default Profile = ({navigation}) => {
             <View style={styles.buttonStyle}>
               <Button
                 color="#1C1D25"
-                borderRadius='50'
+                borderRadius="50"
                 title="SAVE"
                 onPress={() => {
                   console.log('save infor');
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 15,
     marginBottom: 16,
-    height: '70%',
+    height: '80%',
     width: '83%',
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'green',
@@ -294,14 +293,14 @@ const styles = StyleSheet.create({
   texts: {
     marginTop: '43%',
     marginLeft: '10%',
-    marginRight:'1%',
+    marginRight: '1%',
     fontSize: 20,
     textAlign: 'center',
   },
- texts1:{
-  marginTop: '62%',
-  fontSize: 16,
-  textAlign: 'center',
-  marginRight:'10%'
- }
+  texts1: {
+    marginTop: '62%',
+    fontSize: 16,
+    textAlign: 'center',
+    marginRight: '10%',
+  },
 });

@@ -294,6 +294,7 @@ const HomeScreen = ({navigation}) => {
                 console.log('re munite', reMunite);
               } else if (duration < reMunite) {
                 duarationMinute.push(reMunite);
+                console.log('da push vao');
                 reMunite = 0;
               }
               // console.log('mang', duarationMinute);
@@ -331,19 +332,26 @@ const HomeScreen = ({navigation}) => {
     //removeData('inforUser');
     // setData('dayChart', dayCharts);
     //setData('history', datahis);
-    chartHandle();
-    if (isRun == true) {
-      backgroundTask();
-      setTimeout(() => {
-        pedomestorCount();
-      }, 500);
-    }
     getData('inforUser').then((val) => {
       if (val) {
         setVisible(false);
       }
     });
-    removeData('timeDuaration');
+    chartHandle();
+    if (isRun == true) {
+      backgroundTask();
+      setTimeout(() => {
+        // console.log('di vao day');
+        pedomestorCount();
+      }, 500);
+    }
+    getData('inforUser').then((val) => {
+      if (val) {
+        setIsRun(false);
+      }
+    });
+
+    //  removeData('timeDuaration');
     //getData('history').then((val) => console.log('get his', val));
     return () => {
       setIsEnabled(false);
@@ -377,6 +385,7 @@ const HomeScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            style={{height: 50}}
             onPress={() => {
               ref.current.capture().then((uri) => {
                 handleShareAward(uri);
@@ -403,9 +412,9 @@ const HomeScreen = ({navigation}) => {
             }}>
             <View style={{position: 'absolute', top: '10%', left: '40%'}}>
               {isEnabled ? (
-                <Icons name="run-fast" size={60} style={{color: '#ffff'}} />
+                <Icons name="run-fast" size={50} style={{color: '#ffff'}} />
               ) : (
-                <Icons name="run" size={60} style={{color: '#ffff'}} />
+                <Icons name="run" size={50} style={{color: '#ffff'}} />
               )}
             </View>
 
@@ -460,12 +469,12 @@ const HomeScreen = ({navigation}) => {
         </View>
         <View style={styles.icon}>
           <View style={styles.itemicon}>
-            {/* distance */}
+            {/* minutes */}
             <CircularProgres
               size={50}
               width={2}
               backgroundWidth={3}
-              fill={Number(award.distance) / NUMBER_STEP_DIVIDE}
+              fill={Number(award.miniutes) / NUMBER_STEP_DIVIDE}
               tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
@@ -481,7 +490,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.text}>
-              {Math.ceil(Number(award.distance))} M
+              {Math.ceil(Number(award.miniutes))} MN
             </Text>
           </View>
         </View>
@@ -492,7 +501,7 @@ const HomeScreen = ({navigation}) => {
               size={50}
               width={2}
               backgroundWidth={3}
-              fill={Number(award.miniutes) / NUMBER_STEP_DIVIDE}
+              fill={Number(award.distance) / NUMBER_STEP_DIVIDE}
               tintColor="#00ffff"
               backgroundColor="#FFF"
               lineCap="round"
@@ -507,7 +516,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.text}>
-              {Math.ceil(Number(award.miniutes))} MM
+              {Math.ceil(Number(award.distance))} M
             </Text>
           </View>
         </View>
@@ -537,7 +546,7 @@ const HomeScreen = ({navigation}) => {
             ],
           }}
           width={windowWidth * 0.9}
-          height={windowHeight * 0.18}
+          height={windowHeight * 0.25}
           // yAxisLabel="$"
           // yAxisSuffix="k"
           yAxisInterval={1} // optional, defaults to 1
@@ -560,12 +569,13 @@ const HomeScreen = ({navigation}) => {
           }}
           bezier
           style={{
-            marginBottom: 30,
-            paddingTop: 20,
-            marginLeft: 20,
-            marginRight: 10,
+            marginBottom: 10,
+            paddingTop: 10,
+            alignItems: 'center',
+            //  marginLeft: 20,
+            // marginRight: 10,
             borderRadius: 15,
-            borderRadius: 16,
+            //borderRadius: 16,
           }}
         />
       </View>
@@ -606,9 +616,9 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 5,
     justifyContent: 'flex-end',
-    borderColor: 'white',
     paddingLeft: 10,
     paddingRight: 10,
+    alignItems: 'center',
   },
   buttonmenu: {
     flex: 1,

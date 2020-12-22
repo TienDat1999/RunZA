@@ -1,11 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Drawer, Text} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import LinearGradient from 'react-native-linear-gradient';
+import {getData, setData, removeData} from '../components/common/AsyncStorage';
 export function DrawerContent(props) {
+  const [profile, setProfile] = useState({
+    name: null,
+    gender: null,
+    Weight: null,
+    height: null,
+    age: null,
+  });
+  useEffect(() => {
+    getData('inforUser').then((val) => {
+      if (val) {
+        setProfile(val);
+      }
+    });
+  });
+
   return (
     <LinearGradient colors={['#020024', '#082b1f']} style={{flex: 1}}>
       <View style={styles.container}>
@@ -17,11 +33,10 @@ export function DrawerContent(props) {
                 style={{
                   fontSize: 20,
                   color: 'white',
-                  marginTop: 20,
-                  marginLeft: 20,
+                  marginTop: 10,
+                  alignItems: 'center',
                 }}>
-                {' '}
-                TONY STARK{' '}
+                {profile.name}
               </Text>
             </View>
           </View>
@@ -93,18 +108,6 @@ export function DrawerContent(props) {
               />
             </Drawer.Section>
           </DrawerContentScrollView>
-          <Drawer.Section>
-            <DrawerItem
-              icon={({color, size, marginTop}) => (
-                <Icons name="logout" color="white" size={size} marginTop={30} />
-              )}
-              label="Logout"
-              labelStyle={{color: 'white'}}
-              onPress={() => {
-                props.navigation.navigate('Home');
-              }}
-            />
-          </Drawer.Section>
         </View>
       </View>
     </LinearGradient>
@@ -125,14 +128,14 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
-    flex:0.3
+    flex: 0.3,
   },
   footer: {
     flex: 1,
     flexDirection: 'column',
   },
   body: {
-    marginTop: 10,
+    marginTop: '10%',
     borderBottomWidth: 2,
     borderBottomColor: '#FFFFFF',
     marginLeft: 30,
