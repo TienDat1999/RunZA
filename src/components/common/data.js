@@ -138,7 +138,40 @@ export const datahis = [
     ],
   },
 ];
-
+export const his = [
+  {
+    weeks: 52,
+    days: [
+      {
+        Calories: 13,
+        distance: 167.64000898599625,
+        endDate: null,
+        miniutes: 4,
+        numberOfSteps: 187,
+        startDate: '1608422400000',
+        type: 0,
+      },
+      {
+        Calories: 28,
+        distance: 235,
+        endDate: null,
+        miniutes: 5,
+        numberOfSteps: 22,
+        startDate: '1608508800000',
+        type: 1,
+      },
+      {
+        Calories: 85,
+        distance: 236,
+        endDate: null,
+        miniutes: 12,
+        numberOfSteps: 306,
+        startDate: '1608595200000',
+        type: 2,
+      },
+    ],
+  },
+];
 export const dayCharts = [
   {
     steps: 85,

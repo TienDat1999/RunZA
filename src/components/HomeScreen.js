@@ -20,7 +20,7 @@ import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import {LineChart} from 'react-native-chart-kit';
-import {datahis, dayCharts} from './common/data';
+import {his, dayCharts} from './common/data';
 import {backgroundTask} from './common/backGroundTask';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
@@ -150,6 +150,9 @@ const HomeScreen = ({navigation}) => {
   const recieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('award');
+      const weekNow = moment().week();
+      // const number = award.startDate;
+      console.log('number', weekNow);
       if (value != null) {
         const data = JSON.parse(value);
         const now = new Date().getTime();
@@ -158,7 +161,7 @@ const HomeScreen = ({navigation}) => {
         const lastHour = new Date(Number(data.endDate)).getHours();
         console.log('data nhan dc', data);
         if (data.startDate) {
-          if (fn_DateCompare(now, lastDay) == 0) {
+          if (fn_DateCompare(now, lastDay) === 0) {
             setAward(data);
             if (nowHour > lastHour) {
               getData('dayChart').then((day) => {
@@ -190,19 +193,21 @@ const HomeScreen = ({navigation}) => {
             // console.log('di vao day');
             getData('history').then((val) => {
               console.log('val', val);
-              const number = award.startDate;
+              // const number = award.startDate;
               const weekNow = moment().week();
-              const week = moment(Number(number)).week();
+              //  const week = moment(Number(number)).week();
               const type = new Date(Number(award.startDate));
               if (val == null) {
                 // console.log('di vao history null');
+                // neu chua co du lieu thi set luon thoi diem hien tai
                 const month = [
                   {weeks: weekNow, days: [{...award, type: type.getDate()}]},
                 ];
                 setData('history', month);
               } else {
                 //  console.log(val[val.length - 1].weeks, 'dsfsdf', week);
-                if (val[val.length - 1].weeks == week) {
+                //neu la trong tuan thi set trong tuan
+                if (val[val.length - 1].weeks == weekNow) {
                   // console.log(val[val.length - 1]);
                   const lastWeek = val[val.length - 1];
                   const tmp = {
@@ -221,7 +226,7 @@ const HomeScreen = ({navigation}) => {
                 } else {
                   const his = [
                     ...val,
-                    {weeks: week, days: [{...award, type: type.getDate()}]},
+                    {weeks: weekNow, days: [{...award, type: type.getDate()}]},
                   ];
                   setData('history', his);
                   //console.log('tuan moi', his);
@@ -331,7 +336,7 @@ const HomeScreen = ({navigation}) => {
 
     //removeData('inforUser');
     // setData('dayChart', dayCharts);
-    //setData('history', datahis);
+    //setData('history', his);
     getData('inforUser').then((val) => {
       if (val) {
         setVisible(false);

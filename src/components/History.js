@@ -10,13 +10,10 @@ import {
 import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import CircularProgres from '../components/common/CircularProgres';
-
 import {Calendar} from 'react-native-calendars';
 import {fn_DateCompare} from '../components/common/equalDate';
 import {datahis} from './common/data';
-
 import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
 const NUMBER_STEP_DIVIDE = 20;
@@ -85,7 +82,6 @@ export const History = ({navigation}) => {
   };
   const FindWeekNow = () => {
     getData('history').then((history) => {
-      //console.log(history);
       if (history) {
         const weeksNow = history.find((elm) => {
           const weekNow = moment().week();
@@ -94,13 +90,17 @@ export const History = ({navigation}) => {
           }
         });
         const weekCharts = [];
+        console.log(weeksNow);
         if (weeksNow) {
-          // weekCharts.push(weeksNow.days[0].numberOfSteps);
           let number = 0;
           for (let i = 0; i < 7; i++) {
+            //console.log('dsf', weeksNow.days[0].type);
             if (weeksNow.days[number].type == i) {
               weekCharts.push(weeksNow.days[number].numberOfSteps);
-              number = number + 1;
+
+              if (number < weeksNow.days.length - 1) {
+                number = number + 1;
+              }
             } else {
               weekCharts.push(0);
             }
@@ -147,6 +147,7 @@ export const History = ({navigation}) => {
             monthTextColor: '#00CCCC',
           }}
           onDayPress={(day) => {
+            console.log(day.timestamp);
             setSelectDay(day.dateString);
             findHistory(day.timestamp);
           }}

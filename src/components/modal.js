@@ -7,6 +7,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
 } from 'react-native';
+import {getData, setData, removeData} from '../components/common/AsyncStorage';
 import Modal from 'react-native-modal';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RadioGroup from 'react-native-radio-buttons-group';
@@ -17,15 +18,41 @@ export default ModalProfile = ({modalHandle}) => {
     {
       label: 'Male',
       color: 'green',
+      value: 'nam',
     },
     {
       label: 'Female',
       color: 'green',
+      value: 'nu',
     },
   ]);
   const HandleVisible = () => {
     modalHandle(false);
   };
+  const selectedGender = () => {
+    let selectedButton = gender.find((e) => e.selected == true);
+    let selectedButtons = selectedButton
+      ? selectedButton.value
+      : gender[0].label;
+    setgenderchoose(selectedButtons);
+  };
+
+  const [name, setName] = useState(null);
+  const [age, setAge] = useState(null);
+  const [genderchoose, setgenderchoose] = useState(null);
+  const [weigh, setWeigh] = useState(null);
+  const [heigt, setHeight] = useState(null);
+  let profile = {
+    name: name,
+    gender: genderchoose,
+    Weight: weigh,
+    height: heigt,
+    age: age,
+  };
+  const setInforUser = async () => {
+    setData('inforUser', profile);
+  };
+  //console.log('profile', profile);
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Modal isVisible={true}>
@@ -50,6 +77,8 @@ export default ModalProfile = ({modalHandle}) => {
                   placeholder="Enter your name"
                   maxLength={25}
                   placeholderTextColor="gray"
+                  onChangeText={(text) => setName(text)}
+                  value={name}
                 />
               </View>
             </View>
@@ -59,6 +88,8 @@ export default ModalProfile = ({modalHandle}) => {
               </View>
               <View>
                 <TextInput
+                  onChangeText={(text) => setAge(text)}
+                  value={age}
                   style={{
                     height: 40,
                     padding: 5,
@@ -74,14 +105,16 @@ export default ModalProfile = ({modalHandle}) => {
             </View>
             <View style={styles.textbox}>
               <View>
-                <Text style={styles.Text}>Sex: </Text>
+                <Text style={styles.Text}>Gender: </Text>
               </View>
               <View>
                 <RadioGroup
                   flexDirection="row"
                   radioButtons={gender}
                   onPress={(gender) => {
-                    setgender({gender});
+                    setgender(gender);
+                    //console.log(gender);
+                    selectedGender();
                   }}
                 />
               </View>
@@ -92,6 +125,8 @@ export default ModalProfile = ({modalHandle}) => {
               </View>
               <View>
                 <TextInput
+                  onChangeText={(text) => setWeigh(text)}
+                  value={weigh}
                   style={{
                     height: 40,
                     padding: 5,
@@ -110,6 +145,8 @@ export default ModalProfile = ({modalHandle}) => {
               </View>
               <View>
                 <TextInput
+                  onChangeText={(text) => setHeight(text)}
+                  value={heigt}
                   style={{
                     height: 40,
                     padding: 5,
@@ -130,6 +167,7 @@ export default ModalProfile = ({modalHandle}) => {
                 onPress={() => {
                   console.log('save infor');
                   HandleVisible();
+                  setInforUser();
                 }}
               />
             </View>
