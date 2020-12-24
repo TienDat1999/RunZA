@@ -39,7 +39,7 @@ export default ModalProfile = ({modalHandle}) => {
 
   const [name, setName] = useState(null);
   const [age, setAge] = useState(null);
-  const [genderchoose, setgenderchoose] = useState(null);
+  const [genderchoose, setgenderchoose] = useState('nam');
   const [weigh, setWeigh] = useState(null);
   const [heigt, setHeight] = useState(null);
   let profile = {
@@ -50,6 +50,7 @@ export default ModalProfile = ({modalHandle}) => {
     age: age,
   };
   const setInforUser = async () => {
+    console.log('profile', profile);
     setData('inforUser', profile);
   };
   //console.log('profile', profile);

@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 export default Profile = ({navigation}) => {
-  const [selectedValue, setSelectedValue] = useState('Male');
+  const [selectedValue, setSelectedValue] = useState('Nam');
   const defautvalue = {
     name: 'user',
     gender: 'nam',
@@ -158,8 +158,8 @@ export default Profile = ({navigation}) => {
                     onValueChange={(itemValue, itemIndex) =>
                       setSelectedValue(itemValue)
                     }>
-                    <Picker.Item label="Male" value="Male" />
-                    <Picker.Item label="Female" value="Female" />
+                    <Picker.Item label="Male" value="Nam" />
+                    <Picker.Item label="Female" value="Nu" />
                   </Picker>
                 </View>
               </View>

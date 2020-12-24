@@ -159,7 +159,7 @@ const HomeScreen = ({navigation}) => {
         const lastDay = new Date(Number(data.startDate)).getTime();
         const nowHour = new Date().getHours();
         const lastHour = new Date(Number(data.endDate)).getHours();
-        console.log('data nhan dc', data);
+        //console.log('data nhan dc', data);
         if (data.startDate) {
           if (fn_DateCompare(now, lastDay) === 0) {
             setAward(data);
@@ -246,9 +246,12 @@ const HomeScreen = ({navigation}) => {
   const pedomestorCount = () => {
     curentAward().then((value) => {
       getData('inforUser').then((val) => {
+        console.log('inforUser', val);
         if (val != null) {
           let number = BWR(val.gender, val.age, val.Weight, val.height);
           // console.log('calories Burn', Math.ceil(caloburn));
+          console.log(val);
+          console.log('number', number);
           const nows = new Date();
           let timesDurations = null;
           let reMunite = 0;
@@ -259,6 +262,7 @@ const HomeScreen = ({navigation}) => {
           Pedometer.startPedometerUpdatesFromDate(
             nows.getTime(),
             (pedometerData) => {
+              console.log(pedometerData);
               if (miniutesStamp.length != 0) {
                 // console.log('time', miniutesStamp);
                 if (miniutesStamp.length >= 2) {
@@ -307,7 +311,7 @@ const HomeScreen = ({navigation}) => {
               if (sum != 0) {
                 duarationNUmber = sum;
               }
-              //  console.log('duarationNUmber', duarationNUmber);
+              // console.log('duarationNUmber', duarationNUmber);
               setAward({
                 distance: Number(value.distance) + pedometerData.distance,
                 numberOfSteps:
@@ -530,7 +534,6 @@ const HomeScreen = ({navigation}) => {
         <LineChart
           data={{
             labels: [
-              '0',
               '2',
               '4',
               '6',
