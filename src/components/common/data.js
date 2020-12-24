@@ -172,46 +172,64 @@ export const his = [
     ],
   },
 ];
+// export const dayCharts = [
+//   {
+//     steps: 85,
+//     type: 2,
+//   },
+//   {
+//     steps: 875,
+//     type: 3,
+//   },
+//   {
+//     steps: 518,
+//     type: 6,
+//   },
+//   {
+//     steps: 48,
+//     type: 7,
+//   },
+//   {
+//     steps: 758,
+//     type: 8,
+//   },
+//   {
+//     steps: 85,
+//     type: 12,
+//   },
+//   {
+//     steps: 855,
+//     type: 13,
+//   },
+//   {
+//     steps: 84,
+//     type: 17,
+//   },
+//   {
+//     steps: 78,
+//     type: 18,
+//   },
+//   {
+//     steps: 855,
+//     type: 20,
+//   },
+// ];
 export const dayCharts = [
   {
     steps: 85,
-    type: 2,
-  },
-  {
-    steps: 875,
-    type: 3,
-  },
-  {
-    steps: 518,
-    type: 6,
-  },
-  {
-    steps: 48,
-    type: 7,
-  },
-  {
-    steps: 758,
     type: 8,
   },
   {
-    steps: 85,
-    type: 12,
+    steps: 875,
+    type: 9,
   },
   {
-    steps: 855,
-    type: 13,
+    steps: 518,
+    type: 10,
   },
   {
-    steps: 84,
-    type: 17,
-  },
-  {
-    steps: 78,
-    type: 18,
-  },
-  {
-    steps: 855,
-    type: 20,
+    steps: 48,
+    type: 11,
   },
 ];
 const user = {

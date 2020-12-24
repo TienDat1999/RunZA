@@ -156,6 +156,7 @@ const HomeScreen = ({navigation}) => {
       if (value != null) {
         const data = JSON.parse(value);
         const now = new Date().getTime();
+        console.log('value', data);
         const lastDay = new Date(Number(data.startDate)).getTime();
         const nowHour = new Date().getHours();
         const lastHour = new Date(Number(data.endDate)).getHours();
@@ -196,12 +197,12 @@ const HomeScreen = ({navigation}) => {
               // const number = award.startDate;
               const weekNow = moment().week();
               //  const week = moment(Number(number)).week();
-              const type = new Date(Number(award.startDate));
+              const type = new Date(Number(data.startDate));
               if (val == null) {
                 // console.log('di vao history null');
                 // neu chua co du lieu thi set luon thoi diem hien tai
                 const month = [
-                  {weeks: weekNow, days: [{...award, type: type.getDate()}]},
+                  {weeks: weekNow, days: [{...data, type: type.getDate()}]},
                 ];
                 setData('history', month);
               } else {
@@ -212,21 +213,21 @@ const HomeScreen = ({navigation}) => {
                   const lastWeek = val[val.length - 1];
                   const tmp = {
                     ...lastWeek,
-                    days: [...lastWeek.days, {...award, type: type.getDate()}],
+                    days: [...lastWeek.days, {...data, type: type.getDate()}],
                   };
                   // console.log(tmp);
                   // // const t = val;
-                  const data = [];
+                  const dataarr = [];
                   for (var i = 0; i < val.length - 1; i++) {
-                    data.push(val[i]);
+                    dataarr.push(val[i]);
                   }
-                  const his = [...data, tmp];
+                  const his = [...dataarr, tmp];
                   setData('history', his);
                   // console.log('di vao set history', his);
                 } else {
                   const his = [
                     ...val,
-                    {weeks: weekNow, days: [{...award, type: type.getDate()}]},
+                    {weeks: weekNow, days: [{...data, type: type.getDate()}]},
                   ];
                   setData('history', his);
                   //console.log('tuan moi', his);
@@ -251,7 +252,7 @@ const HomeScreen = ({navigation}) => {
           let number = BWR(val.gender, val.age, val.Weight, val.height);
           // console.log('calories Burn', Math.ceil(caloburn));
           console.log(val);
-          console.log('number', number);
+          //  console.log('number', number);
           const nows = new Date();
           let timesDurations = null;
           let reMunite = 0;
@@ -262,7 +263,7 @@ const HomeScreen = ({navigation}) => {
           Pedometer.startPedometerUpdatesFromDate(
             nows.getTime(),
             (pedometerData) => {
-              console.log(pedometerData);
+              //  console.log(pedometerData);
               if (miniutesStamp.length != 0) {
                 // console.log('time', miniutesStamp);
                 if (miniutesStamp.length >= 2) {
@@ -300,7 +301,7 @@ const HomeScreen = ({navigation}) => {
               //neu ma duaration > reMunite thi push
               if (duration == reMunite + 1) {
                 reMunite = duration;
-                console.log('re munite', reMunite);
+                console.log('remunite', reMunite);
               } else if (duration < reMunite) {
                 duarationMinute.push(reMunite);
                 console.log('da push vao');
@@ -339,8 +340,9 @@ const HomeScreen = ({navigation}) => {
     recieveData();
 
     //removeData('inforUser');
-    // setData('dayChart', dayCharts);
+    //setData('dayChart', dayCharts);
     //setData('history', his);
+    // removeData('dayChart');
     getData('inforUser').then((val) => {
       if (val) {
         setVisible(false);
